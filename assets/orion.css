@@ -72,11 +72,16 @@ a,
 .rmx-btn--text:hover .rmx-btn__label,
 .rmx-btn--underline .rmx-btn__label { text-decoration: none; }
 
-/* 1b. A link wrapping chrome takes the browser's default link colour
-      (#0000EE) unless told otherwise, and the app-bar logo is
-      fill: currentColor — so the Rent Manager wordmark rendered bright
-      blue on the navy bar instead of white. Links inside the two bars
-      inherit the bar's own colour; content links keep .rmx-text--link. */
+/* 1b. An <a> also takes the browser's default link colour (#0000EE) unless
+      something sets one, and neither rmx.css nor proto.css does — only
+      .rmx-text--link does, so every bare <a> rendered in UA blue.
+      DESIGN.md §2.1: RMX Blue carries all interactivity, links included,
+      so that is the default here. */
+a { color: var(--text-link); }
+
+/* Inside the two bars a link takes the bar's own colour instead. The app-bar
+   logo is fill: currentColor so it can be white on navy — left to the rule
+   above it rendered a bright blue wordmark. */
 .rmx-appbar a,
 .rmx-contextbar a { color: inherit; }
 
