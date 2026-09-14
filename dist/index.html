@@ -861,6 +861,14 @@ a,
 .rmx-btn--text:hover .rmx-btn__label,
 .rmx-btn--underline .rmx-btn__label { text-decoration: none; }
 
+/* 1b. A link wrapping chrome takes the browser's default link colour
+      (#0000EE) unless told otherwise, and the app-bar logo is
+      fill: currentColor — so the Rent Manager wordmark rendered bright
+      blue on the navy bar instead of white. Links inside the two bars
+      inherit the bar's own colour; content links keep .rmx-text--link. */
+.rmx-appbar a,
+.rmx-contextbar a { color: inherit; }
+
 /* 2. An unchecked .rmx-check renders a gray tick — rmx.css colours the
       glyph white when checked but never hides it when not. */
 .rmx-check:not([data-checked="true"]) .rmx-check__box > svg { visibility: hidden; }
