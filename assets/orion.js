@@ -1542,7 +1542,10 @@ function renderSheet(){
   const list = Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === state.cat);
   document.getElementById('promptList').innerHTML = list.map(k => {
     const p = PROMPTS[k];
-    return `<div class="prompt-item" onclick="ask('${k}')"><svg class="rmx-icon pi"><use href="${iconHref(p.icon)}"></use></svg><span class="pl">${esc(p.label)}</span><svg class="rmx-icon chev"><use href="#chevron-right"></use></svg></div>`;
+    /* No leading glyph. The prompts are sentences, and an icon per row read
+       as decoration rather than meaning — several were substitutions for
+       concepts RMX has no icon for, so the set was inconsistent as well. */
+    return `<div class="prompt-item" onclick="ask('${k}')"><span class="pl">${esc(p.label)}</span><svg class="rmx-icon chev"><use href="#chevron-right"></use></svg></div>`;
   }).join('');
 }
 function selectCat(i){ state.cat = i; renderSheet(); }
