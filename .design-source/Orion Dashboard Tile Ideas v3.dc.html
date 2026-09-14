@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/colors_and_type.css">
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/preview/_card.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Symbols+Outlined" rel="stylesheet">
+<script src="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: #eef4f8; }
+  a { color: #008dd5; text-decoration: none; }
+  a:hover { color: #0071aa; text-decoration: underline; }
+  .ms { font-family: "Material Symbols Outlined"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
+  @keyframes rmx-spin { to { transform: rotate(360deg); } }
+  @keyframes rmx-slide { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+</style>
+</helmet>
+
+<sc-if value="{{ onWorkspace }}" hint-placeholder-val="{{ true }}">
+  <dc-import name="My Workspace Screen" on-view-dashboard="{{ goDashboard }}" hint-size="1920px,945px"></dc-import>
+</sc-if>
+
+<sc-if value="{{ onDashboard }}" hint-placeholder-val="{{ false }}">
+<section id="3a" class="rmx" style="position: relative; width: 1720px; padding: 28px; background: repeating-linear-gradient(135deg, #eaf2f7 0 8px, #eef5f9 8px 16px); font-family: Roboto, system-ui, sans-serif; color: #666; display: flex; flex-direction: column; gap: 20px">
+
+
+  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(19,49,76,0.10)">
+
+    <div style="height: 56px; background: #13314c; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; gap: 16px">
+      <img src="assets/logo-rentmanager-white.svg" alt="Rent Manager" style="height: 26px; width: auto; display: block">
+      <div style="display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center">
+        <div style="display: flex; gap: 4px">
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">menu</span>
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">list_alt</span>
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">star</span>
+        </div>
+        <div style="width: 520px; height: 32px; background: #425a70; border-radius: 4px; display: flex; align-items: center; gap: 8px; padding: 0 10px">
+          <span class="ms" style="font-size: 18px; color: #cedbe7">search</span>
+          <span style="font-size: 14px; font-style: italic; color: #cedbe7">Command Launch</span>
+        </div>
+        <div onClick="{{ toggleAssistant }}" style="{{ entryStyle }}" title="Orion Assistant">
+          <svg width="24" height="24" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+            <circle cx="17" cy="17" r="14" stroke="#4fb0e4" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+            <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+          </svg>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px">
+        <div style="text-align: right; color: #fff"><div style="font-size: 12px; line-height: 15px; color: #cedbe7">Company Code</div><div style="font-size: 13px; line-height: 16px">lcs-rmexpress</div></div>
+        <span class="ms" style="font-size: 20px; color: #008dd5">notifications</span>
+        <span style="width: 30px; height: 30px; border-radius: 999px; background: #008dd5; color: #fff; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center">DS</span>
+      </div>
+    </div>
+
+    <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #f5f8fa">
+
+      <div style="display: flex; align-items: stretch; gap: 12px">
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; padding: 8px 12px; display: flex; align-items: center; gap: 12px; min-width: 300px; width: 1628px; height: 62px">
+          <span onClick="{{ goWorkspace }}" class="ms" style="font-size: 22px; color: #008dd5; cursor: pointer; padding: 4px; border-radius: 4px" style-hover="background: #ebf1f5" title="Back to My Workspace">arrow_back</span>
+          <div>
+            <div style="font-size: 12px; line-height: 16px; color: #666">Dashboard</div>
+            <div style="display: flex; align-items: center; gap: 6px"><span style="font-size: 18px; line-height: 24px; font-weight: 500; color: #13314c">Leasing</span></div>
+          </div><div style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c"><span class="ms" style="font-size: 18px; color: #008dd5">apartment</span>10 selected<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></div><div style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c"><span class="ms" style="font-size: 18px; color: #008dd5">calendar_today</span>Next 30 days<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></div><label style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c; cursor: pointer"><input type="checkbox" checked="{{ showPrompts }}" onChange="{{ togglePrompts }}" style="width: 15px; height: 15px; accent-color: #008dd5; cursor: pointer">Show source prompts</label>
+          
+        </div>
+        
+      </div>
+
+      <!-- Orion command bar -->
+      
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px">
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #008dd5; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">Active Prospects</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">148</span><span style="display: inline-flex; align-items: center; gap: 3px; height: 22px; padding: 0 7px; border-radius: 4px; background: #e2f1da; color: #4a7d2c; font-size: 13px; font-weight: 500"><span class="ms" style="font-size: 15px">trending_up</span>6%</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #eb343c; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">At-Risk Residents</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">7</span><span style="font-size: 13px; color: #666">3 renew ≤60 days</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #6eb744; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">Follow-Ups Due</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">21</span><span style="font-size: 13px; color: #666">no contact 7+ days</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #008dd5; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">Drafts Awaiting Approval</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">{{ pendingDrafts }}</span><span style="font-size: 13px; color: #666">Orion writes, you send</span></div>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1.04fr; gap: 16px; align-items: start">
+
+        <!-- LEFT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Delinquency Pace vs. Last Month -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Delinquency Pace vs. Last Month</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="font-size: 13px; color: #13314c">Day 18 of period</span>
+                  <span onClick="{{ refreshPace }}" class="ms" style="{{ paceSpinStyle }}">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 14px; border-bottom: 1px solid #cedbe7">
+                <div style="display: flex; align-items: center; gap: 14px">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 4px; background: #fdeceb; color: #eb343c; font-size: 15px; font-weight: 500"><span class="ms" style="font-size: 19px">trending_down</span>Behind last month</span>
+                  <span style="flex: 1; font-size: 14px; line-height: 20px; color: #424e5b">Second consecutive month of slipping pace on this day of the period.</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 9px">
+                  <div style="display: flex; align-items: center; gap: 12px">
+                    <span style="width: 96px; font-size: 13px; color: #666">This month</span>
+                    <span style="flex: 1; height: 16px; border-radius: 2px; background: #ebf1f5"><span style="display: block; width: 91.18%; height: 16px; border-radius: 2px; background: #eb343c"></span></span>
+                    <span style="width: 62px; text-align: right; font-size: 15px; font-weight: 500; color: #13314c">91.18%</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 12px">
+                    <span style="width: 96px; font-size: 13px; color: #666">Last month</span>
+                    <span style="flex: 1; height: 16px; border-radius: 2px; background: #ebf1f5"><span style="display: block; width: 93.4%; height: 16px; border-radius: 2px; background: #cedbe7"></span></span>
+                    <span style="width: 62px; text-align: right; font-size: 15px; color: #666">93.40%</span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 10px">
+                  <div style="flex: 1; border: 1px solid #cedbe7; border-left: 4px solid #eb343c; border-radius: 4px; padding: 10px 12px"><div style="font-size: 22px; line-height: 28px; font-weight: 700; color: #13314c">+$23,410</div><div style="font-size: 12px; line-height: 17px; color: #666">More outstanding than same day last month</div></div>
+                  <div style="flex: 1; border: 1px solid #cedbe7; border-left: 4px solid #eb343c; border-radius: 4px; padding: 10px 12px"><div style="font-size: 22px; line-height: 28px; font-weight: 700; color: #13314c">-2.22 pts</div><div style="font-size: 12px; line-height: 17px; color: #666">Collected rate change on day 18</div></div>
+                  <div style="flex: 1; border: 1px solid #cedbe7; border-left: 4px solid #f58220; border-radius: 4px; padding: 10px 12px"><div style="font-size: 22px; line-height: 28px; font-weight: 700; color: #13314c">$249,502</div><div style="font-size: 12px; line-height: 17px; color: #666">Delinquent balance today</div></div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1.5fr 0.9fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div>Property</div><div>Outstanding vs. same day</div><div style="text-align: right">Pace</div>
+              </div>
+              <sc-for list="{{ pace }}" as="p" hint-placeholder-count="3">
+                <div style="display: grid; grid-template-columns: 1.5fr 1.5fr 0.9fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px" style-hover="background: #f5f8fa">
+                  <div style="display: flex; align-items: center; gap: 7px"><span style="{{ p.dotStyle }}"></span><span style="color: #13314c">{{ p.name }}</span></div>
+                  <div style="font-size: 13px; color: #666">{{ p.detail }}</div>
+                  <div style="text-align: right"><span style="{{ p.chipStyle }}">{{ p.label }}</span></div>
+                </div>
+              </sc-for>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f5f8fa; font-size: 14px">
+                <span style="color: #13314c; font-weight: 500">Hawthorne Ridge is the entire portfolio gap</span>
+                <span onClick="{{ paceSteps }}" style="color: #008dd5; cursor: pointer" style-hover="text-decoration: underline">Next steps</span>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt ›</span> Where should I focus on delinquency this month? Compare it to the same point last month and tell me whether I am ahead or behind.</div>
+            </sc-if>
+          </div>
+
+          <!-- Lead Conversion Score -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="{{ leadWrapStyle }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Lead Conversion Score</span>
+                <div style="position: relative; display: flex; align-items: center; gap: 12px">
+                  <span onClick="{{ toggleLeadMenu }}" style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c; cursor: pointer">{{ leadPeriod }}<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <sc-if value="{{ leadMenuOpen }}" hint-placeholder-val="{{ false }}">
+                    <div style="position: absolute; top: 24px; right: 56px; z-index: 20; min-width: 170px; background: #fff; border: 1px solid #cedbe7; border-radius: 4px; box-shadow: 0 3px 6px rgba(0,0,0,0.10); padding: 4px 0">
+                      <sc-for list="{{ leadPeriodOptions }}" as="opt" hint-placeholder-count="3">
+                        <div onClick="{{ opt.onClick }}" style="{{ opt.style }}" style-hover="background: #ebf1f5">{{ opt.label }}</div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <span onClick="{{ refreshLead }}" class="ms" style="{{ leadSpinStyle }}">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="display: flex; border-bottom: 1px solid #cedbe7">
+                <div onClick="{{ leadTabList }}" style="{{ leadTabListStyle }}">List</div>
+                <div onClick="{{ leadTabChart }}" style="{{ leadTabChartStyle }}">Chart</div>
+              </div>
+              <sc-if value="{{ leadIsList }}" hint-placeholder-val="{{ true }}">
+                <div style="padding: 12px 14px 4px">
+                  <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.9fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding-bottom: 8px; border-bottom: 1px solid #cedbe7">
+                    <div>Prospect</div><div>Stage</div>
+                    <div onClick="{{ sortByDays }}" style="{{ daysHeadStyle }}">Days{{ daysArrow }}</div>
+                    <div onClick="{{ sortByScore }}" style="{{ scoreHeadStyle }}">Score{{ scoreArrow }}</div>
+                    <div style="text-align: right">Next Step</div>
+                  </div>
+                  <sc-for list="{{ leads }}" as="row" hint-placeholder-count="4">
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.9fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; border-bottom: 1px solid #ebf1f5" style-hover="background: #f5f8fa">
+                      <div style="display: flex; align-items: center; gap: 6px"><span style="{{ row.dotStyle }}"></span>{{ row.name }}</div>
+                      <div>{{ row.stage }}</div>
+                      <div style="text-align: right">{{ row.days }}</div>
+                      <div style="text-align: right"><span style="{{ row.chipStyle }}">{{ row.score }}</span></div>
+                      <div style="text-align: right"><span onClick="{{ row.onAct }}" style="color: #008dd5; cursor: pointer" style-hover="text-decoration: underline">{{ row.action }}</span></div>
+                    </div>
+                  </sc-for>
+                  <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.9fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; background: #f5f8fa; font-weight: 500; color: #13314c">
+                    <div>Average — 34 leads</div><div></div><div style="text-align: right">7</div><div style="text-align: right">66</div><div></div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ leadIsChart }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 14px">
+                  <div style="display: flex; align-items: center; gap: 18px; font-size: 13px; margin-bottom: 12px"><span style="display: inline-flex; align-items: center; gap: 5px"><span style="width: 9px; height: 9px; border-radius: 999px; background: #008dd5"></span>Leads by score band</span></div>
+                  <div style="display: flex; align-items: flex-end; gap: 20px; height: 168px; padding: 0 6px; border-bottom: 1px solid #cedbe7">
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #fff; background: #13314c; border-radius: 2px; padding: 1px 5px">5</span><div style="width: 100%; height: 34px; background: #eb343c; border-radius: 2px 2px 0 0"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #fff; background: #13314c; border-radius: 2px; padding: 1px 5px">9</span><div style="width: 100%; height: 62px; background: #f58220; border-radius: 2px 2px 0 0"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #fff; background: #13314c; border-radius: 2px; padding: 1px 5px">12</span><div style="width: 100%; height: 118px; background: #008dd5; border-radius: 2px 2px 0 0"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #fff; background: #13314c; border-radius: 2px; padding: 1px 5px">8</span><div style="width: 100%; height: 82px; background: #6eb744; border-radius: 2px 2px 0 0"></div></div>
+                  </div>
+                  <div style="display: flex; gap: 20px; padding: 8px 6px 0; font-size: 12px; color: #666"><span style="flex: 1; text-align: center">0–40</span><span style="flex: 1; text-align: center">41–60</span><span style="flex: 1; text-align: center">61–80</span><span style="flex: 1; text-align: center">81–100</span></div>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt ›</span> Of my current leads, who is most likely to convert — based on history/notes, stage and time in each stage? Create a lead-scoring dashboard so I can prioritize who I talk to.</div>
+            </sc-if>
+          </div>
+
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Resident Sentiment Watchlist -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="{{ watchWrapStyle }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-size: 15px; font-weight: 500; color: #13314c">Resident Sentiment Watchlist</span>
+                  <span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #fdeceb; color: #eb343c; font-size: 12px; font-weight: 500">{{ watchCount }} flagged</span>
+                  <sc-if value="{{ cellSelected }}" hint-placeholder-val="{{ false }}">
+                    <span onClick="{{ clearCell }}" style="display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 7px; border-radius: 2px; background: #ebf1f5; color: #195ca4; font-size: 12px; font-weight: 500; cursor: pointer">{{ cellLabel }}<span class="ms" style="font-size: 14px">close</span></span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="font-size: 12px; color: #8fa3b3">{{ watchUpdated }}</span>
+                  <span onClick="{{ refreshWatch }}" class="ms" style="{{ watchSpinStyle }}">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="display: flex; border-bottom: 1px solid #cedbe7">
+                <div onClick="{{ watchTabList }}" style="{{ watchTabListStyle }}">List</div>
+                <div onClick="{{ watchTabChart }}" style="{{ watchTabChartStyle }}">Chart</div>
+              </div>
+              <sc-if value="{{ watchIsList }}" hint-placeholder-val="{{ true }}">
+                <div>
+                  <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                    <div>Resident</div><div>Sentiment</div><div>Signals</div><div>Renewal</div><div style="text-align: right">Next Step</div>
+                  </div>
+                  <sc-for list="{{ watch }}" as="w" hint-placeholder-count="3">
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px" style-hover="background: #f5f8fa">
+                      <div style="display: flex; align-items: center; gap: 6px"><span style="{{ w.dotStyle }}"></span><div><div style="color: #13314c">{{ w.name }}</div><div style="font-size: 12px; color: #8fa3b3">{{ w.unit }}</div></div></div>
+                      <div style="{{ w.scoreStyle }}">{{ w.score }}</div>
+                      <div style="font-size: 13px">{{ w.signals }}</div>
+                      <div style="{{ w.renewalStyle }}">{{ w.renewal }}</div>
+                      <div style="text-align: right"><span onClick="{{ w.onAct }}" style="color: #008dd5; cursor: pointer" style-hover="text-decoration: underline">{{ w.action }}</span></div>
+                    </div>
+                  </sc-for>
+                  <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; font-size: 14px; background: #f5f8fa; font-weight: 500; color: #13314c">
+                    <div>Watchlist Total</div><div>{{ watchAvg }}</div><div>{{ watchCount }} residents</div><div>3 ≤60 days</div><div style="text-align: right"><span onClick="{{ clearCell }}" style="color: #008dd5; cursor: pointer">View All</span></div>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ watchIsChart }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 14px">
+                  <div style="display: flex; align-items: center; gap: 18px; font-size: 13px; margin-bottom: 12px"><span style="display: inline-flex; align-items: center; gap: 5px"><span style="width: 9px; height: 9px; border-radius: 999px; background: #eb343c"></span>Negative signals per month</span><span style="display: inline-flex; align-items: center; gap: 5px"><span style="width: 9px; height: 9px; border-radius: 999px; background: #cedbe7"></span>Resolved</span></div>
+                  <div style="display: flex; align-items: flex-end; gap: 16px; height: 180px; padding: 0 6px; border-bottom: 1px solid #cedbe7">
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 34px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 62px; background: #cedbe7"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 48px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 58px; background: #cedbe7"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 66px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 54px; background: #cedbe7"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 88px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 46px; background: #cedbe7"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 104px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 40px; background: #cedbe7"></div></div>
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 2px"><div style="height: 122px; background: #eb343c; border-radius: 2px 2px 0 0"></div><div style="height: 34px; background: #cedbe7"></div></div>
+                  </div>
+                  <div style="display: flex; gap: 16px; padding: 8px 6px 0; font-size: 12px; color: #666"><span style="flex: 1; text-align: center">03/26</span><span style="flex: 1; text-align: center">04/26</span><span style="flex: 1; text-align: center">05/26</span><span style="flex: 1; text-align: center">06/26</span><span style="flex: 1; text-align: center">07/26</span><span style="flex: 1; text-align: center">08/26</span></div>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt ›</span> Review maintenance notes, portal messages, surveys and smart voicemails to flag escalated residents before they vacate. Create a watchlist tile that tracks the communication going forward.</div>
+            </sc-if>
+          </div>
+
+          <!-- Renewal Risk x Sentiment -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Renewal Risk × Sentiment</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="font-size: 13px; color: #13314c">Next 6 Months</span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; gap: 8px">
+                  <div style="width: 92px; flex: none; display: flex; flex-direction: column; gap: 8px; padding-top: 24px">
+                    <div style="height: 44px; display: flex; align-items: center; font-size: 13px; color: #13314c; font-weight: 500">Negative</div>
+                    <div style="height: 44px; display: flex; align-items: center; font-size: 13px; color: #13314c; font-weight: 500">Neutral</div>
+                    <div style="height: 44px; display: flex; align-items: center; font-size: 13px; color: #13314c; font-weight: 500">Positive</div>
+                  </div>
+                  <div style="flex: 1; display: flex; flex-direction: column; gap: 8px">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; height: 16px"><span style="font-size: 12px; color: #666; text-align: center">≤60 days</span><span style="font-size: 12px; color: #666; text-align: center">61–120 days</span><span style="font-size: 12px; color: #666; text-align: center">121–180 days</span></div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+                      <sc-for list="{{ cells }}" as="c" hint-placeholder-count="9">
+                        <div onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.count }}</div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #666">
+                  <span>{{ matrixHint }}</span>
+                  <span style="color: #eb343c; font-weight: 500">3 need attention this month</span>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt ›</span> Are any of these residents up for renewal in the next 6 months? Cross-reference renewal date against sentiment so I know who to work first.</div>
+            </sc-if>
+          </div>
+          <!-- Upcoming Vacancy Coverage -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="{{ vacWrapStyle }}">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Upcoming Vacancy Coverage</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="font-size: 13px; color: #13314c">Days</span>
+                  <div style="display: flex; align-items: center; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <span onClick="{{ vacMinus }}" class="ms" style="font-size: 16px; color: #666; width: 24px; height: 22px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer" style-hover="background: #ebf1f5; color: #008dd5">remove</span>
+                    <span style="width: 34px; text-align: center; font-size: 13px; color: #13314c; border-left: 1px solid #cedbe7; border-right: 1px solid #cedbe7">{{ vacDays }}</span>
+                    <span onClick="{{ vacPlus }}" class="ms" style="font-size: 16px; color: #666; width: 24px; height: 22px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer" style-hover="background: #ebf1f5; color: #008dd5">add</span>
+                  </div>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #cedbe7">
+                <div style="position: relative; width: 152px; height: 152px; flex: none">
+                  <svg width="152" height="152" viewBox="0 0 152 152" style="display: block; transform: rotate(-90deg)">
+                    <sc-for list="{{ arcs }}" as="a" hint-placeholder-count="3">
+                      <circle onClick="{{ a.onClick }}" cx="76" cy="76" r="56" fill="none" stroke="{{ a.stroke }}" stroke-width="{{ a.width }}" stroke-dasharray="{{ a.dash }}" stroke-dashoffset="{{ a.offset }}" style="cursor: pointer"></circle>
+                    </sc-for>
+                  </svg>
+                  <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none">
+                    <div style="width: 88px; height: 88px; border-radius: 999px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 20px; font-weight: 500; color: #13314c">{{ vacUnits }}</span><span style="font-size: 12px; color: #666">Vacating</span></div>
+                  </div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+                  <sc-for list="{{ vacLegend }}" as="l" hint-placeholder-count="3">
+                    <div onClick="{{ l.onClick }}" style="{{ l.style }}" style-hover="background: #f5f8fa">
+                      <span style="{{ l.dotStyle }}"></span><span style="flex: 1; color: #13314c">{{ l.label }}</span><span style="color: #666">{{ l.count }}</span>
+                    </div>
+                  </sc-for>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0"><span style="flex: 1; color: #13314c; font-weight: 500">Interested prospects across all units</span><span style="color: #13314c; font-weight: 500">{{ vacProspects }}</span></div>
+                </div>
+              </div>
+
+              <sc-if value="{{ vacStatusSelected }}" hint-placeholder-val="{{ false }}">
+                <div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: #ebf1f5; border-bottom: 1px solid #cedbe7">
+                    <div style="display: flex; align-items: center; gap: 9px">
+                      <span style="{{ vacStatusDot }}"></span>
+                      <span style="font-size: 14px; font-weight: 500; color: #13314c">{{ vacStatusLabel }}</span>
+                      <span style="font-size: 13px; color: #666">{{ vacStatusCount }}</span>
+                    </div>
+                    <span onClick="{{ clearVacStatus }}" style="display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: #008dd5; cursor: pointer" style-hover="text-decoration: underline">Clear<span class="ms" style="font-size: 16px">close</span></span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1.3fr 0.8fr 0.9fr 1.9fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding: 9px 14px; border-bottom: 1px solid #cedbe7">
+                    <div>Unit</div><div>Date vacant</div><div>Applications</div><div>Interested prospects</div>
+                  </div>
+                  <sc-for list="{{ statusUnits }}" as="u" hint-placeholder-count="5">
+                    <div style="display: grid; grid-template-columns: 1.3fr 0.8fr 0.9fr 1.9fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px" style-hover="background: #f5f8fa">
+                      <div><div style="color: #13314c">{{ u.unit }}</div><div style="font-size: 12px; color: #8fa3b3">{{ u.meta }}</div></div>
+                      <div>{{ u.vacant }}</div>
+                      <div><span style="{{ u.appStyle }}">{{ u.apps }}</span></div>
+                      <div style="{{ u.prospectStyle }}">{{ u.prospects }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ vacNoStatus }}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: center; gap: 9px; padding: 12px 14px; border-bottom: 1px solid #cedbe7; font-size: 13px; color: #666">
+                  <span class="ms" style="font-size: 18px; color: #008dd5">touch_app</span>Select a slice of the chart, or a status, to list those units with their applications and interested prospects.
+                </div>
+              </sc-if>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f5f8fa; font-size: 14px">
+                <span style="color: #13314c; font-weight: 500">Portfolio Total — {{ vacUnits }} units · {{ vacApps }} applications</span>
+                <span onClick="{{ blastDraft }}" style="color: #008dd5; cursor: pointer" style-hover="text-decoration: underline">Draft availability email</span>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt ›</span> Show me all units vacant in the next 30 days with any pending applications, then expand it to show prospects currently interested in those units.</div>
+            </sc-if>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orion Assistant overlay -->
+  <sc-if value="{{ assistantOpen }}" hint-placeholder-val="{{ false }}">
+    <dc-import name="Orion Assistant Panel" on-close="{{ closeAssistant }}" on-view-dashboard="{{ showNewTile }}" hint-size="640px,860px" style="position: absolute; top: 116px; right: 44px; z-index: 90"></dc-import>
+  </sc-if>
+
+  <!-- Draft panel -->
+  <sc-if value="{{ draftOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 60; background: rgba(19,49,76,0.28); display: flex; justify-content: flex-end">
+      <div style="width: 520px; height: 100%; background: #fff; border-left: 1px solid #cedbe7; box-shadow: -3px 0 12px rgba(0,0,0,0.14); display: flex; flex-direction: column; animation: rmx-slide 200ms ease-in-out">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #13314c">
+          <div style="display: flex; align-items: center; gap: 8px"><span class="ms" style="font-size: 20px; color: #fff">auto_awesome</span><span style="font-size: 16px; font-weight: 500; color: #fff">Orion Writing Assistant</span></div>
+          <span onClick="{{ closeDraft }}" class="ms" style="font-size: 22px; color: #cedbe7; cursor: pointer">close</span>
+        </div>
+        <div style="padding: 16px; display: flex; flex-direction: column; gap: 14px; flex: 1; overflow: auto">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 13px; color: #666">Prompt used</span>
+            <div style="border: 1px solid #cedbe7; border-left: 3px solid #008dd5; background: #f5f8fa; padding: 9px 11px; font-size: 13px; line-height: 18px; color: #424e5b">{{ draftPrompt }}</div>
+          </div>
+          <div style="display: flex; gap: 12px">
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #666">To</span><div style="border: 1px solid #cedbe7; border-radius: 4px; background: #f5f8fa; padding: 8px 10px; font-size: 14px; color: #13314c">{{ draftTo }}</div></div>
+            <div style="flex: none; width: 130px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #666">Channel</span><div style="border: 1px solid #cedbe7; border-radius: 4px; background: #f5f8fa; padding: 8px 10px; font-size: 14px; color: #13314c">{{ draftChannel }}</div></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 13px; color: #666">Subject</span><div style="border: 1px solid #cedbe7; border-radius: 4px; padding: 8px 10px; font-size: 14px; color: #13314c">{{ draftSubject }}</div></div>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex: 1">
+            <span style="font-size: 13px; color: #666">Draft</span>
+            <div style="border: 1px solid #cedbe7; border-radius: 4px; padding: 12px; font-size: 14px; line-height: 21px; color: #424e5b; white-space: pre-line; flex: 1">{{ draftBody }}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #666"><span class="ms" style="font-size: 18px; color: #666">lock</span>Orion cannot send. Review, edit, then send from Rent Manager.</div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 12px 16px; border-top: 1px solid #cedbe7; background: #f5f8fa">
+          <button onClick="{{ closeDraft }}" style="height: 34px; padding: 0 14px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="border-color: #008dd5; color: #008dd5">Cancel</button>
+          <button onClick="{{ regenerate }}" style="height: 34px; padding: 0 14px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="border-color: #008dd5; color: #008dd5">Regenerate</button>
+          <button onClick="{{ approveDraft }}" style="height: 34px; padding: 0 16px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Approve &amp; Queue</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Toast -->
+  <sc-if value="{{ toastOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 24px; right: 24px; z-index: 70; display: flex; align-items: center; gap: 10px; background: #13314c; color: #fff; border-radius: 4px; padding: 12px 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.22); font-size: 14px">
+      <span class="ms" style="font-size: 20px; color: #6eb744">check_circle</span>{{ toastText }}
+    </div>
+  </sc-if>
+</section>
+</sc-if>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1720},&quot;showPrompts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Board&quot;}}">
+class Component extends DCLogic {
+  state = {
+    leadTab: "list", watchTab: "list", sortKey: "score", sortDir: "desc",
+    leadMenu: false, leadPeriod: "Last 6 Months",
+    spin: {}, updated: {},
+    cell: null, bucket: null, vacDays: 30,
+    openUnits: {}, openTour: 0,
+    dismissed: [], draft: null, toast: null, queued: 3,
+    highlight: null, prompts: null, vacStatus: null, route: "workspace",
+  };
+
+  componentWillUnmount() {
+    clearTimeout(this._spinT); clearTimeout(this._toastT); clearTimeout(this._hlT);
+  }
+
+  spin(key) {
+    this.setState(s => ({ spin: { ...s.spin, [key]: true } }));
+    clearTimeout(this._spinT);
+    this._spinT = setTimeout(() => this.setState(s => ({
+      spin: { ...s.spin, [key]: false },
+      updated: { ...s.updated, [key]: "Updated just now" },
+    })), 900);
+  }
+
+  toast(text) {
+    this.setState({ toast: text });
+    clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  highlight(key, label) {
+    this.setState({ highlight: key });
+    this.toast(label + " — tile created by Orion");
+    clearTimeout(this._hlT);
+    this._hlT = setTimeout(() => this.setState({ highlight: null }), 3200);
+  }
+
+  openDraft(d) { this.setState({ draft: d }); }
+
+  tile(highlighted) {
+    return "background: #fff; border: 1px solid " + (highlighted ? "#008dd5" : "#cedbe7")
+      + "; border-radius: 4px; overflow: hidden; transition: box-shadow 200ms ease-out, border-color 200ms ease-out"
+      + (highlighted ? "; box-shadow: 0 0 0 4px rgba(0,141,213,0.20)" : "");
+  }
+
+  tab(active) {
+    return "flex: 1; text-align: center; padding: 10px 0; font-size: 14px; cursor: pointer; color: "
+      + (active ? "#008dd5" : "#666")
+      + (active ? "; border-bottom: 2px solid #008dd5; margin-bottom: -1px" : "");
+  }
+
+  spinStyle(key) {
+    const on = this.state.spin[key];
+    return "font-size: 19px; color: #008dd5; cursor: pointer"
+      + (on ? "; animation: rmx-spin 800ms linear infinite" : "");
+  }
+
+  chip(bg, color) {
+    return "display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; border-radius: 2px; background: "
+      + bg + "; color: " + color + "; font-weight: 500; font-size: 13px";
+  }
+
+  dot(color) { return "width: 8px; height: 8px; border-radius: 999px; flex: none; background: " + color; }
+
+  renderVals() {
+    const s = this.state;
+    const showPrompts = s.prompts === null ? (this.props.showPrompts ?? false) : s.prompts;
+
+    // ---- Leads
+    const leadData = [
+      { name: "Priya Raman", stage: "Application", days: 4, score: 91, action: "Call", color: "#6eb744", chip: ["#e2f1da", "#4a7d2c"] },
+      { name: "Jordan Wells", stage: "Property Tour", days: 6, score: 84, action: "Write Email", color: "#6eb744", chip: ["#e2f1da", "#4a7d2c"] },
+      { name: "Chris Okafor", stage: "Guest Card", days: 2, score: 72, action: "Send Text", color: "#008dd5", chip: ["#ebf1f5", "#195ca4"] },
+      { name: "Dana Whitfield", stage: "Screening", days: 11, score: 41, action: "Write Email", color: "#f58220", chip: ["#fdf0e5", "#a1541a"] },
+    ];
+    const dir = s.sortDir === "desc" ? -1 : 1;
+    const leads = leadData.slice().sort((a, b) => (a[s.sortKey] - b[s.sortKey]) * dir).map(l => ({
+      ...l,
+      dotStyle: this.dot(l.color),
+      chipStyle: this.chip(l.chip[0], l.chip[1]),
+      onAct: () => this.openDraft({
+        to: l.name, channel: l.action === "Send Text" ? "SMS" : "Email",
+        subject: l.stage === "Application" ? "Finishing your application" : "Following up on your visit",
+        prompt: "Draft a next-step message for " + l.name + " — score " + l.score + ", " + l.days + " days in " + l.stage + ".",
+        body: "Hi " + l.name.split(" ")[0] + ",\n\nThanks for your interest in Ridgeline. You're currently at the "
+          + l.stage.toLowerCase() + " stage, and I want to keep things moving so you don't lose the unit you liked.\n\n"
+          + "Do you have 10 minutes tomorrow to walk through the remaining steps? I can also hold a second option for you in case your first choice goes.\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+      }),
+    }));
+    const arrow = k => (s.sortKey === k ? (s.sortDir === "desc" ? " \u25be" : " \u25b4") : "");
+    const headStyle = k => "text-align: right; cursor: pointer; color: " + (s.sortKey === k ? "#008dd5" : "#13314c");
+
+    // ---- Quiet leads
+    const quietData = [
+      { name: "Sam Ortega", detail: "5 touches \u2192 0 in 12 days" },
+      { name: "Hailey Brooks", detail: "Toured, silent 9 days" },
+      { name: "Devon Marsh", detail: "Application abandoned 15 days" },
+    ];
+    const quiet = quietData.map(q => ({
+      ...q,
+      onAct: () => this.openDraft({
+        to: q.name, channel: "Email", subject: "Still looking?",
+        prompt: "Re-engage " + q.name + " — engagement trended down after strong initial interest.",
+        body: "Hi " + q.name.split(" ")[0] + ",\n\nIt's been a little while since we last talked, so I wanted to check in. "
+          + "The unit you looked at is still available, and two similar floor plans opened up this week.\n\n"
+          + "Want me to send the current availability list, or set up a quick second look?\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+      }),
+    }));
+
+    // ---- Follow-up aging
+    const bucketData = [
+      { key: "b1", label: "7\u201314 days", count: 12, pct: "57.1%", color: "#008dd5" },
+      { key: "b2", label: "15\u201330 days", count: 6, pct: "28.6%", color: "#f58220" },
+      { key: "b3", label: "30+ days", count: 3, pct: "14.3%", color: "#eb343c" },
+    ];
+    const buckets = bucketData.map(b => ({
+      ...b,
+      dotStyle: "width: 9px; height: 9px; border-radius: 999px; flex: none; background: " + b.color,
+      style: "display: flex; align-items: center; gap: 8px; padding: 7px 8px; margin: 0 -8px; border-bottom: 1px solid #ebf1f5; cursor: pointer; border-radius: 2px"
+        + (s.bucket === b.key ? "; background: #ebf1f5; box-shadow: inset 3px 0 0 " + b.color : ""),
+      onClick: () => this.setState({ bucket: s.bucket === b.key ? null : b.key }),
+    }));
+    const staleAll = [
+      { key: "b1", name: "Sam Ortega", meta: "12 days \u00b7 Toured" },
+      { key: "b1", name: "Marcus Reed", meta: "8 days \u00b7 Inquiry" },
+      { key: "b2", name: "Hailey Brooks", meta: "19 days \u00b7 Applied" },
+      { key: "b3", name: "Nia Carter", meta: "34 days \u00b7 Guest Card" },
+    ];
+    const stale = staleAll.filter(x => !s.bucket || x.key === s.bucket).map(x => ({
+      ...x,
+      onAct: () => this.openDraft({
+        to: x.name, channel: "Email", subject: "Checking in on your search",
+        prompt: "Draft a follow-up for " + x.name + " — no communication in " + x.meta.split(" ")[0] + " days.",
+        body: "Hi " + x.name.split(" ")[0] + ",\n\nI don't want to lose track of your search. Here's where things stand and what's available this week.\n\nCan I put two units on hold for a tour Thursday?\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+      }),
+    }));
+    const agingCount = s.bucket ? bucketData.find(b => b.key === s.bucket).count : 21;
+    const bucketPct = k => {
+      const seg = { b1: "#008dd5 0 57.1%, #ebf1f5 57.1% 100%", b2: "#f58220 0 28.6%, #ebf1f5 28.6% 100%", b3: "#eb343c 0 14.3%, #ebf1f5 14.3% 100%" };
+      return seg[k];
+    };
+    const donutStyle = "width: 168px; height: 168px; border-radius: 999px; display: flex; align-items: center; justify-content: center; background: conic-gradient("
+      + (s.bucket ? bucketPct(s.bucket) : "#eb343c 0 14.3%, #f58220 14.3% 42.9%, #008dd5 42.9% 100%") + ")";
+
+    // ---- Matrix
+    const grid = [
+      { r: "Negative", c: "\u226460 days", n: 3, bg: "#eb343c", fg: "#fff" },
+      { r: "Negative", c: "61\u2013120 days", n: 2, bg: "#f58220", fg: "#fff" },
+      { r: "Negative", c: "121\u2013180 days", n: 2, bg: "#f79b4d", fg: "#fff" },
+      { r: "Neutral", c: "\u226460 days", n: 8, bg: "#cedbe7", fg: "#13314c" },
+      { r: "Neutral", c: "61\u2013120 days", n: 14, bg: "#ebf1f5", fg: "#424e5b" },
+      { r: "Neutral", c: "121\u2013180 days", n: 11, bg: "#ebf1f5", fg: "#424e5b" },
+      { r: "Positive", c: "\u226460 days", n: 6, bg: "#6eb744", fg: "#fff" },
+      { r: "Positive", c: "61\u2013120 days", n: 9, bg: "#e2f1da", fg: "#4a7d2c" },
+      { r: "Positive", c: "121\u2013180 days", n: 7, bg: "#e2f1da", fg: "#4a7d2c" },
+    ];
+    const cellKey = g => g.r + "|" + g.c;
+    const cells = grid.map(g => {
+      const sel = s.cell === cellKey(g);
+      return {
+        count: g.n,
+        style: "height: 44px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer; background: "
+          + g.bg + "; color: " + g.fg + "; transition: box-shadow 150ms ease-out"
+          + (sel ? "; box-shadow: 0 0 0 3px rgba(0,141,213,0.55)" : ""),
+        onClick: () => this.setState({ cell: sel ? null : cellKey(g), watchTab: "list" }),
+      };
+    });
+
+    // ---- Watchlist (filtered by matrix cell)
+    const watchData = [
+      { name: "Maria Delgado", unit: "204B \u00b7 Ridgeline", score: "-38", trend: "trending_down", sentiment: "Negative", bucket: "\u226460 days", signals: "3 ticket re-opens, 2 complaints, survey 4/10", renewal: "Oct 31", urgent: true, action: "Write Email", color: "#eb343c" },
+      { name: "Terrance Boyd", unit: "1108 \u00b7 Harbor Flats", score: "-19", trend: "trending_down", sentiment: "Negative", bucket: "61\u2013120 days", signals: "Smart voicemail (noise), 1 escalated ticket", renewal: "Dec 31", urgent: false, action: "Send Text", color: "#f58220" },
+      { name: "Anh Nguyen", unit: "512 \u00b7 Ridgeline", score: "-12", trend: "trending_flat", sentiment: "Negative", bucket: "121\u2013180 days", signals: "2 portal messages unresolved 9 days", renewal: "Feb 28", urgent: false, action: "Write Email", color: "#f58220" },
+      { name: "Rob Feldman", unit: "702 \u00b7 Willowbrook", score: "-4", trend: "trending_flat", sentiment: "Neutral", bucket: "\u226460 days", signals: "1 parking request, no complaints", renewal: "Oct 15", urgent: false, action: "Write Email", color: "#cedbe7" },
+    ];
+    const watch = watchData.filter(w => !s.cell || s.cell === w.sentiment + "|" + w.bucket).map(w => ({
+      ...w,
+      dotStyle: this.dot(w.color),
+      scoreStyle: "display: flex; align-items: center; gap: 5px; font-weight: 500; color: " + w.color,
+      renewalStyle: "font-weight: 500; color: " + (w.urgent ? "#eb343c" : "#13314c"),
+      onAct: () => this.openDraft({
+        to: w.name, channel: w.action === "Send Text" ? "SMS" : "Email",
+        subject: "Checking in on your unit",
+        prompt: "Draft a proactive check-in for " + w.name + " — sentiment " + w.score + ", renewal " + w.renewal + ".",
+        body: "Hi " + w.name.split(" ")[0] + ",\n\nI saw the recent maintenance activity on your unit and I want to make sure everything is resolved to your satisfaction. "
+          + "Your lease is up " + w.renewal + ", and I'd rather fix problems now than have you weighing a move.\n\n"
+          + "Would a walkthrough this week work? I'll bring the ticket history so nothing gets missed.\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+      }),
+    }));
+
+    // ---- Vacancy (status breakdown + clickable donut)
+    const VAC_UNITS = [
+      { unit: "305 \u00b7 Ridgeline", meta: "2 bed \u00b7 $1,795", vacant: "Sep 12", apps: 2, status: "covered", prospects: "Jordan Wells, Priya Raman, Hailey Brooks, Marcus Reed" },
+      { unit: "214 \u00b7 Union Street Lofts", meta: "Studio \u00b7 $1,410", vacant: "Sep 15", apps: 2, status: "covered", prospects: "Chris Okafor, Nia Carter, Devon Marsh" },
+      { unit: "1108 \u00b7 Harbor Flats", meta: "1 bed \u00b7 $1,450", vacant: "Sep 19", apps: 1, status: "covered", prospects: "Dana Whitfield, Marcus Reed, Sam Ortega" },
+      { unit: "610 \u00b7 Union Street Lofts", meta: "Studio \u00b7 $1,320", vacant: "Sep 22", apps: 3, status: "covered", prospects: "Chris Okafor, Priya Raman, Rob Feldman, Dana Whitfield" },
+      { unit: "118 \u00b7 Ridgeline", meta: "2 bed \u00b7 $1,825", vacant: "Sep 30", apps: 1, status: "covered", prospects: "Jordan Wells, Chris Okafor" },
+      { unit: "512 \u00b7 Riverview", meta: "2 bed \u00b7 $1,690", vacant: "Sep 26", apps: 0, status: "interest", prospects: "Sam Ortega, Nia Carter" },
+      { unit: "208 \u00b7 Willowbrook", meta: "1 bed \u00b7 $1,320", vacant: "Sep 29", apps: 0, status: "interest", prospects: "Hailey Brooks, Devon Marsh" },
+      { unit: "431 \u00b7 Harbor Flats", meta: "1 bed \u00b7 $1,395", vacant: "Oct 2", apps: 0, status: "interest", prospects: "Marcus Reed" },
+      { unit: "902 \u00b7 Riverview", meta: "3 bed \u00b7 $2,150", vacant: "Oct 4", apps: 0, status: "interest", prospects: "Rob Feldman, Anh Nguyen" },
+      { unit: "420 \u00b7 Ridgeline", meta: "2 bed \u00b7 $1,900", vacant: "Sep 24", apps: 0, status: "none", prospects: "", matches: 6 },
+      { unit: "702 \u00b7 Harbor Flats", meta: "1 bed \u00b7 $1,375", vacant: "Sep 28", apps: 0, status: "none", prospects: "" },
+      { unit: "145 \u00b7 Willowbrook", meta: "Studio \u00b7 $1,150", vacant: "Oct 1", apps: 0, status: "none", prospects: "" },
+      { unit: "318 \u00b7 Crestline", meta: "2 bed \u00b7 $1,780", vacant: "Oct 3", apps: 0, status: "none", prospects: "" },
+      { unit: "1204 \u00b7 Hawthorne Ridge", meta: "1 bed \u00b7 $1,410", vacant: "Oct 5", apps: 0, status: "none", prospects: "" },
+    ];
+    const VAC_STATUS = {
+      covered: { label: "Covered \u2014 application pending", color: "#6eb744" },
+      interest: { label: "Interest logged, no application", color: "#f58220" },
+      none: { label: "No interest logged", color: "#eb343c" },
+    };
+    const factor = s.vacDays / 30;
+    const vacUnits = Math.round(14 * factor);
+    const unitData = [
+      { unit: "305 \u00b7 Ridgeline", meta: "2 bed \u00b7 $1,795", vacant: "Sep 12", apps: "2 pending", appChip: ["#e2f1da", "#4a7d2c"], prospects: "Jordan Wells, Priya Raman, +2", italic: false,
+        detail: [{ name: "Jordan Wells", note: "Toured twice \u00b7 fit 96" }, { name: "Priya Raman", note: "Application started \u00b7 fit 92" }] },
+      { unit: "1108 \u00b7 Harbor Flats", meta: "1 bed \u00b7 $1,450", vacant: "Sep 19", apps: "1 pending", appChip: ["#ebf1f5", "#424e5b"], prospects: "Dana Whitfield", italic: false,
+        detail: [{ name: "Dana Whitfield", note: "Screening \u00b7 fit 74" }] },
+      { unit: "420 \u00b7 Ridgeline", meta: "2 bed \u00b7 $1,900", vacant: "Sep 24", apps: "None", appChip: ["#fdeceb", "#eb343c"], prospects: "No interest logged", italic: true,
+        detail: [{ name: "6 preference matches", note: "Never contacted about this unit" }] },
+    ];
+    const units = unitData.map((u, i) => ({
+      ...u,
+      open: !!s.openUnits[i],
+      appStyle: "display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; font-size: 12px; font-weight: 500; background: " + u.appChip[0] + "; color: " + u.appChip[1],
+      prospectStyle: "font-size: 13px" + (u.italic ? "; font-style: italic; color: #b3b3b3" : ""),
+      caretStyle: "font-size: 20px; color: #666; transition: transform 200ms ease-in-out" + (s.openUnits[i] ? "; transform: rotate(180deg); color: #008dd5" : ""),
+      onToggle: () => this.setState(st => ({ openUnits: { ...st.openUnits, [i]: !st.openUnits[i] } })),
+      detail: u.detail.map(d => ({
+        ...d,
+        onAct: () => this.openDraft({
+          to: d.name, channel: "Email", subject: "Unit " + u.unit.split(" ")[0] + " is coming available",
+          prompt: "Notify interested prospects that " + u.unit + " frees up " + u.vacant + ".",
+          body: "Hi,\n\nUnit " + u.unit.split(" ")[0] + " (" + u.meta + ") becomes available " + u.vacant
+            + ", and based on your preferences it's a strong match.\n\nWant me to hold a tour slot before it's listed publicly?\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+        }),
+      })),
+    }));
+
+    // ---- Tours
+    const tourData = [
+      { title: "2:30 PM \u00b7 Jordan Wells \u00b7 Ridgeline", prefs: "2 bed \u00b7 pet friendly \u00b7 \u2264$1,850 \u00b7 in-unit W/D", badge: "Emails at 2:00 PM",
+        units: [
+          { score: 96, unit: "Unit 305", note: "$1,795 \u00b7 5 of 5 met", color: "#6eb744" },
+          { score: 88, unit: "Unit 118", note: "$1,825 \u00b7 no W/D", color: "#6eb744" },
+          { score: 63, unit: "Unit 420", note: "$1,900 \u00b7 over budget", color: "#f58220" },
+        ] },
+      { title: "4:15 PM \u00b7 Chris Okafor \u00b7 Union Street Lofts", prefs: "Studio \u00b7 downtown \u00b7 move-in Oct 1", badge: "Emails at 3:45 PM",
+        units: [
+          { score: 90, unit: "Unit 610", note: "$1,320 \u00b7 4 of 4 met", color: "#6eb744" },
+          { score: 71, unit: "Unit 214", note: "$1,410 \u00b7 no elevator", color: "#008dd5" },
+        ] },
+    ];
+    const tours = tourData.map((t, i) => {
+      const open = s.openTour === i;
+      return {
+        ...t,
+        open,
+        cardStyle: "border-radius: 4px; padding: 12px; cursor: pointer; transition: box-shadow 200ms ease-out; border: 1px solid "
+          + (open ? "#008dd5" : "#cedbe7") + "; background: " + (open ? "#ebf1f5" : "#fff")
+          + (open ? "; box-shadow: 0 4px 12px rgba(0,0,0,0.10)" : ""),
+        badgeStyle: "display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 4px; font-size: 12px; font-weight: 500; white-space: nowrap; background: "
+          + (open ? "#008dd5" : "#ebf1f5") + "; color: " + (open ? "#fff" : "#424e5b"),
+        onSelect: () => this.setState({ openTour: i }),
+        units: t.units.map(u => ({
+          ...u,
+          scoreStyle: "width: 30px; height: 20px; border-radius: 2px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; color: #fff; background: " + u.color,
+          barStyle: "display: block; height: 6px; border-radius: 2px; width: " + u.score + "%; background: " + u.color,
+        })),
+        onBrief: () => this.openDraft({
+          to: t.title.split(" \u00b7 ")[1], channel: "Email", subject: "Your tour today — unit shortlist",
+          prompt: "Create a pre-tour briefing: preferences vs. availability, ranked by fit, 30 minutes before the showing.",
+          body: "Tour: " + t.title + "\nPreferences: " + t.prefs + "\n\nRanked shortlist:\n"
+            + t.units.map(u => "  " + u.score + "  " + u.unit + " — " + u.note).join("\n")
+            + "\n\nTalk track: lead with the top match, hold the second as a fallback, mention the fee waiver only if budget comes up.",
+        }),
+      };
+    });
+
+    // ---- Next steps
+    const stepData = [
+      { id: "s1", icon: "priority_high", color: "#eb343c", title: "Renewal check-in \u2014 Maria Delgado",
+        desc: "3 open complaints, renews Oct 31. Acknowledge the maintenance history and offer a walkthrough.", primary: "Write Email",
+        draft: { to: "Maria Delgado", channel: "Email", subject: "Let's get this resolved before renewal",
+          prompt: "Draft a renewal check-in for Maria Delgado \u2014 3 open complaints, renews Oct 31.",
+          body: "Hi Maria,\n\nI reviewed the maintenance history on 204B and I'm sorry the same issue came back twice. "
+            + "Before we talk renewal, I want it fixed and documented.\n\nCan I bring a technician by Thursday and walk the unit with you?\n\nBest,\nDana Sheldon\nLeasing — Rent Manager" } },
+      { id: "s2", icon: "group", color: "#f58220", title: "Re-engage 9 quiet leads",
+        desc: "One Orion Writing Assistant prompt, personalized per lead by last unit viewed.", primary: "Draft Prompt",
+        draft: { to: "9 prospects", channel: "Email \u00b7 bulk", subject: "Still interested in {{unit}}?",
+          prompt: "Write a re-engagement prompt for 9 leads that went quiet after strong initial engagement.",
+          body: "For each lead, write 90 words or less:\n\n1. Reference the last unit they viewed and the date.\n2. Note one thing that changed since (price, availability, similar floor plan).\n3. Offer two concrete tour windows this week.\n4. Close with a single question.\n\nTone: plain, operational, no marketing language. Sign as the assigned agent." } },
+      { id: "s3", icon: "meeting_room", color: "#008dd5", title: "Fill Unit 420 \u2014 no interest logged",
+        desc: "Notify the 6 prospects whose preferences match this unit.", primary: "Write Email",
+        draft: { to: "6 preference matches", channel: "Email \u00b7 bulk", subject: "A 2 bed at Ridgeline just opened",
+          prompt: "Unit 420 vacates Sep 24 with no logged interest \u2014 notify matching prospects.",
+          body: "Hi,\n\nA 2 bed at Ridgeline (Unit 420, $1,900) becomes available September 24. It matches the size and move-in window you gave us.\n\n"
+            + "It isn't listed publicly yet \u2014 want a tour slot before it is?\n\nBest,\nDana Sheldon\nLeasing — Rent Manager" } },
+    ];
+    const steps = stepData.filter(x => !s.dismissed.includes(x.id)).map(x => ({
+      ...x,
+      iconStyle: "font-size: 20px; margin-top: 2px; color: " + x.color,
+      onPrimary: () => this.openDraft(x.draft),
+      onDismiss: () => this.setState(st => ({ dismissed: st.dismissed.concat(x.id) })),
+    }));
+
+    // ---- Orion command chips
+    const chipDefs = [
+      { key: "watch", label: "Flag escalated residents before they vacate" },
+      { key: "lead", label: "Score my leads by likelihood to convert" },
+      { key: "vac", label: "Units vacant in 30 days + applications" },
+      { key: "tour", label: "Pre-tour briefing 30 minutes before showings" },
+    ];
+    const chips = chipDefs.map(c => ({
+      label: c.label,
+      style: "height: 30px; padding: 0 12px; border-radius: 999px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer; background: "
+        + (s.highlight === c.key ? "#ebf1f5" : "#f5f8fa") + "; border: 1px solid "
+        + (s.highlight === c.key ? "#008dd5" : "#cedbe7") + "; color: " + (s.highlight === c.key ? "#195ca4" : "#424e5b"),
+      onClick: () => this.highlight(c.key, c.label),
+    }));
+
+    const d = s.draft || {};
+
+    return {
+      showPrompts,
+      togglePrompts: () => this.setState({ prompts: !showPrompts }),
+      onWorkspace: s.route === "workspace",
+      onDashboard: s.route === "dashboard",
+      goDashboard: () => this.setState({ route: "dashboard", vacStatus: "none" }),
+      goWorkspace: () => this.setState({ route: "workspace" }),
+      showNewTile: () => { this.setState({ assistantOpen: false, vacStatus: "none" }); this.highlight("vac", "Upcoming Vacancy Coverage"); },
+      assistantOpen: s.assistantOpen,
+      toggleAssistant: () => this.setState({ assistantOpen: !s.assistantOpen }),
+      closeAssistant: () => this.setState({ assistantOpen: false }),
+      entryStyle: "width: 34px; height: 34px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background 150ms ease-out; background: "
+        + (s.assistantOpen ? "#425a70" : "transparent"),
+      chips,
+      pendingDrafts: s.queued,
+
+      // lead tile
+      leadWrapStyle: this.tile(s.highlight === "lead"),
+      leadPeriod: s.leadPeriod,
+      leadMenuOpen: s.leadMenu,
+      toggleLeadMenu: () => this.setState({ leadMenu: !s.leadMenu }),
+      leadPeriodOptions: ["Last 30 Days", "Last 6 Months", "Year to Date"].map(label => ({
+        label,
+        style: "padding: 7px 12px; font-size: 14px; cursor: pointer; color: " + (label === s.leadPeriod ? "#008dd5" : "#424e5b"),
+        onClick: () => { this.setState({ leadPeriod: label, leadMenu: false }); this.spin("lead"); },
+      })),
+      refreshLead: () => this.spin("lead"),
+      leadSpinStyle: this.spinStyle("lead"),
+      leadIsList: s.leadTab === "list",
+      leadIsChart: s.leadTab === "chart",
+      leadTabList: () => this.setState({ leadTab: "list" }),
+      leadTabChart: () => this.setState({ leadTab: "chart" }),
+      leadTabListStyle: this.tab(s.leadTab === "list"),
+      leadTabChartStyle: this.tab(s.leadTab === "chart"),
+      leads,
+      sortByScore: () => this.setState({ sortKey: "score", sortDir: s.sortKey === "score" && s.sortDir === "desc" ? "asc" : "desc" }),
+      sortByDays: () => this.setState({ sortKey: "days", sortDir: s.sortKey === "days" && s.sortDir === "desc" ? "asc" : "desc" }),
+      scoreArrow: arrow("score"), daysArrow: arrow("days"),
+      scoreHeadStyle: headStyle("score"), daysHeadStyle: headStyle("days"),
+
+      // delinquency pace tile
+      pace: [
+        { name: "Hawthorne Ridge", detail: "$64,870 \u00b7 was $38,140 \u00b7 -3.63 pts", label: "Behind", color: "#eb343c", chip: ["#fdeceb", "#eb343c"] },
+        { name: "Riverview Apartments", detail: "$32,072 \u00b7 was $31,640 \u00b7 -0.09 pts", label: "Flat", color: "#cedbe7", chip: ["#ebf1f5", "#424e5b"] },
+        { name: "Crestline Business Park", detail: "$26,012 \u00b7 was $29,880 \u00b7 +2.54 pts", label: "Ahead", color: "#6eb744", chip: ["#e2f1da", "#4a7d2c"] },
+      ].map(p => ({
+        name: p.name, detail: p.detail, label: p.label,
+        dotStyle: this.dot(p.color),
+        chipStyle: "display: inline-flex; align-items: center; justify-content: center; min-width: 62px; height: 22px; padding: 0 8px; border-radius: 2px; font-size: 13px; font-weight: 500; background: " + p.chip[0] + "; color: " + p.chip[1],
+      })),
+      refreshPace: () => this.spin("pace"),
+      paceSpinStyle: this.spinStyle("pace"),
+      paceSteps: () => this.toast("Close the Hawthorne Ridge gap first \u2014 late fees unposted 2 of 3 cycles"),
+
+      // quiet tile
+      quiet,
+      refreshQuiet: () => this.spin("quiet"),
+      quietSpinStyle: this.spinStyle("quiet"),
+      quietUpdated: s.updated.quiet || "Updated 6:00 AM",
+
+      // aging tile
+      buckets, stale, agingCount, donutStyle,
+      bucketSelected: !!s.bucket,
+      clearBucket: () => this.setState({ bucket: null }),
+      agingLabel: s.bucket ? "Filtered" : "7+ Days",
+      bulkPrompt: "Draft a prompt for Orion Writing Assistant for these " + agingCount + " prospects?",
+      bulkDraft: () => this.openDraft({
+        to: agingCount + " prospects", channel: "Email \u00b7 bulk", subject: "Following up on your search",
+        prompt: "Show me active prospects with no communication in 7+ days, then draft a follow-up prompt for them.",
+        body: "For each prospect, write 80 words or less:\n\n1. Reference their stage and the last thing that happened.\n2. Name one unit that fits their stated preferences.\n3. Offer two tour windows.\n4. One question to close.\n\nTone: plain and operational. Sign as the assigned agent.",
+      }),
+
+      // matrix
+      cells,
+      matrixHint: s.cell ? "Watchlist filtered to " + s.cell.replace("|", " \u00b7 ") + ". Select again to clear." : "Select a cell to filter the watchlist.",
+
+      // watchlist
+      watchWrapStyle: this.tile(s.highlight === "watch"),
+      watch,
+      watchCount: watch.length,
+      watchAvg: watch.length ? (Math.round(watch.reduce((a, w) => a + parseFloat(w.score), 0) / watch.length)) + " avg" : "\u2014",
+      cellSelected: !!s.cell,
+      cellLabel: s.cell ? s.cell.replace("|", " \u00b7 ") : "",
+      clearCell: () => this.setState({ cell: null }),
+      refreshWatch: () => this.spin("watch"),
+      watchSpinStyle: this.spinStyle("watch"),
+      watchUpdated: s.updated.watch || "Updated 6:00 AM",
+      watchIsList: s.watchTab === "list",
+      watchIsChart: s.watchTab === "chart",
+      watchTabList: () => this.setState({ watchTab: "list" }),
+      watchTabChart: () => this.setState({ watchTab: "chart" }),
+      watchTabListStyle: this.tab(s.watchTab === "list"),
+      watchTabChartStyle: this.tab(s.watchTab === "chart"),
+
+      // vacancy
+      vacWrapStyle: this.tile(s.highlight === "vac"),
+      vacDays: s.vacDays,
+      vacMinus: () => this.setState({ vacDays: Math.max(15, s.vacDays - 15) }),
+      vacPlus: () => this.setState({ vacDays: Math.min(90, s.vacDays + 15) }),
+      vacUnits,
+      vacApps: Math.round(9 * factor),
+      vacCovered: Math.round(5 * factor),
+      vacInterest: Math.round(4 * factor),
+      vacNone: Math.round(5 * factor),
+      vacProspects: Math.round(23 * factor),
+      units,
+
+      vacLegend: ["covered", "interest", "none"].map(k => ({
+        label: VAC_STATUS[k].label,
+        count: VAC_UNITS.filter(u => u.status === k).length,
+        dotStyle: "width: 9px; height: 9px; flex: none; border-radius: 999px; background: " + VAC_STATUS[k].color,
+        style: "display: flex; align-items: center; gap: 8px; padding: 7px 8px; margin: 0 -8px; border-bottom: 1px solid #ebf1f5; border-radius: 2px; cursor: pointer"
+          + (s.vacStatus === k ? "; background: #ebf1f5; box-shadow: inset 3px 0 0 " + VAC_STATUS[k].color : ""),
+        onClick: () => this.setState({ vacStatus: s.vacStatus === k ? null : k }),
+      })),
+      arcs: (() => {
+        const C = 2 * Math.PI * 56;
+        const total = VAC_UNITS.length;
+        let acc = 0;
+        return ["covered", "interest", "none"].map(k => {
+          const n = VAC_UNITS.filter(u => u.status === k).length;
+          const len = (n / total) * C;
+          const offset = -acc;
+          acc += len;
+          const sel = s.vacStatus === k;
+          return {
+            stroke: VAC_STATUS[k].color,
+            width: sel ? 34 : 28,
+            dash: len + " " + (C - len),
+            offset: offset,
+            onClick: () => this.setState({ vacStatus: sel ? null : k }),
+          };
+        });
+      })(),
+      vacStatusSelected: !!s.vacStatus,
+      vacNoStatus: !s.vacStatus,
+      vacStatusLabel: s.vacStatus ? VAC_STATUS[s.vacStatus].label : "",
+      vacStatusDot: s.vacStatus ? "width: 10px; height: 10px; border-radius: 999px; background: " + VAC_STATUS[s.vacStatus].color : "",
+      vacStatusCount: s.vacStatus ? VAC_UNITS.filter(u => u.status === s.vacStatus).length + " units" : "",
+      clearVacStatus: () => this.setState({ vacStatus: null }),
+      statusUnits: VAC_UNITS.filter(u => u.status === s.vacStatus).map(u => ({
+        unit: u.unit, meta: u.meta, vacant: u.vacant,
+        apps: u.apps === 0 ? "None" : u.apps + " pending",
+        appStyle: "display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; font-size: 12px; font-weight: 500; background: "
+          + (u.apps === 0 ? "#fdeceb" : "#e2f1da") + "; color: " + (u.apps === 0 ? "#eb343c" : "#4a7d2c"),
+        prospects: u.prospects || (u.matches ? "No interest logged \u00b7 " + u.matches + " preference matches" : "No interest logged"),
+        prospectStyle: "font-size: 13px; color: " + (u.prospects ? "#666" : "#b3b3b3") + (u.prospects ? "" : "; font-style: italic"),
+      })),
+      blastDraft: () => this.openDraft({
+        to: "23 interested prospects", channel: "Email \u00b7 bulk", subject: "Upcoming availability at your saved properties",
+        prompt: "Show units vacant in the next " + s.vacDays + " days with pending applications, then draft an availability email.",
+        body: "Hi,\n\nHere's what opens up in the next " + s.vacDays + " days at the properties you asked about, with pricing and move-in dates.\n\n"
+          + "Reply with the unit numbers you want to see and I'll hold tour slots.\n\nBest,\nDana Sheldon\nLeasing — Rent Manager",
+      }),
+
+      // tours
+      tourWrapStyle: this.tile(s.highlight === "tour"),
+      tours,
+
+      // next steps
+      steps,
+      noSteps: steps.length === 0,
+      restoreSteps: () => this.setState({ dismissed: [] }),
+
+      // draft panel
+      draftOpen: !!s.draft,
+      draftTo: d.to, draftChannel: d.channel, draftSubject: d.subject, draftBody: d.body, draftPrompt: d.prompt,
+      closeDraft: () => this.setState({ draft: null }),
+      regenerate: () => { this.toast("Orion rewrote the draft"); },
+      approveDraft: () => { this.setState(st => ({ draft: null, queued: st.queued + 1 })); this.toast("Draft queued for your approval"); },
+
+      // toast
+      toastOpen: !!s.toast,
+      toastText: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+{
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "rules": {
+    "react/forbid-elements": [
+      "warn",
+      {
+        "forbid": []
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "ui_kits/rentmanager-app/**"
+            ],
+            "message": "Import design-system components from 'index.js', not component internals."
+          }
+        ]
+      }
+    ],
+    "no-restricted-syntax": [
+      "warn",
+      {
+        "selector": "Literal[value=/#[0-9a-fA-F]{3,8}\\b/]",
+        "message": "Raw hex color — use a design-system color token via var()."
+      },
+      {
+        "selector": "Literal[value=/\\b\\d+px\\b/]",
+        "message": "Raw px value — use a design-system spacing token via var()."
+      },
+      {
+        "selector": "Literal[value=/font-family\\s*:\\s*(?!['\\\"]?(?:Roboto|Roboto Mono))/i]",
+        "message": "Font not provided by the design system. Available: Roboto, Roboto Mono."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/index.js"
+      ],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ],
+  "x-omelette": {
+    "components": {},
+    "tokens": [
+      "--rmx-action-size",
+      "--rmx-action-weight",
+      "--rmx-bg",
+      "--rmx-bg-muted",
+      "--rmx-bg-subtle",
+      "--rmx-body-lg-line",
+      "--rmx-body-lg-size",
+      "--rmx-body-line",
+      "--rmx-body-size",
+      "--rmx-body-sm-line",
+      "--rmx-body-sm-size",
+      "--rmx-body-weight",
+      "--rmx-brand",
+      "--rmx-brand-dark",
+      "--rmx-brand-darker",
+      "--rmx-brand-hover",
+      "--rmx-brand-pressed",
+      "--rmx-brand-tint-bg",
+      "--rmx-brand-tint-soft",
+      "--rmx-display-lg-line",
+      "--rmx-display-lg-size",
+      "--rmx-display-lg-weight",
+      "--rmx-display-md-line",
+      "--rmx-display-md-size",
+      "--rmx-display-md-weight",
+      "--rmx-display-xl-line",
+      "--rmx-display-xl-size",
+      "--rmx-display-xl-weight",
+      "--rmx-error",
+      "--rmx-focus-ring",
+      "--rmx-font-display",
+      "--rmx-font-mono",
+      "--rmx-font-sans",
+      "--rmx-h1-line",
+      "--rmx-h1-size",
+      "--rmx-h1-weight",
+      "--rmx-h2-line",
+      "--rmx-h2-size",
+      "--rmx-h2-weight",
+      "--rmx-h3-line",
+      "--rmx-h3-size",
+      "--rmx-h3-weight",
+      "--rmx-h4-line",
+      "--rmx-h4-size",
+      "--rmx-h4-weight",
+      "--rmx-ink",
+      "--rmx-ink-2",
+      "--rmx-label-color",
+      "--rmx-label-line",
+      "--rmx-label-size",
+      "--rmx-line",
+      "--rmx-line-soft",
+      "--rmx-line-strong",
+      "--rmx-magenta",
+      "--rmx-magenta-strong",
+      "--rmx-mono-line",
+      "--rmx-mono-size",
+      "--rmx-overlay-search",
+      "--rmx-purple",
+      "--rmx-radius-md",
+      "--rmx-radius-pill",
+      "--rmx-radius-sm",
+      "--rmx-radius-xs",
+      "--rmx-s-1",
+      "--rmx-s-10",
+      "--rmx-s-16",
+      "--rmx-s-2",
+      "--rmx-s-3",
+      "--rmx-s-4",
+      "--rmx-s-5",
+      "--rmx-s-6",
+      "--rmx-s-8",
+      "--rmx-shadow-card",
+      "--rmx-shadow-popup",
+      "--rmx-shadow-sm",
+      "--rmx-shadow-xs",
+      "--rmx-success",
+      "--rmx-success-bg",
+      "--rmx-text",
+      "--rmx-text-muted",
+      "--rmx-warning",
+      "--rmx-warning-soft"
+    ],
+    "tokenKinds": {
+      "--rmx-brand": "color",
+      "--rmx-brand-hover": "color",
+      "--rmx-brand-pressed": "color",
+      "--rmx-brand-dark": "color",
+      "--rmx-brand-darker": "color",
+      "--rmx-brand-tint-bg": "color",
+      "--rmx-brand-tint-soft": "color",
+      "--rmx-ink": "color",
+      "--rmx-ink-2": "color",
+      "--rmx-text": "font",
+      "--rmx-text-muted": "font",
+      "--rmx-line": "color",
+      "--rmx-line-soft": "color",
+      "--rmx-line-strong": "color",
+      "--rmx-bg": "color",
+      "--rmx-bg-subtle": "color",
+      "--rmx-bg-muted": "color",
+      "--rmx-overlay-search": "color",
+      "--rmx-error": "color",
+      "--rmx-success": "color",
+      "--rmx-success-bg": "color",
+      "--rmx-warning": "color",
+      "--rmx-warning-soft": "color",
+      "--rmx-magenta": "color",
+      "--rmx-magenta-strong": "color",
+      "--rmx-purple": "color",
+      "--rmx-shadow-card": "shadow",
+      "--rmx-shadow-popup": "shadow",
+      "--rmx-shadow-sm": "shadow",
+      "--rmx-shadow-xs": "shadow",
+      "--rmx-focus-ring": "shadow",
+      "--rmx-radius-xs": "radius",
+      "--rmx-radius-sm": "radius",
+      "--rmx-radius-md": "radius",
+      "--rmx-radius-pill": "radius",
+      "--rmx-s-1": "spacing",
+      "--rmx-s-2": "spacing",
+      "--rmx-s-3": "spacing",
+      "--rmx-s-4": "spacing",
+      "--rmx-s-5": "spacing",
+      "--rmx-s-6": "spacing",
+      "--rmx-s-8": "spacing",
+      "--rmx-s-10": "spacing",
+      "--rmx-s-16": "spacing",
+      "--rmx-font-sans": "font",
+      "--rmx-font-mono": "font",
+      "--rmx-font-display": "font",
+      "--rmx-display-xl-size": "spacing",
+      "--rmx-display-xl-line": "spacing",
+      "--rmx-display-xl-weight": "font",
+      "--rmx-display-lg-size": "spacing",
+      "--rmx-display-lg-line": "spacing",
+      "--rmx-display-lg-weight": "font",
+      "--rmx-display-md-size": "spacing",
+      "--rmx-display-md-line": "spacing",
+      "--rmx-display-md-weight": "font",
+      "--rmx-h1-size": "spacing",
+      "--rmx-h1-line": "spacing",
+      "--rmx-h1-weight": "font",
+      "--rmx-h2-size": "spacing",
+      "--rmx-h2-line": "spacing",
+      "--rmx-h2-weight": "font",
+      "--rmx-h3-size": "spacing",
+      "--rmx-h3-line": "spacing",
+      "--rmx-h3-weight": "font",
+      "--rmx-h4-size": "spacing",
+      "--rmx-h4-line": "spacing",
+      "--rmx-h4-weight": "font",
+      "--rmx-body-size": "spacing",
+      "--rmx-body-line": "spacing",
+      "--rmx-body-weight": "font",
+      "--rmx-body-sm-size": "spacing",
+      "--rmx-body-sm-line": "spacing",
+      "--rmx-body-lg-size": "spacing",
+      "--rmx-body-lg-line": "spacing",
+      "--rmx-action-size": "spacing",
+      "--rmx-action-weight": "font",
+      "--rmx-label-size": "spacing",
+      "--rmx-label-line": "spacing",
+      "--rmx-label-color": "color",
+      "--rmx-mono-size": "spacing",
+      "--rmx-mono-line": "spacing"
+    },
+    "fontFamilies": [
+      "Roboto",
+      "Roboto Mono"
+    ]
+  }
+}

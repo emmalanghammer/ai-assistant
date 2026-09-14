@@ -1,0 +1,161 @@
+/* RMX prototype-only styles — the same file in every prototype.
+
+   Everything here is scaffolding that a real Express screen would not need:
+   the scrim behind an overlay, the toast stack, the dropdown panel, the
+   screen index. It is separate from rmx.css so it stays obvious what is the
+   design system and what is prototype plumbing — a developer handed this
+   deletes proto.css and keeps rmx.css.
+
+   Tokens only. No hex values. */
+
+/* ---- overlays ---- */
+.rmx-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .32);
+  z-index: 900;
+}
+
+.rmx-overlay.is-open,
+[data-rmx-panel].is-open {
+  position: fixed;
+  z-index: 950;
+}
+
+.rmx-overlay.is-open {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: calc(100vh - 96px);
+  overflow: auto;
+}
+
+/* A side panel slides from the right rather than sitting centred. */
+[data-rmx-panel].is-open {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 480px;
+  background: var(--background-primary, #fff);
+  border-left: 1px solid var(--border-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+
+/* ---- dropdown panel ----
+   The floating half of a dropdown. The trigger is an Input Field, styled by
+   rmx.css. Never a native <select>. */
+[data-rmx-dropdown] {
+  position: relative;
+}
+
+.rmx-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  z-index: 800;
+  background: var(--background-primary, #fff);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm, 4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+  padding: var(--spacing-xxs, 4px) 0;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.rmx-menu > [data-value] {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--text-primary);
+  padding: 0 var(--spacing-sm, 12px);
+  height: 32px;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.rmx-menu > [data-value]:hover {
+  background: var(--background-ui-primary);
+}
+
+.rmx-menu > [data-value][aria-selected="true"] {
+  font-weight: 500;
+  color: var(--text-link);
+}
+
+[data-rmx-dropdown][data-open="true"] [data-rmx-trigger] .rmx-icon {
+  transform: rotate(180deg);
+}
+
+/* ---- toasts ---- */
+.rmx-toaststack {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+  align-items: center;
+  pointer-events: none;
+}
+
+/* ---- sortable register headers ---- */
+.rmx-register th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.rmx-register th[data-dir]::after {
+  content: "";
+  display: inline-block;
+  margin-left: var(--spacing-xxs, 4px);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+}
+
+.rmx-register th[data-dir="asc"]::after  { border-bottom: 4px solid currentColor; }
+.rmx-register th[data-dir="desc"]::after { border-top: 4px solid currentColor; }
+
+/* ---- screen index (index.html only) ---- */
+.rmx-index {
+  padding: 32px;
+  max-width: 860px;
+}
+
+.rmx-index__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 8px);
+}
+
+.rmx-index__item {
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm, 4px);
+  background: var(--background-primary, #fff);
+  padding: 12px var(--spacing-md, 16px);
+}
+
+.rmx-index__note {
+  color: var(--text-tertiary);
+  margin: var(--spacing-xxs, 4px) 0 0;
+}
+
+/* ---- utilities ---- */
+[hidden] { display: none !important; }
+
+.rmx-icon { transition: transform .12s ease; }
+
+:focus-visible {
+  outline: 2px solid var(--border-secondary);
+  outline-offset: 1px;
+}

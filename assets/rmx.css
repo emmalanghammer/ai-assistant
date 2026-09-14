@@ -1,0 +1,415 @@
+/* ============================================================
+   RMX recipes — consumes assets/tokens.css. NO literal colours here.
+   Every class is namespaced rmx- so scripts/audit.mjs can find them
+   and so prototypes never collide with page styles.
+
+   Pair with:
+   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+   Icons: RMX uses a Flexible Icon component, not raw Material glyphs.
+   In HTML, use inline <svg> — see references/controls.md. Do NOT load
+   an icon font by ligature; it degrades to visible words offline.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body.rmx {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px; line-height: 20px;
+  color: var(--text-primary);
+  background: var(--background-ui-primary);
+}
+
+/* ---------- Typography (Text Placeholder equivalents) ---------- */
+.rmx-text            { font-size: 14px; line-height: 20px; color: var(--text-primary); }
+.rmx-text--semibold  { font-weight: 600; color: var(--text-secondary); }
+.rmx-text--link      { color: var(--text-link); cursor: pointer; }
+.rmx-text--link:hover{ text-decoration: underline; }
+.rmx-text--label     { color: var(--text-primary); }
+/* Text Style=Italic Disabled — the ONLY use of italic gray */
+.rmx-placeholder     { font-style: italic; color: var(--text-disabled); }
+.rmx-h1 { font: 400 24px/32px Roboto, sans-serif; color: var(--text-secondary); margin: 0; }
+.rmx-h2 { font: 400 20px/28px Roboto, sans-serif; color: var(--text-secondary); margin: 0; }
+.rmx-h3 { font: 600 16px/24px Roboto, sans-serif; color: var(--text-secondary); margin: 0; }
+
+/* ---------- Button ---------- */
+.rmx-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-xxs);
+  height: 36px; padding: var(--spacing-xs) var(--spacing-md);
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  font: var(--type-label-m-regular);   /* Web/Label/M/Regular - 14/400, NOT 500 */ cursor: pointer; white-space: nowrap;
+}
+.rmx-btn--primary   { background: var(--background-primary-button); color: var(--text-inverse); }
+.rmx-btn--secondary { background: var(--background-secondary-button); color: var(--text-link);
+                      border-color: var(--border-secondary); }
+.rmx-btn--secondary:hover { background: var(--border-disabled); }
+.rmx-btn--text      { background: transparent; color: var(--text-link); padding: 0 var(--spacing-xs); }
+.rmx-btn--marketing { background: var(--background-tertiary-button); color: var(--text-secondary);
+                      width: 296px; height: 48px; font-size: 16px; }
+.rmx-btn--compact   { height: 24px; padding: 0 var(--spacing-xs); }
+.rmx-btn:disabled   { background: var(--background-brand-primary-disabled); cursor: default; }
+
+/* Split Button — two segments, 1px inverse divider, trailing caret segment.
+   v1 declared this component and never implemented it. */
+.rmx-split { display: inline-flex; height: 36px; border-radius: var(--radius-sm); overflow: hidden; }
+.rmx-split > .rmx-split__main {
+  display: inline-flex; align-items: center; gap: var(--spacing-xxs);
+  padding: 0 var(--spacing-md); background: var(--background-primary-button);
+  color: var(--text-inverse); font: var(--type-label-m-regular);   /* Web/Label/M/Regular - 14/400, NOT 500 */ border: 0; cursor: pointer;
+}
+.rmx-split > .rmx-split__caret {
+  width: 24px; display: inline-flex; align-items: center; justify-content: center;
+  background: var(--background-primary-button); color: var(--text-inverse);
+  border: 0; border-left: 1px solid var(--container-primary); cursor: pointer;
+}
+
+/* ---------- Input Field (static-prototype safe: works on a div) ---------- */
+.rmx-field { display: flex; flex-direction: column; gap: var(--spacing-xxs); width: 248px; }
+.rmx-field > .rmx-field__label { font-size: 14px; color: var(--text-primary); }
+.rmx-field--filter > .rmx-field__label { color: var(--text-label); }
+.rmx-field__box {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  height: 36px; padding: var(--spacing-xs);
+  background: var(--component-input-default);
+  border: 1px solid var(--border-primary); border-radius: var(--radius-sm);
+  color: var(--text-secondary); font-size: 14px;
+}
+.rmx-field__box:focus-within { border-color: var(--border-secondary); }
+.rmx-field__box > input { all: unset; flex: 1; min-width: 0; color: inherit; font: inherit; }
+.rmx-field__box > input::placeholder { font-style: italic; color: var(--text-disabled); }
+
+/* ---------- Checkbox / Radio ---------- */
+.rmx-check { display: inline-flex; align-items: center; gap: var(--spacing-xs); cursor: pointer; }
+.rmx-check__box {
+  width: 20px; height: 20px; flex: none; border-radius: 2px;
+  border: 2px solid var(--icon-disabled); background: var(--container-primary);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+/* Checked is ORANGE — icon-attention #F58220. v1's stylesheet used the
+   marketing orange #F79B4D, which is a different token. */
+.rmx-check[data-checked="true"] .rmx-check__box {
+  background: var(--icon-attention); border-color: var(--border-attention);
+}
+.rmx-check[data-checked="true"] .rmx-check__box > svg { color: var(--container-primary); }
+/* State=Blue / State=Register — the select-all above a register */
+.rmx-check--blue[data-checked="true"] .rmx-check__box,
+.rmx-check--register[data-checked="true"] .rmx-check__box {
+  background: var(--border-secondary); border-color: var(--border-secondary);
+}
+.rmx-radio__dot {
+  width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--icon-disabled);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.rmx-radio[data-checked="true"] .rmx-radio__dot { border-color: var(--border-secondary); }
+.rmx-radio[data-checked="true"] .rmx-radio__dot::after {
+  content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--border-secondary);
+}
+
+/* ---------- Tabs — ONE definition. Active underline is BLUE. ---------- */
+.rmx-tab {
+  padding: var(--spacing-md) var(--spacing-xs);
+  font: 600 14px/1 Roboto, sans-serif; color: var(--text-primary);
+  background: transparent;                      /* never a fill */
+  border: 0; border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+.rmx-tab[aria-selected="true"] {
+  color: var(--text-secondary);
+  border-bottom-color: var(--border-secondary);  /* #008DD5, 2px */
+  background: transparent;
+}
+.rmx-tabrow { display: flex; align-items: flex-start; }
+
+/* ---------- Lozenge / Pill ---------- */
+.rmx-lozenge {
+  display: inline-flex; align-items: center; gap: var(--spacing-xs);
+  height: 24px; padding: var(--spacing-xxs) var(--spacing-xs);
+  border-radius: var(--radius-sm); font-size: 14px; color: var(--text-secondary);
+}
+.rmx-lozenge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; }
+.rmx-lozenge--success { background: var(--component-lozenge-success); }
+.rmx-lozenge--success::before { background: var(--icon-success); }
+.rmx-lozenge--error   { background: var(--component-lozenge-error); }
+.rmx-lozenge--error::before { background: var(--icon-error); }
+.rmx-lozenge--brand   { background: var(--component-lozenge-brand); }
+.rmx-lozenge--brand::before { background: var(--icon-brand); }
+.rmx-lozenge--caution { background: var(--component-lozenge-caution); }
+.rmx-lozenge--caution::before { background: var(--icon-notice); }
+.rmx-lozenge--status  { background: transparent; font-style: italic; padding: 0; }
+.rmx-lozenge--status::before { display: none; }
+.rmx-lozenge--32 { height: 32px; }
+.rmx-pill {
+  display: inline-flex; align-items: center; gap: var(--spacing-xxs);
+  height: 20px; padding: 0 var(--spacing-xs);
+  border-radius: var(--radius-lg);                /* Radius/lg — legitimately round */
+  background: var(--container-primary); border: 1px solid var(--border-secondary);
+  font-size: 14px; color: var(--text-secondary);
+}
+
+/* ---------- Register: Header + Cell + Cell Content ---------- */
+.rmx-register { width: 100%; border-collapse: collapse; background: var(--container-primary); }
+/* Header Style=Register — full-page, gray */
+.rmx-register th { font: var(--type-label-s-medium); letter-spacing: 1.134px;
+  height: 28px; padding: var(--spacing-xxs) var(--spacing-xs);
+  background: var(--container-tertiary-dark); color: var(--text-inverse);
+  font: 500 12.6px/1 Roboto, sans-serif; letter-spacing: 1.1px; text-align: left;
+  border-right: .5px solid var(--container-primary); white-space: nowrap;
+}
+.rmx-register th:last-child { border-right: 0; }
+/* Header Style=Table — embedded in a Tile, white */
+.rmx-register--table th {
+  height: 32px; background: var(--container-primary); color: var(--text-secondary);
+  border-top: 1px solid var(--border-primary); border-bottom: 1px solid var(--border-primary);
+  border-right: 0;
+}
+/* Cell */
+.rmx-register td {
+  height: var(--cell-height); padding: 0 var(--spacing-xs);
+  background: var(--component-register-row-default); color: var(--text-secondary);
+  border-top: 1px solid var(--border-disabled); border-bottom: 1px solid var(--border-disabled);
+  font-size: 14px;
+}
+.rmx-register tr[data-striped="true"] td { background: var(--container-tertiary); }
+.rmx-register__totals { padding-top: var(--spacing-xs); text-align: right; font-size: 12px; color: var(--text-disabled); }
+.rmx-colorblock { display: block; width: 10px; height: var(--cell-height); }
+
+/* ---------- Tile ---------- */
+.rmx-tile {
+  display: flex; flex-direction: column;
+  background: var(--background-tile);
+  border: 1px solid var(--border-primary); border-radius: var(--radius-sm);
+}
+.rmx-tile__header {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  min-height: 36px; padding: var(--spacing-xs);
+  border-bottom: 2px solid var(--border-secondary);
+}
+.rmx-tile__title { font: 600 14px/1 Roboto, sans-serif; color: var(--text-secondary); }
+.rmx-tile__actions { margin-left: auto; display: flex; align-items: center; gap: var(--spacing-xs); }
+.rmx-tile__body { padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-md); flex: 1; }
+.rmx-fieldgrid { display: flex; gap: var(--spacing-xl); }
+.rmx-fieldgrid__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-md); }
+.rmx-ro { display: flex; flex-direction: column; }
+.rmx-ro__label { font-size: 14px; color: var(--text-primary); }
+.rmx-ro__value { font: 600 14px/20px Roboto, sans-serif; color: var(--text-secondary); }
+.rmx-ro__value--link { color: var(--text-link); }
+
+/* ---------- Scoreboard Header ---------- */
+.rmx-scoreboard {
+  display: flex; min-height: 64px;
+  background: var(--container-primary);
+  border: 1px solid var(--border-primary); border-radius: var(--radius-sm); overflow: hidden;
+}
+.rmx-scoreboard__bar { width: 16px; flex: none; background: var(--container-secondary-dark); }
+.rmx-scoreboard__content {
+  flex: 1; display: flex; align-items: center; gap: var(--spacing-2xl);
+  padding: 0 var(--spacing-md);
+}
+
+/* ---------- Page chrome ---------- */
+/* ---------- App bar (Header, Use=Default) ----------
+   Harvested from RMX Components node 18:2314. Do not restyle, do not rebuild.
+
+   The structure is the part that kept going wrong: it is THREE EQUAL COLUMNS
+   (flex:1 0 0 each), not a row with margin-left:auto. The search bar lands
+   centred because its column is centred — reproduce it any other way and the
+   bar is subtly wrong on every screen.
+
+   The icon cluster belongs INSIDE the Command Launch column, left of the
+   search field. It is a segmented control on --component-command-launch with
+   1px gaps, rounded only on the outer ends — not three outlined buttons. */
+.rmx-appbar {
+  display: flex; align-items: center; overflow: clip;
+  height: 48px;
+  /* --display-display (1920) is the Figma CANVAS width, not a CSS rule. Pinning
+     the bar to it made every screen scroll horizontally below 1920, including
+     at 1440. The bar is full-bleed and fluid; 1920 is the width it was
+     MEASURED at, and the three columns keep their proportions at any width. */
+  width: 100%; min-width: 960px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--component-main-header); color: var(--text-ondark);
+}
+.rmx-appbar__leading,
+.rmx-appbar__launch,
+.rmx-appbar__manage { flex: 1 0 0; min-width: 1px; display: flex; align-items: center; }
+.rmx-appbar__leading { gap: var(--spacing-md); }
+.rmx-appbar__launch  { gap: var(--spacing-xs); justify-content: center; }
+.rmx-appbar__manage  { gap: var(--spacing-2xl); justify-content: flex-end; padding-block: 1px; }
+
+/* The real Rent Manager logo, node 9671:2926 — 175x32, currentColor so it
+   takes --text-ondark. Never set the brand as a text span. */
+.rmx-appbar__logo { width: 175px; height: 32px; flex: none; fill: currentColor; }
+.rmx-appbar__logo--mark { display: none; }
+
+.rmx-appbar__icons { display: flex; align-items: center; gap: 1px; }
+.rmx-appbar__icons > button {
+  height: 32px; border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--component-command-launch); color: var(--text-ondark);
+}
+.rmx-appbar__icons > button:first-child {
+  width: 39.02px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+.rmx-appbar__icons > button:nth-child(2) { width: 45.03px; padding: 6px 13px; }
+.rmx-appbar__icons > button:last-child {
+  width: 38.02px; padding: 6px 9px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* Command Launch search — 454px, and its placeholder is Web/Label/S/Italic
+   (12px italic, text-ondark), not the 14px regular of a normal Input Field. */
+.rmx-appbar__search {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  /* 454px is its measured width at 1920. It may shrink below that rather than
+     force the bar to overflow; it never grows past it. */
+  width: 454px; max-width: 100%; min-width: 0; flex: 0 1 454px;
+  height: 32px; overflow: clip;
+  padding: 14px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  background: var(--component-command-launch);
+}
+.rmx-appbar__search > .rmx-icon { width: 24px; height: 24px; flex: none; }
+.rmx-appbar__search > input {
+  all: unset; flex: 1; min-width: 0;
+  font: var(--type-label-s-italic); color: var(--text-ondark);
+}
+.rmx-appbar__search > input::placeholder { color: var(--text-ondark); opacity: 1; }
+
+.rmx-appbar__code { display: flex; flex-direction: column; color: var(--text-ondark); }
+.rmx-appbar__code > :first-child { font: var(--type-label-s-regular); }
+.rmx-appbar__code > :last-child  { font: var(--type-label-m-regular); }
+
+.rmx-appbar__user { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-lg); }
+.rmx-appbar__avatar {
+  width: 32px; height: 32px; border-radius: var(--radius-round);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--container-secondary); color: var(--text-inverse, #fff);
+  font: var(--type-label-m-regular);
+}
+/* ---------- Context Bar ----------
+   Harvested from node 10861:12222. Two slots, justify-between: leading items
+   left, trailing items right. Both slots gap 12px (--spacing-sm), NOT 16.
+   The page title is Web/Heading/S/Regular (18/24) in --text-inverse; trailing
+   items are 20px icons. */
+.rmx-contextbar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 40px; width: 100%; min-width: 960px; overflow: clip;
+  padding: var(--spacing-xs) var(--content-contentpadding);
+  background: var(--component-context-header); color: var(--text-inverse);
+}
+.rmx-contextbar__leading,
+.rmx-contextbar__trailing { display: flex; align-items: center; gap: var(--spacing-sm); overflow: clip; }
+.rmx-contextbar__trailing { justify-content: flex-end; }
+.rmx-contextbar__trailing .rmx-icon { width: 20px; height: 20px; }
+.rmx-contextbar__title { font: var(--type-heading-s-regular); color: var(--text-inverse); }
+/* A white field inside the blue bar must not inherit white text.
+   This is the cascade bug that made v1's entity field invisible. */
+.rmx-contextbar .rmx-field__box,
+.rmx-contextbar .rmx-field__box > input { color: var(--text-secondary); }
+.rmx-actionbar {
+  width: 40px; flex: none; display: flex; flex-direction: column; align-items: center;
+  gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-xs);
+  background: var(--container-secondary-dark); color: var(--text-ondark);
+}
+.rmx-shell { display: flex; align-items: stretch; min-height: calc(100vh - 88px); }
+.rmx-page { max-width: 100%; flex: 1; min-width: 0; padding: var(--spacing-md) var(--spacing-xl); background: var(--container-primary); }
+.rmx-filterrow { display: flex; align-items: flex-end; gap: var(--spacing-xs); padding-bottom: var(--spacing-sm); }
+.rmx-filterrow__actions { margin-left: auto; display: flex; gap: var(--spacing-xs); }
+
+/* ---------- Feedback: three DIFFERENT components ---------- */
+/* Callout — always outlined, 40px. Type = Default | Help | Error | Warning */
+.rmx-callout {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  min-height: 40px; padding: var(--spacing-xs); border-radius: var(--radius-sm);
+  background: var(--container-primary); border: 1px solid var(--border-secondary);
+  font: 600 14px/20px Roboto, sans-serif; color: var(--text-secondary);
+}
+.rmx-callout--warning { border-color: var(--border-attention); }
+.rmx-callout--error   { border-color: var(--text-error); }
+/* Bulk Action — the FILLED banner above a register. Blue, not navy. */
+.rmx-bulkaction {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  height: 48px; padding: 0 var(--spacing-md); border-radius: var(--radius-sm);
+  background: var(--component-toast-brand); color: var(--text-inverse);
+}
+/* Toast — State = Success | Action | Failure. Action (blue) is the default. */
+.rmx-toast {
+  display: flex; align-items: center; gap: var(--spacing-xs);
+  padding: var(--spacing-md); border-radius: var(--radius-sm);
+  background: var(--component-toast-brand); color: var(--text-inverse);
+  font: 600 16px/24px Roboto, sans-serif;
+  box-shadow: 0 3px 6px rgba(0,0,0,.25);
+}
+.rmx-toast--success { background: var(--component-toast-success); }
+.rmx-toast--failure { background: var(--text-error); }
+/* Reminder — the green surface belongs here, not to Toast. */
+.rmx-reminder {
+  display: flex; gap: var(--spacing-md); width: 376px; padding: var(--spacing-md);
+  border-radius: var(--radius-sm); background: var(--component-toast-success); color: var(--text-inverse);
+}
+
+/* ---------- Overlays ---------- */
+.rmx-overlay { background: var(--background-card); border: 1px solid var(--border-primary);
+               border-radius: var(--radius-sm); overflow: hidden; }
+.rmx-overlay__header { display: flex; align-items: center; height: 48px; padding: 0 var(--spacing-md);
+  background: var(--container-primary); border-bottom: 1px solid var(--border-primary);
+  font: 400 16px/24px Roboto, sans-serif; color: var(--text-secondary); }
+.rmx-overlay__footer { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-xs);
+  height: 52px; padding: 0 var(--spacing-md);
+  background: var(--background-footer); border-top: 1px solid var(--border-primary); }
+
+/* ---------- Board card + swim lane ---------- */
+.rmx-boardcard {
+  width: 272px; min-height: 128px; display: flex;
+  background: var(--container-primary); border-radius: var(--radius-sm);
+  box-shadow: 0 0 2.5px rgba(76,76,76,.05), 0 -2px 10px rgba(76,76,76,.06), 0 10px 5px rgba(76,76,76,.15);
+}
+.rmx-boardcard__bar { width: 8px; flex: none; border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+
+/* ---------- Orion — the gradient is a BORDER, not a fill ---------- */
+.rmx-orion-surface {
+  background: var(--container-primary);
+  border-radius: var(--orion-radius-overlay);
+  box-shadow: var(--orion-glow-lg);
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--container-primary), var(--container-primary)), var(--orion-border-gradient);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.rmx-orion-bar {
+  min-height: 52px; border-radius: var(--orion-radius-bar);
+  box-shadow: var(--orion-glow);
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--background-ui-primary), var(--background-ui-primary)), var(--orion-border-gradient);
+  background-origin: border-box; background-clip: padding-box, border-box;
+}
+.rmx-orion-tag {
+  display: inline-flex; align-items: center; gap: var(--spacing-xxs);
+  height: 20px; padding: 0 var(--spacing-xs); border-radius: var(--radius-sm);
+  background: var(--container-primary); font-size: 12px; color: var(--text-secondary);
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--container-primary), var(--container-primary)), var(--orion-border-gradient);
+  background-origin: border-box; background-clip: padding-box, border-box;
+}
+
+/* Icons: sized boxes for inline SVG. */
+/* The harvested icons are FILL-based (the library exports filled paths, not
+   strokes). Without fill:currentColor they render solid black — invisible on
+   the navy app bar, muddy everywhere else. */
+.rmx-icon { width: 20px; height: 20px; flex: none; display: inline-block; fill: currentColor; }
+.rmx-icon--16 { width: 16px; height: 16px; }
+.rmx-icon--24 { width: 24px; height: 24px; }
+
+/* ---------- Action button underline ----------
+   The underlined state belongs to the LABEL, never to an icon sitting next to
+   it. text-decoration inherits into inline SVG children and draws a stray rule
+   under the glyph, which reads as a rendering bug. */
+.rmx-btn__label { text-decoration: inherit; }
+.rmx-btn--text:hover .rmx-btn__label,
+.rmx-btn--underline .rmx-btn__label { text-decoration: underline; }
+.rmx-btn--text:hover,
+.rmx-btn--underline { text-decoration: none; }
+.rmx-btn .rmx-icon,
+.rmx-text--link .rmx-icon { text-decoration: none; }

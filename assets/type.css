@@ -1,0 +1,78 @@
+/* ============================================================
+   RMX type scale - HARVESTED FROM RMX FOUNDATIONS, DO NOT EDIT BY HAND
+   ------------------------------------------------------------
+   Source of truth: data/text-styles.json. Every style below is a real
+   named text style. audit.mjs fails any text that is not one of them.
+   ============================================================ */
+
+/* A weight the browser has not actually loaded is silently synthesised —
+   600 renders as fake Bold while getComputedStyle still reports 600.
+   Turning synthesis off makes a missing face visibly wrong, not quietly wrong. */
+html { font-synthesis-weight: none; font-synthesis-style: none; }
+
+:root {
+  --type-display-xl: 400 96px/normal Roboto, sans-serif;   /* Web/Display/XL - Onboarding */
+  --type-display-l-semibold: 600 56px/64px Roboto, sans-serif;   /* Web/Display/L/SemiBold - Used for styled splash pages. */
+  --type-display-s-semibold: 600 40px/48px Roboto, sans-serif;   /* Web/Display/S/SemiBold */
+  --type-heading-xl-semibold: 600 32px/40px Roboto, sans-serif;   /* Web/Heading/XL/SemiBold */
+  --type-heading-xl-medium: 500 32px/40px Roboto, sans-serif;   /* Web/Heading/XL/Medium */
+  --type-heading-l-semibold: 600 24px/32px Roboto, sans-serif;   /* Web/Heading/L/SemiBold */
+  --type-heading-l-medium: 500 24px/32px Roboto, sans-serif;   /* Web/Heading/L/Medium */
+  --type-heading-l-regular: 400 24px/32px Roboto, sans-serif;   /* Web/Heading/L/Regular */
+  --type-heading-m-semibold: 600 20px/28px Roboto, sans-serif;   /* Web/Heading/M/SemiBold */
+  --type-heading-m-medium: 500 20px/28px Roboto, sans-serif;   /* Web/Heading/M/Medium */
+  --type-heading-m-regular: 400 20px/28px Roboto, sans-serif;   /* Web/Heading/M/Regular */
+  --type-heading-s-semibold: 600 18px/24px Roboto, sans-serif;   /* Web/Heading/S/SemiBold */
+  --type-heading-s-regular: 400 18px/24px Roboto, sans-serif;   /* Web/Heading/S/Regular */
+  --type-paragraph-l-semibold: 600 16px/24px Roboto, sans-serif;   /* Web/Paragraph/L/SemiBold */
+  --type-paragraph-l-medium: 500 16px/24px Roboto, sans-serif;   /* Web/Paragraph/L/Medium */
+  --type-paragraph-l-regular: 400 16px/24px Roboto, sans-serif;   /* Web/Paragraph/L/Regular */
+  --type-paragraph-s-semibold: 600 14px/20px Roboto, sans-serif;   /* Web/Paragraph/S/SemiBold */
+  --type-paragraph-s-regular: 400 14px/20px Roboto, sans-serif;   /* Web/Paragraph/S/Regular - Body text for most use cases. */
+  --type-paragraph-s-italic: italic 400 14px/20px Roboto, sans-serif;   /* Web/Paragraph/S/Italic - Use italics to give emphasis. */
+  --type-paragraph-s-special-underline: 400 14px/20px Roboto, sans-serif;   /* Web/Paragraph/S/Special/Underline - Use for links on hover. */
+  --type-label-l-semibold: 600 16px/normal Roboto, sans-serif;   /* Web/Label/L/SemiBold */
+  --type-label-l-medium: 500 16px/normal Roboto, sans-serif;   /* Web/Label/L/Medium - Used sparingly */
+  --type-label-l-regular: 400 16px/normal Roboto, sans-serif;   /* Web/Label/L/Regular */
+  --type-label-l-italic: italic 400 16px/normal Roboto, sans-serif;   /* Web/Label/L/Italic - Used to show emphasis. */
+  --type-label-m-semibold: 600 14px/normal Roboto, sans-serif;   /* Web/Label/M/SemiBold */
+  --type-label-m-regular: 400 14px/normal Roboto, sans-serif;   /* Web/Label/M/Regular */
+  --type-label-m-italic: italic 400 14px/normal Roboto, sans-serif;   /* Web/Label/M/Italic - Used to show emphasis. */
+  --type-label-s-semibold: 600 12px/normal Roboto, sans-serif;   /* Web/Label/S/SemiBold - Used sparingly */
+  --type-label-s-regular: 400 12px/normal Roboto, sans-serif;   /* Web/Label/S/Regular */
+  --type-label-s-italic: italic 400 12px/normal Roboto, sans-serif;   /* Web/Label/S/Italic - Used as placeholder text */
+  --type-label-s-medium: 500 12.600000381469727px/normal Roboto, sans-serif;   /* Web/Label/S/Medium - This style is used specifically for the Register Headers. */  /* + letter-spacing: 1.134px */
+}
+
+/* One class per style. Prefer these over ad-hoc font declarations. */
+.rmx-type-display-xl { font: var(--type-display-xl); }
+.rmx-type-display-l-semibold { font: var(--type-display-l-semibold); }
+.rmx-type-display-s-semibold { font: var(--type-display-s-semibold); }
+.rmx-type-heading-xl-semibold { font: var(--type-heading-xl-semibold); }
+.rmx-type-heading-xl-medium { font: var(--type-heading-xl-medium); }
+.rmx-type-heading-l-semibold { font: var(--type-heading-l-semibold); }
+.rmx-type-heading-l-medium { font: var(--type-heading-l-medium); }
+.rmx-type-heading-l-regular { font: var(--type-heading-l-regular); }
+.rmx-type-heading-m-semibold { font: var(--type-heading-m-semibold); }
+.rmx-type-heading-m-medium { font: var(--type-heading-m-medium); }
+.rmx-type-heading-m-regular { font: var(--type-heading-m-regular); }
+.rmx-type-heading-s-semibold { font: var(--type-heading-s-semibold); }
+.rmx-type-heading-s-regular { font: var(--type-heading-s-regular); }
+.rmx-type-paragraph-l-semibold { font: var(--type-paragraph-l-semibold); }
+.rmx-type-paragraph-l-medium { font: var(--type-paragraph-l-medium); }
+.rmx-type-paragraph-l-regular { font: var(--type-paragraph-l-regular); }
+.rmx-type-paragraph-s-semibold { font: var(--type-paragraph-s-semibold); }
+.rmx-type-paragraph-s-regular { font: var(--type-paragraph-s-regular); }
+.rmx-type-paragraph-s-italic { font: var(--type-paragraph-s-italic); }
+.rmx-type-paragraph-s-special-underline { font: var(--type-paragraph-s-special-underline); text-decoration: underline; }
+.rmx-type-label-l-semibold { font: var(--type-label-l-semibold); }
+.rmx-type-label-l-medium { font: var(--type-label-l-medium); }
+.rmx-type-label-l-regular { font: var(--type-label-l-regular); }
+.rmx-type-label-l-italic { font: var(--type-label-l-italic); }
+.rmx-type-label-m-semibold { font: var(--type-label-m-semibold); }
+.rmx-type-label-m-regular { font: var(--type-label-m-regular); }
+.rmx-type-label-m-italic { font: var(--type-label-m-italic); }
+.rmx-type-label-s-semibold { font: var(--type-label-s-semibold); }
+.rmx-type-label-s-regular { font: var(--type-label-s-regular); }
+.rmx-type-label-s-italic { font: var(--type-label-s-italic); }
+.rmx-type-label-s-medium { font: var(--type-label-s-medium); letter-spacing: 1.134px; }

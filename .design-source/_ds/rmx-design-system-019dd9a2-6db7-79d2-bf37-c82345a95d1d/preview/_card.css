@@ -1,0 +1,29 @@
+/* Shared baseline for every preview/ card */
+@import url('../colors_and_type.css');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  font-family: var(--rmx-font-sans);
+  color: var(--rmx-text);
+}
+
+.card {
+  width: 700px;
+  padding: 24px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row { display: flex; flex-direction: row; gap: 12px; align-items: center; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 12px; }
+.muted { color: var(--rmx-text); font-size: 12px; line-height: 16px; }
+.label { font-size: 11px; color: var(--rmx-text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
+
+.swatch { width: 64px; height: 64px; border-radius: 4px; border: 1px solid var(--rmx-line); flex-shrink: 0; }
+.swatch-tile { display: flex; flex-direction: column; gap: 6px; min-width: 92px; }
+.swatch-name { font-size: 12px; line-height: 14px; color: var(--rmx-ink); font-weight: 500; }
+.swatch-hex { font-family: var(--rmx-font-mono); font-size: 11px; color: var(--rmx-text); }

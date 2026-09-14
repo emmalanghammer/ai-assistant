@@ -1,0 +1,78 @@
+/* RMX design tokens — Tailwind v4 @theme block.
+   Import this in your project's root CSS, after `@import "tailwindcss";`
+   Source of truth: VendorPay/src/index.css. Do not hand-edit values here —
+   if a token is wrong or missing, fix it in VendorPay first, then re-copy. */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap");
+
+@theme {
+  --font-sans: "Roboto", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-blue: #008dd5;
+  --color-brand-navy: #13314c;
+  --color-brand-orange: #f79b4d;
+  --color-attention: #f58220;
+  --color-notice: #faa61c;
+
+  --color-text-primary: #13314c;
+  --color-text-secondary: #425a70;
+  --color-text-link: #008dd5;
+  --color-text-inverse: #ffffff;
+  --color-label-gray: #666666;
+
+  --color-border-primary: #cedbe7;
+
+  --color-container-primary: #ffffff;
+  --color-container-secondary: #008dd5;
+
+  --color-icon-primary: #008dd5;
+  --color-icon-secondary: #ffffff;
+  --color-icon-tertiary: #666666;
+  --color-icon-inverse: #13314c;
+
+  --color-success: #6eb744;
+  --color-success-bg: #e2f1da;
+  --color-error: #eb343c;
+  --color-error-bg: #fbd6d8;
+  --color-warning-bg: #feedd2;
+
+  --spacing-xxxs: 2px;
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  --spacing-5xl: 56px;
+  --spacing-6xl: 64px;
+  --spacing-9xl: 96px;
+
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-round: 200px;
+
+  --color-input-fill: #f5f8fa;
+  --color-border-disabled: #ebf1f5;
+  --color-checkbox-checked: #f79b4d;
+  --color-hover-primary: #0071aa;
+  --color-hover-secondary: #ebf1f5;
+  --color-row-hover: #ebf1f5;
+
+  --shadow-dropshadow-md: 1px 2px 12px 1px rgba(76, 76, 76, 0.1), 0 4px 10px -10px rgba(76, 76, 76, 0.1),
+    0 -2px 20px -5px rgba(76, 76, 76, 0.08);
+  --shadow-dropshadow-lg: 1px 2px 12px 1px rgba(76, 76, 76, 0.14), 0 10px 10px -5px rgba(76, 76, 76, 0.15);
+}
+
+body {
+  background-color: #f3f4f8;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}

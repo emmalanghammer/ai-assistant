@@ -1,0 +1,130 @@
+/* ============================================================
+   RMX responsive — PROTOTYPE CONVENTIONS, NOT LIBRARY TRUTH
+   ------------------------------------------------------------
+   RMX Foundations defines exactly ONE width: --display-display,
+   1920px. There are no breakpoint tokens and no Mobile / Tablet /
+   Narrow variants on any of the 130 components. Everything in the
+   library is authored at 1920.
+
+   So every rule in this file is a decision taken for prototypes,
+   agreed with Emma on 2026-09-10 — not a value harvested from
+   Figma. If the design system later defines responsive behaviour,
+   THAT wins and this file is replaced.
+
+   Read references/responsive.md before changing anything here.
+
+   Breakpoints (named after what they are for, not after devices):
+     >= 1280   desktop   as authored; nothing collapses
+     1024-1279 laptop    fluid, search shrinks, nothing hides
+      768-1023 tablet    secondary chrome hides, page padding drops
+      < 768    phone     single column, app bar reduced to essentials
+   ============================================================ */
+
+:root {
+  --bp-laptop: 1280px;
+  --bp-tablet: 1024px;
+  --bp-phone: 768px;
+}
+
+/* The bars are full-bleed and fluid at every width. 1920 is what they
+   were measured at, never a floor. */
+.rmx-appbar,
+.rmx-contextbar { min-width: 0; }
+
+/* ---------- 1024–1279 · laptop ----------
+   Nothing hides. The Command Launch search gives up width first, because
+   it is the only element in the bar with slack. */
+@media (max-width: 1279px) {
+  .rmx-appbar__search { flex: 0 1 380px; }
+}
+
+/* ---------- 768–1023 · tablet ----------
+   DECISION: Company Code is the first thing to go. It is reference
+   information, not navigation, and it is the widest low-value block in
+   the Manage column. The avatar and bell stay — they are wayfinding. */
+@media (max-width: 1023px) {
+  .rmx-appbar__code { display: none; }
+  .rmx-appbar__search { flex: 0 1 280px; }
+  .rmx-appbar__manage { gap: var(--spacing-md); }
+  .rmx-page { padding-inline: var(--spacing-md); }
+  .rmx-shell { display: block; }
+
+  /* DECISION: the 40px Action Bar rail becomes a horizontal strip under
+     the context bar rather than a side rail, which would eat a fifth of
+     a tablet's width. */
+  .rmx-actionbar {
+    width: 100%; flex-direction: row; justify-content: flex-end;
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  /* Tiles stop sitting side by side. */
+  .rmx-tilerow, .rmx-fieldgrid { flex-direction: column; }
+  .rmx-fieldgrid__col { width: 100%; }
+}
+
+/* ---------- < 768 · phone ----------
+   DECISION: the app bar keeps logo, search and avatar. The icon cluster
+   (Mega Menu / Reports / Favorites) hides — all three are shortcuts that
+   also exist elsewhere, and at this width the search is what people use.
+   The three columns stop being equal thirds, because equal thirds at
+   375px leaves the search unusable. */
+@media (max-width: 767px) {
+  .rmx-appbar { padding-inline: var(--spacing-sm); gap: var(--spacing-xs); }
+  .rmx-appbar__icons { display: none; }
+  .rmx-appbar__leading { flex: 0 0 auto; }
+  .rmx-appbar__launch { flex: 1 1 auto; }
+  .rmx-appbar__manage { flex: 0 0 auto; }
+  /* Swap the full lockup for the roof mark. Scaling the 175px lockup down to
+     32 makes an illegible smudge; the mark is the same artwork, cropped. */
+  .rmx-appbar__logo { display: none; }
+  .rmx-appbar__logo--mark[hidden] { display: block !important; width: 32px; }
+  .rmx-appbar__search { flex: 1 1 auto; min-width: 0; }
+
+  .rmx-contextbar { padding-inline: var(--spacing-sm); }
+  .rmx-page { padding-inline: var(--spacing-sm); }
+
+  /* A dialog at 520px does not fit 375. Overlays go near-full-bleed. */
+  .rmx-overlay.is-open {
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px);
+    max-height: calc(100vh - 48px);
+  }
+  [data-rmx-panel].is-open { width: 100%; }
+
+  /* Filter rows wrap instead of overflowing. */
+  .rmx-filterrow { flex-wrap: wrap; }
+  .rmx-field { width: 100%; }
+}
+
+/* ---------- Registers ----------
+   DECISION (Emma, 2026-09-10): columns shrink until they cannot, then
+   truncate with an ellipsis. The register does NOT get its own sideways
+   scroll, and no column is hidden — hiding one would need a priority
+   order per screen, which is a per-design decision, not a global rule.
+
+   Cells keep their 36px height and 14px type at every width: those are
+   system rules and do not flex. */
+.rmx-register { table-layout: auto; }
+.rmx-register th,
+.rmx-register td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* A truncated cell must still be readable on hover/focus for a prototype
+   to be testable — this reveals the full value without changing layout. */
+.rmx-register td[title]:hover { cursor: help; }
+
+@media (max-width: 1023px) {
+  .rmx-register th,
+  .rmx-register td { max-width: 180px; }
+}
+@media (max-width: 767px) {
+  .rmx-register th,
+  .rmx-register td { max-width: 120px; padding-inline: var(--spacing-xs); }
+}
+
+/* Anything genuinely un-shrinkable scrolls inside its own box rather than
+   pushing the page sideways. */
+.rmx-tile__body { max-width: 100%; overflow-x: auto; }

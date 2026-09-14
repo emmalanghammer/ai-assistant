@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/colors_and_type.css">
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/preview/_card.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Symbols+Outlined" rel="stylesheet">
+<script src="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: #eef4f8; }
+  a { color: #008dd5; text-decoration: none; }
+  a:hover { color: #0071aa; text-decoration: underline; }
+  .ms { font-family: "Material Symbols Outlined"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
+  @keyframes eh-pulse { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+  @keyframes eh-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<section id="4a" class="rmx" style="padding: 28px; background: repeating-linear-gradient(135deg, #eaf2f7 0 8px, #eef5f9 8px 16px); font-family: Roboto, system-ui, sans-serif; color: #666; display: flex; flex-direction: column; gap: 20px; width: 1156px">
+
+  <div style="display: flex; align-items: center; gap: 12px">
+    <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 2px; background: #13314c; color: #fff; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500">4a</span>
+    <span style="font-size: 12px; line-height: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: #8fa3b3; font-weight: 500">Express Help · answers, data summaries, suggested next steps — a dashboard tile is one deliverable</span>
+  </div>
+
+  <div style="width: 1100px; height: 900px; border-radius: 10px; padding: 2px; background: linear-gradient(160deg, #008dd5 0%, #0aa0c8 50%, #6eb744 100%); box-shadow: 0 4px 12px rgba(19,49,76,0.14); display: flex">
+    <div style="flex: 1; min-width: 0; min-height: 0; background: #fff; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column">
+
+      <!-- Header -->
+      <div style="height: 68px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 22px; border-bottom: 1px solid #e5edf3; background: #fff">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+            <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+            <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+            <path d="M25.5 6.6c.35 1.8 1.15 2.6 2.95 2.95-1.8.35-2.6 1.15-2.95 2.95-.35-1.8-1.15-2.6-2.95-2.95 1.8-.35 2.6-1.15 2.95-2.95Z" fill="#008dd5"></path>
+          </svg>
+          <span style="font-size: 24px; line-height: 30px; font-weight: 500; color: #13314c">Orion Assistant</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px">
+          <span onClick="{{ newChat }}" class="ms" style="font-size: 24px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">edit_square</span>
+          <span style="width: 1px; height: 26px; background: #cedbe7"></span>
+          <span class="ms" style="font-size: 24px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">history</span>
+          <span style="width: 1px; height: 26px; background: #cedbe7"></span>
+          <span class="ms" style="font-size: 24px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">close</span>
+        </div>
+      </div>
+
+      <!-- Transcript -->
+      <div ref="{{ scrollRef }}" style="flex: 1; min-height: 0; overflow: auto; background: linear-gradient(#f7fbfd, #eef6fb); padding: 22px; display: flex; flex-direction: column; gap: 16px">
+
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <div style="text-align: center; padding-top: 8px">
+              <div style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">Hi Ryan!</div>
+              <div style="font-size: 17px; line-height: 25px; color: #56707f; max-width: 660px; margin: 6px auto 0">Ask me anything about Rent Manager. I can answer from Express Help, or look through your data and pull the answer together with suggested next steps.</div>
+            </div>
+            <div style="background: #fff; border: 1px solid #e5edf3; border-radius: 8px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+                <span style="font-size: 20px; line-height: 26px; font-weight: 500; color: #13314c">Start from a prompt</span>
+                <span style="font-size: 14px; color: #8fa3b3">or type your own below</span>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <sc-for list="{{ cats }}" as="cat" hint-placeholder-count="3">
+                  <div onClick="{{ cat.onClick }}" style="{{ cat.style }}">{{ cat.label }}</div>
+                </sc-for>
+              </div>
+              <div style="font-size: 14px; line-height: 20px; color: #666">{{ catHint }}</div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <sc-for list="{{ promptList }}" as="p" hint-placeholder-count="3">
+                  <div onClick="{{ p.onClick }}" style="display: flex; align-items: center; gap: 14px; border: 1px solid #e5edf3; border-radius: 6px; padding: 13px 16px; background: #fff; cursor: pointer" style-hover="border-color: #008dd5; box-shadow: 0 3px 6px rgba(0,0,0,0.08)">
+                    <span class="ms" style="{{ p.iconStyle }}">{{ p.icon }}</span>
+                    <span style="flex: 1; font-size: 16px; line-height: 23px; color: #13314c">{{ p.label }}</span>
+                    <span class="ms" style="font-size: 20px; color: #008dd5">chevron_right</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ messages }}" as="m" hint-placeholder-count="0">
+          <div style="{{ m.rowStyle }}">
+            <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+              <div style="width: 100%; background: #f5f8fa; border: 1px solid #e5edf3; border-radius: 8px; padding: 14px 18px; font-size: 16px; line-height: 24px; color: #13314c">{{ m.text }}</div>
+            </sc-if>
+            <sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; gap: 12px; align-items: flex-start">
+                <svg width="26" height="26" viewBox="0 0 34 34" fill="none" style="flex: none; margin-top: 3px" aria-hidden="true">
+                  <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+                  <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+                </svg>
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                  <div style="font-size: 16px; line-height: 24px; color: #424e5b">{{ m.text }}</div>
+
+                  <sc-if value="{{ m.hasSteps }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; gap: 8px">
+                      <sc-for list="{{ m.steps }}" as="st" hint-placeholder-count="3">
+                        <div style="display: flex; gap: 12px; align-items: flex-start">
+                          <span style="width: 22px; height: 22px; flex: none; border-radius: 999px; background: #ebf1f5; color: #195ca4; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px">{{ st.n }}</span>
+                          <span style="flex: 1; font-size: 15px; line-height: 23px; color: #424e5b">{{ st.text }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasStats }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px">
+                      <sc-for list="{{ m.stats }}" as="stat" hint-placeholder-count="3">
+                        <div style="background: #fff; border: 1px solid #e5edf3; border-left: 4px solid #008dd5; border-radius: 6px; padding: 11px 13px">
+                          <div style="font-size: 24px; line-height: 30px; font-weight: 700; color: #13314c">{{ stat.value }}</div>
+                          <div style="font-size: 13px; line-height: 18px; color: #666">{{ stat.label }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasFindings }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; gap: 7px">
+                      <sc-for list="{{ m.findings }}" as="f" hint-placeholder-count="3">
+                        <div style="display: flex; gap: 10px"><span class="ms" style="font-size: 18px; color: #6eb744; margin-top: 3px">check_circle</span><span style="flex: 1; font-size: 15px; line-height: 23px; color: #424e5b">{{ f.text }}</span></div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasTable }}" hint-placeholder-val="{{ false }}">
+                    <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                      <sc-for list="{{ m.table }}" as="tr" hint-placeholder-count="3">
+                        <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 0.8fr; gap: 10px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                          <span style="color: #13314c">{{ tr.a }}</span><span style="color: #666; font-size: 13px">{{ tr.b }}</span><span style="{{ tr.chipStyle }}">{{ tr.c }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasArticle }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 16px; background: #fff; border: 1px solid #e5edf3; border-radius: 6px; padding: 13px 16px">
+                      <span style="font-size: 15px; color: #b3b3b3; white-space: nowrap">Suggested Article</span>
+                      <span style="flex: 1; font-size: 16px; color: #13314c">{{ m.articleTitle }}</span>
+                      <span class="ms" style="font-size: 22px; color: #008dd5; cursor: pointer">open_in_new</span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasTile }}" hint-placeholder-val="{{ false }}">
+                    <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                      <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                        <span style="font-size: 15px; font-weight: 500; color: #13314c">{{ m.tileName }}</span>
+                        <div style="display: flex; align-items: center; gap: 10px"><span class="ms" style="font-size: 18px; color: #008dd5">refresh</span><span class="ms" style="font-size: 18px; color: #666">more_vert</span></div>
+                      </div>
+                      <sc-for list="{{ m.tileRows }}" as="row" hint-placeholder-count="3">
+                        <div style="display: grid; grid-template-columns: 1.4fr 1.4fr 0.8fr; gap: 10px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                          <span style="color: #13314c">{{ row.a }}</span><span style="color: #666; font-size: 13px">{{ row.b }}</span><span style="{{ row.chipStyle }}">{{ row.c }}</span>
+                        </div>
+                      </sc-for>
+                      <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; background: #f5f8fa; font-size: 13px; color: #666"><span>{{ m.tileFooter }}</span><span style="color: #008dd5">View All</span></div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasPicker }}" hint-placeholder-val="{{ false }}">
+                    <div style="background: #fff; border: 1px solid #e5edf3; border-radius: 6px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+                      <span style="font-size: 16px; font-weight: 500; color: #13314c">Which dashboard should it go on?</span>
+                      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px">
+                        <sc-for list="{{ dashboards }}" as="db" hint-placeholder-count="4">
+                          <div onClick="{{ db.onClick }}" style="{{ db.style }}" style-hover="border-color: #008dd5">
+                            <span style="{{ db.radioStyle }}"></span>
+                            <div style="flex: 1"><div style="font-size: 15px; color: #13314c">{{ db.name }}</div><div style="font-size: 13px; color: #8fa3b3">{{ db.meta }}</div></div>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px">
+                        <button onClick="{{ m.onAddTile }}" style="height: 36px; padding: 0 16px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Add to Dashboard</button>
+                        <span style="font-size: 13px; color: #666">You can move or resize it on the dashboard afterward.</span>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasNote }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #cedbe7; border-radius: 4px; background: #f5f8fa">
+                      <span class="ms" style="font-size: 18px; color: #666">info</span>
+                      <span style="font-size: 13px; line-height: 19px; color: #666">{{ m.note }}</span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasLink }}" hint-placeholder-val="{{ false }}">
+                    <a href="{{ m.linkHref }}" target="_top" style="display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #008dd5; border-radius: 6px; padding: 13px 16px; text-decoration: none" style-hover="background: #ebf1f5">
+                      <span class="ms" style="font-size: 22px; color: #008dd5">dashboard</span>
+                      <span style="flex: 1; display: flex; flex-direction: column">
+                        <span style="font-size: 16px; font-weight: 500; color: #008dd5">{{ m.linkLabel }}</span>
+                        <span style="font-size: 13px; color: #666">{{ m.linkHint }}</span>
+                      </span>
+                      <span class="ms" style="font-size: 22px; color: #008dd5">open_in_new</span>
+                    </a>
+                  </sc-if>
+
+                  <sc-if value="{{ m.hasActions }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                      <sc-for list="{{ m.actions }}" as="a" hint-placeholder-count="2">
+                        <button onClick="{{ a.onClick }}" style="{{ a.style }}" style-hover="border-color: #008dd5; color: #008dd5">{{ a.label }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; gap: 12px; align-items: center">
+            <svg width="26" height="26" viewBox="0 0 34 34" fill="none" style="flex: none" aria-hidden="true">
+              <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+              <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+            </svg>
+            <span style="font-size: 15px; font-style: italic; color: #666">{{ thinkingText }}</span>
+            <span style="display: flex; gap: 5px">
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out infinite"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out 0.2s infinite"></span>
+              <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out 0.4s infinite"></span>
+            </span>
+          </div>
+        </sc-if>
+      </div>
+
+      <!-- Prompt sheet -->
+      <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: none; border-top: 1px solid #e5edf3; background: #fff; padding: 16px 22px; display: flex; flex-direction: column; gap: 12px; animation: eh-in 160ms ease-out">
+          <div style="display: flex; align-items: center; justify-content: space-between">
+            <span style="font-size: 16px; font-weight: 500; color: #13314c">Prompt library</span>
+            <span onClick="{{ closeSheet }}" class="ms" style="font-size: 20px; color: #666; cursor: pointer">close</span>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <sc-for list="{{ cats }}" as="cat" hint-placeholder-count="3">
+              <div onClick="{{ cat.onClick }}" style="{{ cat.style }}">{{ cat.label }}</div>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; max-height: 190px; overflow: auto">
+            <sc-for list="{{ promptList }}" as="p" hint-placeholder-count="3">
+              <div onClick="{{ p.onClick }}" style="display: flex; align-items: center; gap: 12px; border: 1px solid #e5edf3; border-radius: 6px; padding: 11px 14px; cursor: pointer" style-hover="border-color: #008dd5; background: #f7fbfd">
+                <span class="ms" style="{{ p.iconStyle }}">{{ p.icon }}</span>
+                <span style="flex: 1; font-size: 15px; line-height: 22px; color: #13314c">{{ p.label }}</span>
+                <span class="ms" style="font-size: 19px; color: #008dd5">chevron_right</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Composer -->
+      <div style="flex: none; border-top: 1px solid #e5edf3; background: #fff; padding: 14px 22px 16px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; align-items: center; gap: 10px">
+          <button onClick="{{ toggleSheet }}" style="{{ browseStyle }}" style-hover="border-color: #008dd5; color: #008dd5"><span class="ms" style="font-size: 18px">list_alt</span>Browse prompts</button>
+          <span style="font-size: 13px; color: #8fa3b3">{{ contextLabel }}</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; border: 1px solid #cedbe7; border-radius: 6px; padding: 13px 16px; background: #fff; box-shadow: 0 1px 2px rgba(76,76,76,0.08)">
+          <span style="flex: 1; font-size: 17px; font-style: italic; color: #b3b3b3">Ask anything...</span>
+          <span class="ms" style="font-size: 26px; color: #4fb0e4; cursor: pointer" style-hover="color: #008dd5">send</span>
+        </div>
+        <div style="text-align: center; font-size: 14px; font-style: italic; color: #666">AI may be inaccurate. Make sure to verify information before use.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; width: 1100px">
+    <span style="font-size: 14px; color: #666">Need more help? View all documentation at <a href="#4a">ExpressHelp</a></span>
+    <button style="height: 36px; padding: 0 18px; border: 1px solid #008dd5; background: #fff; color: #008dd5; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 15px; cursor: pointer" style-hover="background: #ebf1f5">Contact Support</button>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1156,&quot;height&quot;:1010}}">
+const PROMPTS = {
+  a1: {
+    cat: 0, icon: "menu_book",
+    label: "How do I set up a notification so tenants know their move-out date is coming up?",
+    text: "You can do this with a Scheduled Task tied to the Lease Expiration report.",
+    steps: [
+      { n: 1, text: "Go to Tools > Scheduled Tasks and add a task of type Notification." },
+      { n: 2, text: "Set the trigger to Lease End Date and the offset to 60 days before." },
+      { n: 3, text: "Pick the tenant contact method and the template you want sent." },
+      { n: 4, text: "Assign the properties it applies to, then activate the task." },
+    ],
+    article: "Scheduled Tasks: Lease Expiration Notifications",
+    actions: ["article", "related"],
+  },
+  a2: {
+    cat: 0, icon: "menu_book",
+    label: "How do I add a late fee schedule to a property?",
+    text: "Late fees are configured per property, then applied on the charge cycle.",
+    steps: [
+      { n: 1, text: "Open the property, then go to the Setup tab > Late Fees." },
+      { n: 2, text: "Add a tier: grace days, flat amount or percentage, and the charge type." },
+      { n: 3, text: "Choose whether the fee compounds daily and set a maximum." },
+      { n: 4, text: "Save, then run Post Late Fees to preview before posting." },
+    ],
+    article: "Late Fee Setup and Posting",
+    actions: ["article", "related"],
+  },
+  a3: {
+    cat: 0, icon: "menu_book",
+    label: "How do I give a new user access to only one property?",
+    text: "Use a user group with a property filter rather than editing the user directly.",
+    steps: [
+      { n: 1, text: "Go to Admin > User Groups and create a group for the role." },
+      { n: 2, text: "On the Properties tab of the group, select only the property." },
+      { n: 3, text: "Set the permission set for registers, reports and setup areas." },
+      { n: 4, text: "Assign the user to the group and have them sign out and back in." },
+    ],
+    article: "User Groups and Property-Level Permissions",
+    actions: ["article", "related"],
+  },
+  d1: {
+    cat: 2, icon: "task_alt",
+    label: "Where should I focus on delinquency this month?",
+    text: "I pulled charges, receipts and balances for your 10 selected properties for the current period.",
+    stats: [
+      { value: "$249,502", label: "Delinquent balance" },
+      { value: "91.18%", label: "Collected this period" },
+      { value: "8.82%", label: "Uncollected portfolio-wide" },
+    ],
+    findings: [
+      { text: "Hawthorne Ridge carries 26% of total delinquency at $64,870, the largest single share." },
+      { text: "Crestline Business Park has the worst uncollected rate at 19.56% despite a smaller balance." },
+      { text: "The delinquent balance rose four of the last six months before flattening in June." },
+    ],
+    note: "Based on charges, receipts, tenant balances and lease dates in your data.",
+    actions: ["nextsteps", "tile", "list"],
+    nextSteps: [
+      { title: "Work Crestline first", detail: "Highest uncollected rate. 12 tenants account for 78% of the balance." },
+      { title: "Review the 9 tenants over 60 days", detail: "All have promised payments logged but no receipts." },
+      { title: "Check late fee posting at Hawthorne Ridge", detail: "Fees were not posted for two of the last three cycles." },
+    ],
+    tileName: "Delinquency Watch",
+    tileRows: [
+      { a: "Hawthorne Ridge", b: "$64,870 delinquent", c: "8.94%", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Crestline Business Park", b: "$26,012 delinquent", c: "19.56%", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Riverview Apartments", b: "$32,072 delinquent", c: "7.37%", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+    tileFooter: "10 properties \u00b7 refreshes daily at 6:00 AM",
+    table: [
+      { a: "Unit 204B \u00b7 Hawthorne", b: "62 days past due", c: "$3,240", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Suite 12 \u00b7 Crestline", b: "48 days past due", c: "$8,110", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Unit 512 \u00b7 Riverview", b: "31 days past due", c: "$1,495", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+  },
+  d2: {
+    cat: 1, icon: "insights",
+    label: "Show me upcoming vacant units and any prospects that have shown interest or may be a good fit.",
+    text: "14 units come available in the next 30 days. I matched each against pending applications and logged prospect interest.",
+    stats: [
+      { value: "14", label: "Units vacating" },
+      { value: "9", label: "Pending applications" },
+      { value: "5", label: "Units with no interest" },
+    ],
+    findings: [
+      { text: "Unit 420 at Ridgeline vacates Sep 24 with no logged interest, though 6 prospects match its preferences." },
+      { text: "Unit 305 is effectively covered with 2 applications pending and 4 interested prospects." },
+      { text: "Harbor Flats has the thinnest coverage of any property at 44% of vacating units." },
+    ],
+    note: "Based on lease end dates, move-out notices, application status and prospect preferences.",
+    actions: ["nextsteps", "tile", "list"],
+    nextSteps: [
+      { title: "Prioritize Unit 420", detail: "No interest logged and 24 days out. Six preference matches exist in your prospect register." },
+      { title: "Confirm the 9 pending applications", detail: "Three are missing income verification, which is the usual stall point." },
+      { title: "Re-list Harbor Flats early", detail: "Coverage there has run below 50% for three consecutive months." },
+    ],
+    tileName: "Upcoming Vacancy Coverage",
+    tileRows: [
+      { a: "305 \u00b7 Ridgeline", b: "Vacant Sep 12", c: "2 pending", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "1108 \u00b7 Harbor Flats", b: "Vacant Sep 19", c: "1 pending", chip: ["#ebf1f5", "#424e5b"] },
+      { a: "420 \u00b7 Ridgeline", b: "Vacant Sep 24", c: "None", chip: ["#fdeceb", "#eb343c"] },
+    ],
+    tileFooter: "14 units \u00b7 23 interested prospects",
+    table: [
+      { a: "420 \u00b7 Ridgeline", b: "2 bed \u00b7 $1,900 \u00b7 Sep 24", c: "0 interest", chip: ["#fdeceb", "#eb343c"] },
+      { a: "702 \u00b7 Harbor Flats", b: "1 bed \u00b7 $1,375 \u00b7 Sep 28", c: "0 interest", chip: ["#fdeceb", "#eb343c"] },
+      { a: "118 \u00b7 Ridgeline", b: "2 bed \u00b7 $1,825 \u00b7 Sep 30", c: "1 interest", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+  },
+  d3: {
+    cat: 1, icon: "insights",
+    label: "Flag escalated residents before they vacate",
+    text: "I read maintenance history, portal messages, survey responses and smart voicemail transcripts for the last 30 days.",
+    stats: [
+      { value: "7", label: "Residents with negative sentiment" },
+      { value: "3", label: "Renew within 60 days" },
+      { value: "19", label: "Escalated signals logged" },
+    ],
+    findings: [
+      { text: "Maria Delgado (204B) is the sharpest drop: 3 ticket re-opens, 2 portal complaints and a 4/10 survey." },
+      { text: "Two more negative-sentiment residents renew inside 120 days, and both cite noise rather than price." },
+      { text: "Sentiment for this group has declined six months running while resolved-ticket volume fell." },
+    ],
+    note: "Based on history and notes, work orders, portal messages, surveys and voicemail transcripts.",
+    actions: ["nextsteps", "tile", "list"],
+    nextSteps: [
+      { title: "Walk 204B with a technician", detail: "Same issue re-opened three times. Renewal decision is due Oct 31." },
+      { title: "Group the noise complaints", detail: "Four residents in the same building reported noise in the same window." },
+      { title: "Close the 9-day-old portal messages", detail: "Two residents are waiting on a reply, which is the strongest churn signal in the set." },
+    ],
+    tileName: "Resident Sentiment Watchlist",
+    tileRows: [
+      { a: "Maria Delgado", b: "204B \u00b7 renews Oct 31", c: "-38", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Terrance Boyd", b: "1108 \u00b7 renews Dec 31", c: "-19", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Anh Nguyen", b: "512 \u00b7 renews Feb 28", c: "-12", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+    tileFooter: "7 residents tracked \u00b7 refreshes daily",
+    table: [
+      { a: "Maria Delgado", b: "3 re-opens \u00b7 survey 4/10", c: "-38", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Terrance Boyd", b: "Voicemail: noise \u00b7 1 escalation", c: "-19", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Anh Nguyen", b: "2 portal messages unresolved", c: "-12", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+  },
+  n1: {
+    cat: 2, icon: "task_alt",
+    label: "Who should I follow up with today?",
+    text: "21 active prospects have had no communication or status change in 7 or more days. Here is how I would order them.",
+    stats: [
+      { value: "21", label: "Awaiting contact" },
+      { value: "3", label: "Past 30 days" },
+      { value: "9", label: "Went quiet after strong interest" },
+    ],
+    findings: [
+      { text: "Sam Ortega had five touches then went silent 12 days ago, right after a tour." },
+      { text: "Nia Carter has been waiting 34 days and is your oldest open guest card." },
+      { text: "Six of the 21 have a unit still available that matched their stated preferences." },
+    ],
+    note: "I can surface and organize these. Sending messages is not something I can do yet.",
+    actions: ["nextsteps", "tile", "list"],
+    nextSteps: [
+      { title: "Start with the 9 who went quiet after strong interest", detail: "They engaged repeatedly, so a single check-in usually restarts the conversation." },
+      { title: "Close out the 3 past 30 days", detail: "Mark them lost or re-qualify them so your pipeline numbers stay honest." },
+      { title: "Match the 6 with available units", detail: "Their preferred unit type is open right now, which gives you a concrete reason to call." },
+    ],
+    tileName: "Follow-Up Queue",
+    tileRows: [
+      { a: "Sam Ortega", b: "12 days \u00b7 Toured", c: "Priority", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Hailey Brooks", b: "19 days \u00b7 Applied", c: "Priority", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Marcus Reed", b: "8 days \u00b7 Inquiry", c: "Normal", chip: ["#ebf1f5", "#424e5b"] },
+    ],
+    tileFooter: "21 prospects \u00b7 aged by last contact",
+    table: [
+      { a: "Nia Carter", b: "34 days \u00b7 Guest Card", c: "Oldest", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Sam Ortega", b: "12 days \u00b7 Toured", c: "Quiet", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Marcus Reed", b: "8 days \u00b7 Inquiry", c: "New", chip: ["#ebf1f5", "#424e5b"] },
+    ],
+  },
+  n2: {
+    cat: 1, icon: "insights",
+    label: "Score my leads by likelihood to convert",
+    text: "I scored 34 active leads on stage reached, days in stage, note volume, visits and reply speed.",
+    stats: [
+      { value: "34", label: "Active leads scored" },
+      { value: "8", label: "Scoring 81 to 100" },
+      { value: "66", label: "Average score" },
+    ],
+    findings: [
+      { text: "Priya Raman (91) and Jordan Wells (84) both advanced a stage in the last five days." },
+      { text: "Dana Whitfield has sat in screening 11 days, the longest stall in your pipeline." },
+      { text: "Leads that reply within four hours convert at roughly twice the rate of the rest." },
+    ],
+    note: "Based on prospect stage history, history and notes entries, the visit log and message timestamps.",
+    actions: ["nextsteps", "tile", "list"],
+    nextSteps: [
+      { title: "Call Priya Raman today", detail: "Application started four days ago and she has replied twice this week." },
+      { title: "Unblock Dana Whitfield", detail: "Screening has been open 11 days. Income verification is the missing piece." },
+      { title: "Book Jordan Wells a second showing", detail: "Two tours logged and no decision. A ranked shortlist usually closes this." },
+    ],
+    tileName: "Lead Conversion Score",
+    tileRows: [
+      { a: "Priya Raman", b: "Application \u00b7 4 days", c: "91", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Jordan Wells", b: "Property Tour \u00b7 6 days", c: "84", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Chris Okafor", b: "Guest Card \u00b7 2 days", c: "72", chip: ["#ebf1f5", "#195ca4"] },
+    ],
+    tileFooter: "34 leads scored \u00b7 top 10 shown",
+    table: [
+      { a: "Priya Raman", b: "Application \u00b7 2 replies this week", c: "91", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Dana Whitfield", b: "Screening \u00b7 11 days stalled", c: "41", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Nia Carter", b: "Guest Card \u00b7 no visits", c: "28", chip: ["#fdeceb", "#eb343c"] },
+    ],
+  },
+  n3: {
+    cat: 1, icon: "insights",
+    label: "Pre-tour briefing 30 minutes before showings",
+    text: "You have two showings today. I cross-referenced each prospect's stated preferences against current availability.",
+    stats: [
+      { value: "2", label: "Showings today" },
+      { value: "5", label: "Units ranked" },
+      { value: "96", label: "Best fit score" },
+    ],
+    findings: [
+      { text: "Jordan Wells at 2:30 PM: Unit 305 meets all five stated preferences at $1,795." },
+      { text: "Unit 420 is $50 over his stated ceiling, so hold it as a fallback only." },
+      { text: "Chris Okafor at 4:15 PM: Unit 610 meets all four preferences and his Oct 1 move-in." },
+    ],
+    note: "Based on prospect preferences, unit availability and pricing, and your showing calendar.",
+    actions: ["nextsteps", "tile"],
+    nextSteps: [
+      { title: "Lead with Unit 305 for Jordan", detail: "Five of five preferences met and under his budget ceiling." },
+      { title: "Print the comparison for both prospects", detail: "Fit ranking, price and availability date in one page." },
+      { title: "Hold Unit 610 for the 4:15 showing", detail: "It matches Chris on every preference and his move-in date." },
+    ],
+    tileName: "Pre-Tour Briefings",
+    tileRows: [
+      { a: "2:30 PM \u00b7 Jordan Wells", b: "Unit 305 \u00b7 $1,795", c: "96", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "4:15 PM \u00b7 Chris Okafor", b: "Unit 610 \u00b7 $1,320", c: "90", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Fallback", b: "Unit 420 \u00b7 over budget", c: "63", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+    tileFooter: "Today's showings \u00b7 ranked by fit",
+  },
+};
+
+const CATS = [
+  { label: "Answers from Express Help", hint: "I look this up in Rent Manager documentation and walk you through it." },
+  { label: "Summarize my data", hint: "I read your records across modules and consolidate what I find." },
+  { label: "Tell me what to do next", hint: "I read your records, then rank what needs attention and why." },
+];
+
+const DASHBOARDS = [
+  { name: "My Leasing Dashboard", meta: "12 tiles \u00b7 private to you" },
+  { name: "Prospect Snapshot", meta: "8 tiles \u00b7 shared with your team" },
+  { name: "Lease Renewals", meta: "6 tiles \u00b7 shared with your team" },
+  { name: "New dashboard\u2026", meta: "Named after this tile" },
+];
+
+class Component extends DCLogic {
+  state = { cat: 2, messages: [], thinking: null, sheetOpen: false, dashSel: 0, seq: 0 };
+
+  componentDidUpdate() {
+    const el = this._scroll;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  push(msgs) {
+    this.setState(s => ({ messages: s.messages.concat(msgs), seq: s.seq + msgs.length }));
+  }
+
+  ask(id) {
+    const p = PROMPTS[id];
+    this.setState({ sheetOpen: false });
+    this.push([{ role: "user", text: p.label }]);
+    this.setState({ thinking: p.cat === 0 ? "Searching Express Help" : "Reading your data" });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ thinking: null });
+      this.push([{
+        role: "bot", src: id, text: p.text, steps: p.steps, stats: p.stats, findings: p.findings,
+        article: p.article, note: p.note, actions: p.actions,
+      }]);
+    }, 900);
+  }
+
+  act(key, id) {
+    const p = PROMPTS[id];
+    if (key === "article") {
+      this.push([{ role: "bot", text: "Opening " + p.article + " in a new tab. The steps above are the short version.", article: p.article, actions: ["related"] }]);
+      return;
+    }
+    if (key === "related") {
+      this.push([{ role: "bot", text: "Related prompts you can try next:", actions: ["browse"] }]);
+      return;
+    }
+    if (key === "browse") { this.setState({ sheetOpen: true }); return; }
+    if (key === "nextsteps") {
+      this.push([{
+        role: "user", text: "What do you suggest I do next?",
+      }]);
+      this.setState({ thinking: "Ranking what needs attention" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        this.push([{
+          role: "bot", src: id, text: "Here is the order I would work it, with the reason for each.",
+          steps: p.nextSteps.map((n, i) => ({ n: i + 1, text: n.title + " \u2014 " + n.detail })),
+          note: "I can organize and track this. Writing or sending messages is not available yet, so these are yours to act on.",
+          actions: ["tile", "list"],
+        }]);
+      }, 800);
+      return;
+    }
+    if (key === "list") {
+      this.push([{ role: "bot", src: id, text: "The full list, ordered the same way:", table: p.table || p.tileRows, actions: ["tile"] }]);
+      return;
+    }
+    if (key === "tile") {
+      this.push([{ role: "user", text: "Create a dashboard tile so I can keep an eye on this." }]);
+      this.setState({ thinking: "Building the tile" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        this.push([{
+          role: "bot", src: id, text: "Here is the tile. It reads live from the same records, so it stays current.",
+          tile: true, picker: true,
+        }]);
+      }, 800);
+    }
+  }
+
+  addTile(id) {
+    const p = PROMPTS[id];
+    const db = DASHBOARDS[this.state.dashSel];
+    const name = this.state.dashSel === 3 ? p.tileName : db.name;
+    this.push([{
+      role: "bot",
+      text: p.tileName + " was added to " + name + ". It refreshes each morning at 6:00 AM, and you can move or resize it from the dashboard.",
+      link: { label: "Open " + name, hint: "View the tile and work through your next steps there", href: "Orion%20Dashboard%20Tile%20Ideas%20v3.dc.html" },
+      note: "Want it tracked differently? Tell me what to change and I will rebuild the tile.",
+      actions: ["browse"],
+    }]);
+  }
+
+  chip(bg, color) {
+    return "justify-self: end; display: inline-flex; align-items: center; justify-content: center; min-width: 62px; height: 22px; padding: 0 8px; border-radius: 2px; font-size: 13px; font-weight: 500; background: " + bg + "; color: " + color;
+  }
+
+  btn(primary) {
+    return primary
+      ? "height: 34px; padding: 0 16px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer"
+      : "height: 34px; padding: 0 16px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer";
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ACTION_LABELS = {
+      nextsteps: ["Suggest next steps", true],
+      tile: ["Create a dashboard tile", false],
+      list: ["Show me the full list", false],
+      article: ["Open the article", true],
+      related: ["Something else", false],
+      browse: ["Browse prompts", false],
+    };
+
+    const messages = s.messages.map((m, i) => {
+      const isUser = m.role === "user";
+      const p = m.src ? PROMPTS[m.src] : null;
+      return {
+        isUser, isBot: !isUser,
+        rowStyle: "display: flex; animation: eh-in 180ms ease-out",
+        text: m.text,
+        hasSteps: !!m.steps, steps: m.steps || [],
+        hasStats: !!m.stats, stats: m.stats || [],
+        hasFindings: !!m.findings, findings: m.findings || [],
+        hasTable: !!m.table,
+        table: (m.table || []).map(r => ({ a: r.a, b: r.b, c: r.c, chipStyle: this.chip(r.chip[0], r.chip[1]) })),
+        hasArticle: !!m.article, articleTitle: m.article,
+        hasNote: !!m.note, note: m.note,
+        hasLink: !!m.link,
+        linkLabel: m.link ? m.link.label : "",
+        linkHint: m.link ? m.link.hint : "",
+        linkHref: m.link ? m.link.href : "",
+        hasTile: !!m.tile,
+        tileName: p ? p.tileName : "",
+        tileFooter: p ? p.tileFooter : "",
+        tileRows: p && m.tile ? p.tileRows.map(r => ({ a: r.a, b: r.b, c: r.c, chipStyle: this.chip(r.chip[0], r.chip[1]) })) : [],
+        hasPicker: !!m.picker,
+        onAddTile: () => this.addTile(m.src),
+        hasActions: !!(m.actions && m.actions.length),
+        actions: (m.actions || []).map(k => ({
+          label: ACTION_LABELS[k][0],
+          style: this.btn(ACTION_LABELS[k][1]),
+          onClick: () => this.act(k, m.src),
+        })),
+      };
+    });
+
+    const cats = CATS.map((c, i) => ({
+      label: c.label,
+      style: "padding: 8px 14px; border-radius: 999px; font-size: 14px; cursor: pointer; border: 1px solid "
+        + (s.cat === i ? "#008dd5" : "#cedbe7") + "; background: " + (s.cat === i ? "#ebf1f5" : "#fff")
+        + "; color: " + (s.cat === i ? "#195ca4" : "#424e5b"),
+      onClick: () => this.setState({ cat: i }),
+    }));
+
+    const promptList = Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === s.cat).map(k => ({
+      label: PROMPTS[k].label,
+      icon: PROMPTS[k].icon,
+      iconStyle: "font-size: 21px; color: " + (PROMPTS[k].cat === 0 ? "#8fa3b3" : "#008dd5"),
+      onClick: () => this.ask(k),
+    }));
+
+    const dashboards = DASHBOARDS.map((db, i) => ({
+      ...db,
+      style: "display: flex; align-items: center; gap: 11px; border-radius: 6px; padding: 10px 12px; cursor: pointer; border: 1px solid "
+        + (s.dashSel === i ? "#008dd5" : "#cedbe7") + "; background: " + (s.dashSel === i ? "#ebf1f5" : "#fff"),
+      radioStyle: "width: 16px; height: 16px; flex: none; border-radius: 999px; box-sizing: border-box; background: #fff; border: "
+        + (s.dashSel === i ? "5px solid #008dd5" : "1px solid #cedbe7"),
+      onClick: () => this.setState({ dashSel: i }),
+    }));
+
+    return {
+      isHome: s.messages.length === 0,
+      messages, cats, promptList, dashboards,
+      catHint: CATS[s.cat].hint,
+      thinking: !!s.thinking, thinkingText: s.thinking || "",
+      sheetOpen: s.sheetOpen,
+      toggleSheet: () => this.setState({ sheetOpen: !s.sheetOpen }),
+      closeSheet: () => this.setState({ sheetOpen: false }),
+      browseStyle: "height: 32px; padding: 0 12px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: "
+        + (s.sheetOpen ? "#ebf1f5" : "#fff") + "; border: 1px solid " + (s.sheetOpen ? "#008dd5" : "#cedbe7")
+        + "; color: " + (s.sheetOpen ? "#195ca4" : "#424e5b"),
+      contextLabel: s.messages.length === 0 ? "10 properties selected" : "Company code lcs-rmexpress \u00b7 10 properties selected",
+      newChat: () => this.setState({ messages: [], thinking: null, sheetOpen: false }),
+      scrollRef: el => { this._scroll = el; },
+    };
+  }
+}
+</script>
+</body>
+</html>

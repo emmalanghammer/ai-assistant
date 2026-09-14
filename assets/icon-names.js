@@ -1,0 +1,117 @@
+/* Material Symbols ligature -> RMX sprite id. GENERATED — keep in step with the
+   two sprite sheets; nothing here is a drawn glyph.
+
+   The prototype used to render icons as an icon font by ligature, which the
+   RMX prototyping skill forbids: offline, every icon renders as its own name.
+   Icons are now real geometry from RMX Iconography, referenced by <use>. This
+   map exists only for the handful of sites where the glyph is data-driven —
+   a prompt's `icon`, the favourite star's two states, a toast's status icon.
+
+   iconHref('payments') -> '#payables' */
+const RMX_ICON_NAMES = {
+  "ac_unit": "recurring-charges",
+  "add": "add",
+  "add_circle": "add-circle",
+  "apartment": "properties",
+  "arrow_back": "arrow-back",
+  "arrow_downward": "arrow-downward",
+  "arrow_drop_down": "arrow-drop-down",
+  "arrow_forward": "arrow-forward",
+  "arrow_right_alt": "arrow-right-alt",
+  "arrow_upward": "arrow-upward",
+  "assessment": "reports",
+  "assignment_late": "priorities",
+  "assignment_turned_in": "lease-renewals",
+  "auto_awesome": "orion",
+  "autorenew": "autorenew",
+  "build": "issues",
+  "calendar_today": "calendar-today",
+  "call": "call",
+  "campaign": "campaign",
+  "check": "check",
+  "check_circle": "check-circle",
+  "chevron_left": "chevron-left",
+  "chevron_right": "chevron-right",
+  "close": "close",
+  "content_copy": "content-copy",
+  "dashboard": "dashboard",
+  "delete": "delete-filled",
+  "description": "description",
+  "directions_car": "search",
+  "donut_large": "occupancy",
+  "door_front": "occupancy",
+  "download": "download",
+  "drafts": "compose-email",
+  "edit": "edit",
+  "edit_square": "edit",
+  "expand_less": "keyboard-arrow-up",
+  "expand_more": "keyboard-arrow-down",
+  "fact_check": "list",
+  "first_page": "first-page",
+  "folder": "folder",
+  "format_list_bulleted": "list",
+  "grade": "grade",
+  "grid_view": "grid-view",
+  "group": "tenants",
+  "help": "help",
+  "history": "history",
+  "home": "rental-info",
+  "home_work": "properties",
+  "info": "info",
+  "insights": "reports",
+  "keyboard_double_arrow_right": "keyboard-double-arrow-right",
+  "last_page": "last-page",
+  "library_books": "reports",
+  "lightbulb": "info",
+  "link": "link",
+  "list": "list",
+  "list_alt": "list",
+  "local_parking": "violations",
+  "lock": "lock",
+  "mail": "mail",
+  "meeting_room": "occupancy",
+  "menu": "menu",
+  "more_vert": "more-vert",
+  "notifications": "notifications",
+  "open_in_new": "open-in-new",
+  "payments": "payables",
+  "person": "person",
+  "person_add": "assignment-add",
+  "picture_as_pdf": "description",
+  "print": "print",
+  "priority_high": "error",
+  "receipt_long": "receivables",
+  "redeem": "receivables",
+  "refresh": "refresh",
+  "remove": "remove",
+  "request_quote": "bills",
+  "schedule": "schedule",
+  "school": "school",
+  "search": "search",
+  "send": "send",
+  "settings": "settings",
+  "star": "grade",
+  "star_outline": "grade-outline",
+  "summarize": "reports",
+  "table_view": "grid-view",
+  "task_alt": "checklist",
+  "touch_app": "info",
+  "trending_down": "arrow-downward",
+  "trending_flat": "remove",
+  "trending_up": "arrow-upward",
+  "tune": "tune",
+  "visibility": "visibility",
+  "visibility_off": "visibility-off",
+  "warning": "warning",
+  "zoom_in": "zoom-in",
+  "zoom_out": "zoom-out"
+};
+
+function iconHref(name) {
+  const id = RMX_ICON_NAMES[name];
+  if (id) return '#' + id;
+  /* An unmapped name is a bug, not a thing to paper over with a stand-in —
+     say so in the console and render nothing rather than a wrong glyph. */
+  console.warn('[rmx] no RMX icon mapped for "' + name + '"');
+  return '';
+}

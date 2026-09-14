@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/colors_and_type.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Symbols+Outlined" rel="stylesheet">
+<script src="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/_ds_bundle.js"></script>
+<style>
+  .ms { font-family: "Material Symbols Outlined"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
+  @keyframes eh-pulse { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+  @keyframes eh-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div class="rmx" style="position: relative; width: {{ panelW }}px; height: {{ panelH }}px; border-radius: 8px; padding: 2px; background: linear-gradient(160deg, #008dd5 0%, #0aa0c8 50%, #6eb744 100%); box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 12px 32px rgba(19,49,76,0.24); display: flex; font-family: Roboto, system-ui, sans-serif; color: #666; animation: eh-in 180ms ease-out">
+  <div onMouseDown="{{ startW }}" title="Drag to resize width" style="position: absolute; top: 10px; left: -5px; width: 10px; bottom: 22px; cursor: ew-resize; z-index: 3"></div>
+  <div onMouseDown="{{ startH }}" title="Drag to resize height" style="position: absolute; left: 12px; right: 22px; bottom: -5px; height: 10px; cursor: ns-resize; z-index: 3"></div>
+  <div onMouseDown="{{ startBoth }}" title="Drag to resize" style="position: absolute; left: -6px; bottom: -6px; width: 20px; height: 20px; cursor: nesw-resize; z-index: 4; border-left: 2px solid rgba(255,255,255,0.85); border-bottom: 2px solid rgba(255,255,255,0.85); border-bottom-left-radius: 8px"></div>
+  <div style="flex: 1; min-width: 0; min-height: 0; background: #fff; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column">
+
+    <div style="flex: none; height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; border-bottom: 1px solid #e5edf3; background: #fff">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <svg width="28" height="28" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+          <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+          <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+          <path d="M25.5 6.6c.35 1.8 1.15 2.6 2.95 2.95-1.8.35-2.6 1.15-2.95 2.95-.35-1.8-1.15-2.6-2.95-2.95 1.8-.35 2.6-1.15 2.95-2.95Z" fill="#008dd5"></path>
+        </svg>
+        <span style="font-size: 20px; line-height: 26px; font-weight: 500; color: #13314c">Orion Assistant</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px">
+        <span onClick="{{ newChat }}" class="ms" style="font-size: 22px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">edit_square</span>
+        <span style="width: 1px; height: 24px; background: #cedbe7"></span>
+        <span class="ms" style="font-size: 22px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">history</span>
+        <span style="width: 1px; height: 24px; background: #cedbe7"></span>
+        <span onClick="{{ onClose }}" class="ms" style="font-size: 22px; color: #13314c; cursor: pointer" style-hover="color: #008dd5">close</span>
+      </div>
+    </div>
+
+    <div ref="{{ scrollRef }}" style="flex: 1; min-height: 0; overflow: auto; background: linear-gradient(#f7fbfd, #eef6fb); padding: 18px; display: flex; flex-direction: column; gap: 14px">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; gap: 16px">
+          <div style="text-align: center">
+            <div style="font-size: 26px; line-height: 34px; font-weight: 700; color: #13314c">Hi Ryan!</div>
+            <div style="font-size: 15px; line-height: 22px; color: #56707f; max-width: 520px; margin: 6px auto 0">Ask me anything about Rent Manager. I can answer from Express Help, or look through your data and pull the answer together with suggested next steps.</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-for list="{{ messages }}" as="m" hint-placeholder-count="0">
+        <div style="{{ m.rowStyle }}">
+          <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+            <div style="width: 100%; background: #f5f8fa; border: 1px solid #e5edf3; border-radius: 8px; padding: 12px 14px; font-size: 15px; line-height: 22px; color: #13314c">{{ m.text }}</div>
+          </sc-if>
+          <sc-if value="{{ m.isBot }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; gap: 10px; align-items: flex-start">
+              <svg width="24" height="24" viewBox="0 0 34 34" fill="none" style="flex: none; margin-top: 3px" aria-hidden="true">
+                <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+                <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+              </svg>
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+                <div style="font-size: 15px; line-height: 22px; color: #424e5b">{{ m.text }}</div>
+
+                <sc-if value="{{ m.hasSteps }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 7px">
+                    <sc-for list="{{ m.steps }}" as="st" hint-placeholder-count="3">
+                      <div style="display: flex; gap: 10px; align-items: flex-start">
+                        <span style="width: 21px; height: 21px; flex: none; border-radius: 999px; background: #ebf1f5; color: #195ca4; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center; margin-top: 1px">{{ st.n }}</span>
+                        <span style="flex: 1; font-size: 14px; line-height: 21px; color: #424e5b">{{ st.text }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasStats }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+                    <sc-for list="{{ m.stats }}" as="stat" hint-placeholder-count="3">
+                      <div style="background: #fff; border: 1px solid #e5edf3; border-left: 4px solid #008dd5; border-radius: 6px; padding: 9px 11px">
+                        <div style="font-size: 20px; line-height: 26px; font-weight: 700; color: #13314c">{{ stat.value }}</div>
+                        <div style="font-size: 12px; line-height: 17px; color: #666">{{ stat.label }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasBullets }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 7px">
+                    <sc-for list="{{ m.bullets }}" as="b" hint-placeholder-count="4">
+                      <div style="display: flex; gap: 10px"><span style="width: 5px; height: 5px; flex: none; border-radius: 999px; background: #008dd5; margin-top: 8px"></span><span style="flex: 1; font-size: 15px; line-height: 22px; color: #424e5b">{{ b.text }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasUnitList }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: grid; grid-template-columns: 1.35fr 0.7fr 0.85fr 0.85fr; gap: 8px; padding: 8px 12px; background: #f5f8fa; border-bottom: 1px solid #cedbe7; font-size: 12px; color: #13314c; font-weight: 500">
+                      <span>Unit</span><span>Vacant</span><span>Applications</span><span style="text-align: right">Interest</span>
+                    </div>
+                    <sc-for list="{{ m.units }}" as="u" hint-placeholder-count="14">
+                      <div style="padding: 9px 12px; border-bottom: 1px solid #ebf1f5">
+                        <div style="display: grid; grid-template-columns: 1.35fr 0.7fr 0.85fr 0.85fr; gap: 8px; align-items: center; font-size: 14px">
+                          <span style="color: #13314c">{{ u.unit }}</span>
+                          <span style="font-size: 13px; color: #666">{{ u.vacant }}</span>
+                          <span><span style="{{ u.appStyle }}">{{ u.apps }}</span></span>
+                          <span style="{{ u.interestStyle }}">{{ u.interest }}</span>
+                        </div>
+                        <div style="{{ u.prospectStyle }}">{{ u.prospects }}</div>
+                      </div>
+                    </sc-for>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: #f5f8fa; font-size: 13px; color: #13314c; font-weight: 500"><span>14 units &middot; 9 applications</span><span>23 interested prospects</span></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasFindings }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 6px">
+                    <sc-for list="{{ m.findings }}" as="f" hint-placeholder-count="3">
+                      <div style="display: flex; gap: 9px"><span class="ms" style="font-size: 17px; color: #6eb744; margin-top: 3px">check_circle</span><span style="flex: 1; font-size: 14px; line-height: 21px; color: #424e5b">{{ f.text }}</span></div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasPlan }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #13314c">
+                      <span class="ms" style="font-size: 20px; color: #fff">fact_check</span>
+                      <span style="flex: 1; font-size: 15px; font-weight: 500; color: #fff">{{ m.planTitle }}</span>
+                      <span style="display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 2px; background: #f58220; color: #fff; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase">Not posted</span>
+                    </div>
+                    <div style="padding: 4px 0">
+                      <sc-for list="{{ m.planRows }}" as="pr" hint-placeholder-count="6">
+                        <div style="display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 12px; align-items: baseline; padding: 8px 14px; border-bottom: 1px solid #ebf1f5">
+                          <span style="font-size: 13px; color: #8fa3b3">{{ pr.label }}</span>
+                          <span style="font-size: 14px; color: #13314c; font-variant-numeric: tabular-nums">{{ pr.value }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <sc-if value="{{ m.hasPlanWarn }}" hint-placeholder-val="{{ false }}">
+                      <div style="display: flex; gap: 9px; padding: 10px 14px; background: #fdf0e5">
+                        <span class="ms" style="font-size: 18px; color: #a1541a; margin-top: 1px">warning</span>
+                        <span style="flex: 1; font-size: 13px; line-height: 19px; color: #7a4315">{{ m.planWarn }}</span>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasTable }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <sc-for list="{{ m.table }}" as="tr" hint-placeholder-count="3">
+                      <div style="display: grid; grid-template-columns: 1.3fr 1.4fr 0.8fr; gap: 8px; align-items: center; padding: 9px 12px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                        <span style="color: #13314c">{{ tr.a }}</span><span style="color: #666; font-size: 13px">{{ tr.b }}</span><span style="{{ tr.chipStyle }}">{{ tr.c }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasReport }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #cedbe7; background: #13314c">
+                      <span style="font-size: 14px; font-weight: 500; color: #fff">{{ m.reportTitle }}</span>
+                      <span class="ms" style="font-size: 19px; color: #cedbe7; cursor: pointer">open_in_new</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1.6fr 0.95fr 0.95fr 0.7fr; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #cedbe7; font-size: 12px; font-weight: 500; color: #13314c">
+                      <span></span>
+                      <sc-for list="{{ m.reportCols }}" as="col" hint-placeholder-count="3">
+                        <span style="text-align: right">{{ col.label }}</span>
+                      </sc-for>
+                    </div>
+                    <sc-for list="{{ m.reportRows }}" as="r" hint-placeholder-count="8">
+                      <div style="{{ r.rowStyle }}">
+                        <span style="{{ r.labelStyle }}">{{ r.a }}</span>
+                        <span style="{{ r.numStyle }}">{{ r.b }}</span>
+                        <span style="{{ r.numStyle }}">{{ r.c }}</span>
+                        <span style="{{ r.varStyle }}">{{ r.d }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasTenants }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 6px">
+                    <sc-for list="{{ m.tenants }}" as="t" hint-placeholder-count="2">
+                      <div onClick="{{ t.onClick }}" style="display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #cedbe7; border-radius: 4px; padding: 11px 13px; cursor: pointer" style-hover="border-color: #008dd5; background: #f7fbfd">
+                        <span class="ms" style="font-size: 22px; color: #008dd5">person</span>
+                        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                          <span style="font-size: 15px; color: #13314c">{{ t.name }}</span>
+                          <span style="font-size: 13px; color: #666">{{ t.unit }}</span>
+                          <span style="font-size: 13px; color: #424e5b">{{ t.vehicle }}</span>
+                        </div>
+                        <span style="{{ t.badgeStyle }}">{{ t.badge }}</span>
+                        <span class="ms" style="font-size: 20px; color: #008dd5">chevron_right</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasRecord }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: #13314c">
+                      <span class="ms" style="font-size: 24px; color: #fff">person</span>
+                      <div style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+                        <span style="font-size: 16px; font-weight: 500; color: #fff">{{ m.recordName }}</span>
+                        <span style="font-size: 12px; color: #cedbe7">{{ m.recordMeta }}</span>
+                      </div>
+                      <span class="ms" style="font-size: 20px; color: #cedbe7; cursor: pointer">open_in_new</span>
+                    </div>
+                    <div style="padding: 14px; display: flex; flex-direction: column; gap: 14px">
+                      <div style="border: 2px solid #008dd5; background: #ebf1f5; border-radius: 4px; padding: 11px 13px; display: flex; flex-direction: column; gap: 3px">
+                        <span style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: #195ca4">{{ m.vehicleLabel }}</span>
+                        <span style="font-size: 16px; color: #13314c">{{ m.vehicleValue }}</span>
+                        <span style="font-size: 13px; color: #666">{{ m.vehicleMeta }}</span>
+                      </div>
+                      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 18px">
+                        <sc-for list="{{ m.recordFields }}" as="f" hint-placeholder-count="6">
+                          <div style="display: flex; flex-direction: column; gap: 2px">
+                            <span style="font-size: 12px; color: #8fa3b3">{{ f.label }}</span>
+                            <span style="font-size: 14px; color: #13314c">{{ f.value }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                      <sc-if value="{{ m.hasSecondVehicle }}" hint-placeholder-val="{{ false }}">
+                        <div style="display: flex; align-items: center; gap: 9px; border-top: 1px solid #ebf1f5; padding-top: 11px">
+                          <span class="ms" style="font-size: 18px; color: #8fa3b3">directions_car</span>
+                          <span style="font-size: 13px; color: #666">{{ m.secondVehicle }}</span>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasFollowups }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 7px">
+                    <span style="font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: #8fa3b3">Ask about this result</span>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                      <sc-for list="{{ m.followups }}" as="f" hint-placeholder-count="3">
+                        <button onClick="{{ f.onClick }}" style="{{ f.style }}" style-hover="border-color: #008dd5; background: #ebf1f5">{{ f.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasPrint }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                      <span class="ms" style="font-size: 20px; color: #008dd5">print</span>
+                      <span style="flex: 1; font-size: 15px; font-weight: 500; color: #13314c">{{ m.printName }}</span>
+                      <span style="font-size: 13px; color: #666">{{ m.printPages }}</span>
+                    </div>
+                    <div style="padding: 4px 0">
+                      <sc-for list="{{ m.printParams }}" as="pp" hint-placeholder-count="4">
+                        <div style="display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 12px; align-items: baseline; padding: 7px 14px; border-bottom: 1px solid #ebf1f5">
+                          <span style="font-size: 13px; color: #8fa3b3">{{ pp.label }}</span>
+                          <span style="font-size: 14px; color: #13314c">{{ pp.value }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; padding: 11px 14px; background: #f7fbfd">
+                      <sc-for list="{{ m.printFormats }}" as="pf" hint-placeholder-count="3">
+                        <button onClick="{{ pf.onClick }}" style="{{ pf.style }}" style-hover="border-color: #008dd5; color: #008dd5"><span class="ms" style="font-size: 17px">{{ pf.icon }}</span>{{ pf.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasDoc }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #667685; border-radius: 4px; padding: 12px; overflow: auto; max-height: 460px">
+                    <div style="background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.20); padding: 26px 28px; display: flex; flex-direction: column; gap: 14px; min-width: 520px">
+                      <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 16px">
+                        <div style="display: flex; flex-direction: column; gap: 2px">
+                          <span style="font-size: 12px; font-weight: 500; color: #13314c">LCS Property Management</span>
+                          <span style="font-size: 11px; color: #666">lcs-rmexpress</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+                          <span style="font-size: 11px; color: #666">{{ m.docPrinted }}</span>
+                          <span style="font-size: 11px; color: #666">{{ m.docPage }}</span>
+                        </div>
+                      </div>
+                      <div style="text-align: center; display: flex; flex-direction: column; gap: 3px; border-bottom: 2px solid #13314c; padding-bottom: 10px">
+                        <span style="font-size: 16px; font-weight: 700; color: #13314c">{{ m.docTitle }}</span>
+                        <span style="font-size: 11px; color: #666">{{ m.docSubtitle }}</span>
+                        <span style="font-size: 11px; color: #666">{{ m.docScope }}</span>
+                      </div>
+                      <div>
+                        <div style="display: grid; grid-template-columns: 1.5fr 1.7fr 0.55fr; gap: 12px; padding: 0 0 6px; border-bottom: 1px solid #13314c; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: #13314c">
+                          <span>{{ m.docHeadA }}</span><span>{{ m.docHeadB }}</span><span style="text-align: right">{{ m.docHeadC }}</span>
+                        </div>
+                        <sc-for list="{{ m.docRows }}" as="dr" hint-placeholder-count="12">
+                          <div style="{{ dr.rowStyle }}">
+                            <span style="color: #13314c">{{ dr.a }}</span>
+                            <span style="color: #424e5b">{{ dr.b }}</span>
+                            <span style="text-align: right; font-variant-numeric: tabular-nums; color: #13314c">{{ dr.c }}</span>
+                          </div>
+                        </sc-for>
+                        <div style="display: grid; grid-template-columns: 1.5fr 1.7fr 0.55fr; gap: 12px; padding: 7px 0 0; border-top: 2px solid #13314c; font-size: 12px; font-weight: 700; color: #13314c">
+                          <span>{{ m.docTotalLabel }}</span><span style="color: #424e5b; font-weight: 400">{{ m.docTotalDetail }}</span><span style="text-align: right; font-variant-numeric: tabular-nums">{{ m.docTotalValue }}</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #cedbe7; padding-top: 8px; font-size: 10px; color: #8fa3b3">
+                        <span>{{ m.docSource }}</span><span>Rent Manager · {{ m.docPage }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasArticle }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid #e5edf3; border-radius: 6px; padding: 11px 14px">
+                    <span style="font-size: 14px; color: #b3b3b3; white-space: nowrap">Suggested Article</span>
+                    <span style="flex: 1; font-size: 15px; color: #13314c">{{ m.articleTitle }}</span>
+                    <span class="ms" style="font-size: 20px; color: #008dd5; cursor: pointer">open_in_new</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasTile }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid #cedbe7">
+                      <span style="font-size: 15px; font-weight: 500; color: #13314c">{{ m.tileName }}</span>
+                      <div style="display: flex; align-items: center; gap: 10px"><span class="ms" style="font-size: 18px; color: #008dd5">refresh</span><span class="ms" style="font-size: 18px; color: #666">more_vert</span></div>
+                    </div>
+                    <sc-if value="{{ m.hasTileNote }}" hint-placeholder-val="{{ false }}">
+                      <div style="padding: 9px 12px; border-bottom: 1px solid #cedbe7; background: #f7fbfd; font-size: 13px; line-height: 19px; color: #424e5b">{{ m.tileNote }}</div>
+                    </sc-if>
+                    <div style="display: grid; grid-template-columns: 1.3fr 1.4fr 0.8fr; gap: 8px; padding: 8px 12px; border-bottom: 1px solid #cedbe7; background: #f5f8fa; font-size: 12px; color: #13314c; font-weight: 500">
+                      <span>{{ m.tileHeadA }}</span><span>{{ m.tileHeadB }}</span><span style="text-align: right">{{ m.tileHeadC }}</span>
+                    </div>
+                    <sc-for list="{{ m.tileRows }}" as="row" hint-placeholder-count="3">
+                      <div style="display: grid; grid-template-columns: 1.3fr 1.4fr 0.8fr; gap: 8px; align-items: center; padding: 9px 12px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                        <span style="color: #13314c">{{ row.a }}</span><span style="color: #666; font-size: 13px">{{ row.b }}</span><span style="{{ row.chipStyle }}">{{ row.c }}</span>
+                      </div>
+                    </sc-for>
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #f5f8fa; font-size: 13px; color: #666"><span>{{ m.tileFooter }}</span><span style="color: #008dd5">View All</span></div>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasPicker }}" hint-placeholder-val="{{ false }}">
+                  <div style="background: #fff; border: 1px solid #e5edf3; border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+                    <span style="font-size: 15px; font-weight: 500; color: #13314c">Which dashboard should it go on?</span>
+                    <div style="display: flex; flex-direction: column; gap: 6px">
+                      <sc-for list="{{ dashboards }}" as="db" hint-placeholder-count="4">
+                        <div onClick="{{ db.onClick }}" style="{{ db.style }}" style-hover="border-color: #008dd5">
+                          <span style="{{ db.radioStyle }}"></span>
+                          <div style="flex: 1"><div style="font-size: 14px; color: #13314c">{{ db.name }}</div><div style="font-size: 12px; color: #8fa3b3">{{ db.meta }}</div></div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <button onClick="{{ m.onAddTile }}" style="align-self: flex-start; height: 34px; padding: 0 14px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Add to Dashboard</button>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasLink }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ m.linkHref }}" onClick="{{ m.onLink }}" style="display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid #008dd5; border-radius: 6px; padding: 11px 14px; text-decoration: none; cursor: pointer" style-hover="background: #ebf1f5">
+                    <span class="ms" style="font-size: 21px; color: #008dd5">dashboard</span>
+                    <span style="flex: 1; display: flex; flex-direction: column">
+                      <span style="font-size: 15px; font-weight: 500; color: #008dd5">{{ m.linkLabel }}</span>
+                      <span style="font-size: 12px; color: #666">{{ m.linkHint }}</span>
+                    </span>
+                    <span class="ms" style="font-size: 20px; color: #008dd5">open_in_new</span>
+                  </a>
+                </sc-if>
+
+                <sc-if value="{{ m.hasNote }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid #cedbe7; border-radius: 4px; background: #f5f8fa">
+                    <span class="ms" style="font-size: 17px; color: #666">info</span>
+                    <span style="font-size: 13px; line-height: 19px; color: #666">{{ m.note }}</span>
+                  </div>
+                </sc-if>
+
+                <sc-if value="{{ m.hasActions }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                    <sc-for list="{{ m.actions }}" as="a" hint-placeholder-count="2">
+                      <button onClick="{{ a.onClick }}" style="{{ a.style }}" style-hover="border-color: #008dd5; color: #008dd5">{{ a.label }}</button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; gap: 10px; align-items: center">
+          <svg width="24" height="24" viewBox="0 0 34 34" fill="none" style="flex: none" aria-hidden="true">
+            <circle cx="17" cy="17" r="14" stroke="#008dd5" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="66 22" transform="rotate(-40 17 17)"></circle>
+            <path d="M17 8.5c.9 4.6 2.9 6.7 7.5 7.6-4.6.9-6.6 2.9-7.5 7.5-.9-4.6-2.9-6.6-7.5-7.5 4.6-.9 6.6-3 7.5-7.6Z" fill="#6eb744"></path>
+          </svg>
+          <span style="font-size: 14px; font-style: italic; color: #666">{{ thinkingText }}</span>
+          <span style="display: flex; gap: 5px">
+            <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out infinite"></span>
+            <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out 0.2s infinite"></span>
+            <span style="width: 7px; height: 7px; border-radius: 999px; background: #008dd5; animation: eh-pulse 1.2s ease-in-out 0.4s infinite"></span>
+          </span>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="flex: none; border-top: 1px solid #e5edf3; background: #fff; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; animation: eh-in 160ms ease-out">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <span style="font-size: 15px; font-weight: 500; color: #13314c">Prompt Suggestions</span>
+          <span onClick="{{ closeSheet }}" class="ms" style="font-size: 20px; color: #666; cursor: pointer">close</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px">
+          <sc-for list="{{ cats }}" as="cat" hint-placeholder-count="3">
+            <div onClick="{{ cat.onClick }}" style="{{ cat.style }}">{{ cat.label }}</div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; max-height: 170px; overflow: auto">
+          <sc-for list="{{ promptList }}" as="p" hint-placeholder-count="3">
+            <div onClick="{{ p.onClick }}" style="display: flex; align-items: center; gap: 10px; border: 1px solid #e5edf3; border-radius: 6px; padding: 10px 12px; cursor: pointer" style-hover="border-color: #008dd5; background: #f7fbfd">
+              <span class="ms" style="{{ p.iconStyle }}">{{ p.icon }}</span>
+              <span style="flex: 1; font-size: 14px; line-height: 21px; color: #13314c">{{ p.label }}</span>
+              <span class="ms" style="font-size: 18px; color: #008dd5">chevron_right</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="flex: none; border-top: 1px solid #e5edf3; background: #fff; padding: 12px 18px 14px; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #cedbe7; border-radius: 6px; padding: 11px 14px; background: #fff; box-shadow: 0 1px 2px rgba(76,76,76,0.08)">
+        <input type="text" placeholder="Ask anything..." value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onDraftKey }}" style="flex: 1; min-width: 0; border: none; outline: none; background: transparent; font-family: Roboto, sans-serif; font-size: 15px; color: #13314c">
+        <span onClick="{{ submitDraft }}" class="ms" style="font-size: 24px; color: #4fb0e4; cursor: pointer" style-hover="color: #008dd5">send</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <button onClick="{{ toggleSheet }}" style="{{ browseStyle }}" style-hover="border-color: #008dd5; color: #008dd5"><span class="ms" style="font-size: 18px">list_alt</span>Prompt Suggestions</button>
+      </div>
+      <div style="text-align: center; font-size: 13px; font-style: italic; color: #666">AI may be inaccurate. Make sure to verify information before use.</div>
+    </div>
+
+    <div style="flex: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 18px; border-top: 1px solid #e5edf3; background: #f7fbfd">
+      <span style="font-size: 13px; color: #666">Need more help? View all documentation at <a href="#" style="color: #008dd5">ExpressHelp</a></span>
+      <button style="height: 32px; padding: 0 14px; border: 1px solid #008dd5; background: #fff; color: #008dd5; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer" style-hover="background: #ebf1f5">Contact Support</button>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:640,&quot;height&quot;:860},&quot;onClose&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onViewDashboard&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;() =&gt; void&quot;},&quot;onTileAdded&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(tile: any) =&gt; void&quot;},&quot;onOpenReport&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(doc: any) =&gt; void&quot;}}">
+const GREEN = ["#e2f1da", "#4a7d2c"], RED = ["#fdeceb", "#eb343c"], ORANGE = ["#fdf0e5", "#a1541a"], GRAY = ["#ebf1f5", "#424e5b"];
+
+const PROMPTS = {
+  d1: {
+    reportName: "Delinquency Detail",
+    reportSource: "Receivables \u00b7 Delinquency",
+    cat: 2, icon: "task_alt",
+    label: "Where should I focus on delinquency this month?",
+    text: "You are behind where you were at this point last month. On day 18 of the period you had collected 93.40%; today you are at 91.18%, which is $23,410 more outstanding than the same day last month.",
+    stats: [
+      { value: "$249,502", label: "Delinquent balance (+$23,410 vs. day 18 last month)" },
+      { value: "91.18%", label: "Collected \u00b7 down 2.22 pts from 93.40%" },
+      { value: "Behind", label: "Pace vs. same day last month" },
+    ],
+    findings: [
+      { text: "Hawthorne Ridge is the whole gap: $64,870 outstanding against $38,140 on the same day last month." },
+      { text: "Crestline Business Park is actually ahead, down from 22.10% to 19.56% uncollected." },
+      { text: "Riverview is flat month over month, so the portfolio slip is concentrated in one property." },
+      { text: "Two months ago on day 18 you were at 94.05%, so this is the second consecutive month of slipping pace." },
+    ],
+    note: "Compares charges, receipts and tenant balances as of the same day in the prior period.",
+    actions: ["nextsteps", "list", "print"],
+    nextSteps: [
+      { title: "Close the Hawthorne Ridge gap first", detail: "It accounts for $26,730 of the $23,410 portfolio slip, so nothing else moves the number as much." },
+      { title: "Check late fee posting at Hawthorne Ridge", detail: "Fees were not posted for two of the last three cycles, which is likely why the pace fell there and nowhere else." },
+      { title: "Review the 9 tenants over 60 days", detail: "All have promised payments logged but no receipts. Seven of the nine are at Hawthorne." },
+      { title: "Copy what Crestline did", detail: "It improved 2.54 points month over month. Its manager started calling on day 5 instead of day 12." },
+    ],
+    tileName: "Delinquency Pace vs. Last Month",
+    tileHead: ["Property", "Outstanding vs. same day", "Pace"],
+    tileNote: "Behind last month \u00b7 91.18% collected vs. 93.40% on day 18 \u00b7 +$23,410 outstanding",
+    tileRows: [
+      { a: "Hawthorne Ridge", b: "$64,870 \u00b7 was $38,140", c: "Behind", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Riverview Apartments", b: "$32,072 \u00b7 was $31,640", c: "Flat", chip: ["#ebf1f5", "#424e5b"] },
+      { a: "Crestline Business Park", b: "$26,012 \u00b7 was $29,880", c: "Ahead", chip: ["#e2f1da", "#4a7d2c"] },
+    ],
+    tileFooter: "Day 18 of period \u00b7 same-day comparison \u00b7 refreshes daily",
+    table: [
+      { a: "Portfolio", b: "91.18% collected \u00b7 was 93.40%", c: "-2.22 pts", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Hawthorne Ridge", b: "8.94% uncollected \u00b7 was 5.31%", c: "-3.63 pts", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Riverview Apartments", b: "7.37% uncollected \u00b7 was 7.28%", c: "-0.09 pts", chip: ["#ebf1f5", "#424e5b"] },
+      { a: "Crestline Business Park", b: "19.56% uncollected \u00b7 was 22.10%", c: "+2.54 pts", chip: ["#e2f1da", "#4a7d2c"] },
+    ],
+  },
+  d2: {
+    reportName: "Upcoming Vacancy & Prospect Coverage",
+    reportSource: "Rental Info \u00b7 Lease Expiration",
+    cat: 2, icon: "insights",
+    label: "Show me upcoming vacant units and any prospects that have shown interest or may be a good fit.",
+    text: "Here is what I found across your 10 selected properties for the next 30 days.",
+    listOnly: true,
+    bullets: [
+      "14 units are vacating, and 9 applications are pending across 5 of them.",
+      "4 units have logged prospect interest but no application yet.",
+      "5 units have no interest logged at all, and Unit 420 at Ridgeline is the closest of those at Sep 24.",
+      "23 prospects are interested across all vacating units, and 6 more match Unit 420's preferences without having asked about it.",
+      "Harbor Flats has the thinnest coverage of any property, at 44% of its vacating units.",
+    ],
+    note: "Based on lease end dates, move-out notices, application status and prospect preferences.",
+    actions: ["nextsteps", "list", "print"],
+    nextSteps: [
+      { title: "Prioritize Unit 420", detail: "No interest logged and 24 days out. Six preference matches exist in your prospect register." },
+      { title: "Confirm the 9 pending applications", detail: "Three are missing income verification, which is the usual stall point." },
+      { title: "Re-list Harbor Flats early", detail: "Coverage there has run below 50% for three consecutive months." },
+    ],
+    tileName: "Upcoming Vacancy Coverage",
+    tileKind: "vacancy",
+    unitList: true,
+    tileHead: ["Unit", "Vacant \u00b7 applications", "Interest"],
+    tileNote: "14 vacating \u00b7 5 covered \u00b7 4 interest only \u00b7 5 with no interest logged",
+    tileRows: [
+      { a: "420 \u00b7 Ridgeline", b: "Sep 24 \u00b7 no applications", c: "None", chip: RED },
+      { a: "1108 \u00b7 Harbor Flats", b: "Sep 19 \u00b7 1 pending", c: "3", chip: ORANGE },
+      { a: "305 \u00b7 Ridgeline", b: "Sep 12 \u00b7 2 pending", c: "4", chip: GREEN },
+    ],
+    tileFooter: "14 units \u00b7 23 interested prospects",
+  },
+  d3: {
+    reportName: "Resident Sentiment Watchlist",
+    reportSource: "Rental Info \u00b7 Tenant History",
+    cat: 2, icon: "insights",
+    label: "Flag escalated residents before they vacate",
+    text: "I read maintenance history, portal messages, survey responses and smart voicemail transcripts for the last 30 days.",
+    stats: [
+      { value: "7", label: "Residents with negative sentiment" },
+      { value: "3", label: "Renew within 60 days" },
+      { value: "19", label: "Escalated signals logged" },
+    ],
+    findings: [
+      { text: "Maria Delgado (204B) is the sharpest drop: 3 ticket re-opens, 2 portal complaints and a 4/10 survey." },
+      { text: "Two more negative-sentiment residents renew inside 120 days, and both cite noise rather than price." },
+      { text: "Sentiment for this group has declined six months running while resolved-ticket volume fell." },
+    ],
+    note: "Based on history and notes, work orders, portal messages, surveys and voicemail transcripts.",
+    actions: ["nextsteps", "list", "print"],
+    nextSteps: [
+      { title: "Walk 204B with a technician", detail: "Same issue re-opened three times. Renewal decision is due Oct 31." },
+      { title: "Group the noise complaints", detail: "Four residents in the same building reported noise in the same window." },
+      { title: "Close the 9-day-old portal messages", detail: "Two residents are waiting on a reply, which is the strongest churn signal in the set." },
+    ],
+    tileName: "Resident Sentiment Watchlist",
+    tileHead: ["Resident", "Unit \u00b7 renewal", "Sentiment"],
+    tileNote: "7 flagged \u00b7 -23 average sentiment \u00b7 3 renew within 60 days",
+    tileRows: [
+      { a: "Maria Delgado", b: "204B \u00b7 renews Oct 31", c: "-38", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Terrance Boyd", b: "1108 \u00b7 renews Dec 31", c: "-19", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Anh Nguyen", b: "512 \u00b7 renews Feb 28", c: "-12", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+    tileFooter: "7 residents tracked \u00b7 refreshes daily",
+    table: [
+      { a: "Maria Delgado", b: "3 re-opens \u00b7 survey 4/10", c: "-38", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Terrance Boyd", b: "Voicemail: noise \u00b7 1 escalation", c: "-19", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Anh Nguyen", b: "2 portal messages unresolved", c: "-12", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+  },
+  d4: {
+    reportName: "Lead Conversion Scoring",
+    reportSource: "Rental Info \u00b7 Prospect Waiting List",
+    cat: 2, icon: "insights",
+    label: "Score my leads by likelihood to convert",
+    text: "I scored 34 active leads on stage reached, days in stage, note volume, visits and reply speed.",
+    stats: [
+      { value: "34", label: "Active leads scored" },
+      { value: "8", label: "Scoring 81 to 100" },
+      { value: "66", label: "Average score" },
+    ],
+    findings: [
+      { text: "Priya Raman (91) and Jordan Wells (84) both advanced a stage in the last five days." },
+      { text: "Dana Whitfield has sat in screening 11 days, the longest stall in your pipeline." },
+      { text: "Leads that reply within four hours convert at roughly twice the rate of the rest." },
+    ],
+    note: "Based on prospect stage history, history and notes entries, the visit log and message timestamps.",
+    actions: ["nextsteps", "list", "print"],
+    nextSteps: [
+      { title: "Call Priya Raman today", detail: "Application started four days ago and she has replied twice this week." },
+      { title: "Unblock Dana Whitfield", detail: "Screening has been open 11 days. Income verification is the missing piece." },
+      { title: "Book Jordan Wells a second showing", detail: "Two tours logged and no decision. A ranked shortlist usually closes this." },
+    ],
+    tileName: "Lead Conversion Score",
+    tileHead: ["Prospect", "Stage \u00b7 days in stage", "Score"],
+    tileNote: "34 leads scored \u00b7 average 66 \u00b7 sortable by score or days",
+    tileRows: [
+      { a: "Priya Raman", b: "Application \u00b7 4 days", c: "91", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Jordan Wells", b: "Property Tour \u00b7 6 days", c: "84", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Chris Okafor", b: "Guest Card \u00b7 2 days", c: "72", chip: ["#ebf1f5", "#195ca4"] },
+    ],
+    tileFooter: "34 leads scored \u00b7 top 10 shown",
+    table: [
+      { a: "Priya Raman", b: "Application \u00b7 2 replies this week", c: "91", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Dana Whitfield", b: "Screening \u00b7 11 days stalled", c: "41", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Nia Carter", b: "Guest Card \u00b7 no visits", c: "28", chip: ["#fdeceb", "#eb343c"] },
+    ],
+  },
+  d5: {
+    cat: 2, icon: "insights",
+    label: "Pre-tour briefing 30 minutes before showings",
+    text: "You have two showings today. I cross-referenced each prospect's stated preferences against current availability.",
+    stats: [
+      { value: "2", label: "Showings today" },
+      { value: "5", label: "Units ranked" },
+      { value: "96", label: "Best fit score" },
+    ],
+    findings: [
+      { text: "Jordan Wells at 2:30 PM: Unit 305 meets all five stated preferences at $1,795." },
+      { text: "Unit 420 is $50 over his stated ceiling, so hold it as a fallback only." },
+      { text: "Chris Okafor at 4:15 PM: Unit 610 meets all four preferences and his Oct 1 move-in." },
+    ],
+    note: "Based on prospect preferences, unit availability and pricing, and your showing calendar.",
+    actions: ["nextsteps", "print"],
+    nextSteps: [
+      { title: "Lead with Unit 305 for Jordan", detail: "Five of five preferences met and under his budget ceiling." },
+      { title: "Print the comparison for both prospects", detail: "Fit ranking, price and availability date in one page." },
+      { title: "Hold Unit 610 for the 4:15 showing", detail: "It matches Chris on every preference and his move-in date." },
+    ],
+    tileName: "Pre-Tour Briefings",
+    tileHead: ["Showing", "Top match", "Fit"],
+    tileNote: "Emails you the ranked shortlist 30 minutes before each showing",
+    tileRows: [
+      { a: "2:30 PM \u00b7 Jordan Wells", b: "Unit 305 \u00b7 $1,795", c: "96", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "4:15 PM \u00b7 Chris Okafor", b: "Unit 610 \u00b7 $1,320", c: "90", chip: ["#e2f1da", "#4a7d2c"] },
+      { a: "Fallback", b: "Unit 420 \u00b7 over budget", c: "63", chip: ["#fdf0e5", "#a1541a"] },
+    ],
+    tileFooter: "Today's showings \u00b7 ranked by fit",
+  },
+  n1: {
+    reportName: "Prospect Follow-Up Aging",
+    reportSource: "Rental Info \u00b7 Prospect Activity",
+    cat: 2, icon: "task_alt",
+    label: "Who should I follow up with today?",
+    text: "21 active prospects have had no communication or status change in 7 or more days. Here is how I would order them.",
+    stats: [
+      { value: "21", label: "Awaiting contact" },
+      { value: "3", label: "Past 30 days" },
+      { value: "9", label: "Went quiet after strong interest" },
+    ],
+    findings: [
+      { text: "Sam Ortega had five touches then went silent 12 days ago, right after a tour." },
+      { text: "Nia Carter has been waiting 34 days and is your oldest open guest card." },
+      { text: "Six of the 21 have a unit still available that matched their stated preferences." },
+    ],
+    note: "I can surface and organize these. Sending messages is not something I can do yet.",
+    actions: ["nextsteps", "list", "print"],
+    nextSteps: [
+      { title: "Start with the 9 who went quiet after strong interest", detail: "They engaged repeatedly, so a single check-in usually restarts the conversation." },
+      { title: "Close out the 3 past 30 days", detail: "Mark them lost or re-qualify them so your pipeline numbers stay honest." },
+      { title: "Match the 6 with available units", detail: "Their preferred unit type is open right now, which gives you a concrete reason to call." },
+    ],
+    tileName: "Follow-Up Queue",
+    tileHead: ["Prospect", "Last contact", "Priority"],
+    tileNote: "21 awaiting contact \u00b7 12 at 7\u201314 days \u00b7 6 at 15\u201330 \u00b7 3 past 30",
+    tileRows: [
+      { a: "Sam Ortega", b: "12 days \u00b7 Toured", c: "Priority", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Hailey Brooks", b: "19 days \u00b7 Applied", c: "Priority", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Marcus Reed", b: "8 days \u00b7 Inquiry", c: "Normal", chip: ["#ebf1f5", "#424e5b"] },
+    ],
+    tileFooter: "21 prospects \u00b7 aged by last contact",
+    table: [
+      { a: "Nia Carter", b: "34 days \u00b7 Guest Card", c: "Oldest", chip: ["#fdeceb", "#eb343c"] },
+      { a: "Sam Ortega", b: "12 days \u00b7 Toured", c: "Quiet", chip: ["#fdf0e5", "#a1541a"] },
+      { a: "Marcus Reed", b: "8 days \u00b7 Inquiry", c: "New", chip: ["#ebf1f5", "#424e5b"] },
+    ],
+  },
+};
+
+const UNITS = [
+  { unit: "420", property: "Ridgeline", meta: "2 bed \u00b7 $1,900", vacant: "Sep 24", apps: 0, interest: 0, status: "none", prospects: [], matches: 6 },
+  { unit: "702", property: "Harbor Flats", meta: "1 bed \u00b7 $1,375", vacant: "Sep 28", apps: 0, interest: 0, status: "none", prospects: [] },
+  { unit: "145", property: "Willowbrook", meta: "Studio \u00b7 $1,150", vacant: "Oct 1", apps: 0, interest: 0, status: "none", prospects: [] },
+  { unit: "318", property: "Crestline", meta: "2 bed \u00b7 $1,780", vacant: "Oct 3", apps: 0, interest: 0, status: "none", prospects: [] },
+  { unit: "1204", property: "Hawthorne Ridge", meta: "1 bed \u00b7 $1,410", vacant: "Oct 5", apps: 0, interest: 0, status: "none", prospects: [] },
+  { unit: "431", property: "Harbor Flats", meta: "1 bed \u00b7 $1,395", vacant: "Oct 2", apps: 0, interest: 1, status: "interest", prospects: ["Marcus Reed"] },
+  { unit: "512", property: "Riverview", meta: "2 bed \u00b7 $1,690", vacant: "Sep 26", apps: 0, interest: 2, status: "interest", prospects: ["Sam Ortega", "Nia Carter"] },
+  { unit: "208", property: "Willowbrook", meta: "1 bed \u00b7 $1,320", vacant: "Sep 29", apps: 0, interest: 2, status: "interest", prospects: ["Hailey Brooks", "Devon Marsh"] },
+  { unit: "902", property: "Riverview", meta: "3 bed \u00b7 $2,150", vacant: "Oct 4", apps: 0, interest: 2, status: "interest", prospects: ["Rob Feldman", "Anh Nguyen"] },
+  { unit: "118", property: "Ridgeline", meta: "2 bed \u00b7 $1,825", vacant: "Sep 30", apps: 1, interest: 2, status: "covered", prospects: ["Jordan Wells", "Chris Okafor"] },
+  { unit: "1108", property: "Harbor Flats", meta: "1 bed \u00b7 $1,450", vacant: "Sep 19", apps: 1, interest: 3, status: "covered", prospects: ["Dana Whitfield", "Marcus Reed", "Sam Ortega"] },
+  { unit: "214", property: "Union Street Lofts", meta: "Studio \u00b7 $1,410", vacant: "Sep 15", apps: 2, interest: 3, status: "covered", prospects: ["Chris Okafor", "Nia Carter", "Devon Marsh"] },
+  { unit: "305", property: "Ridgeline", meta: "2 bed \u00b7 $1,795", vacant: "Sep 12", apps: 2, interest: 4, status: "covered", prospects: ["Jordan Wells", "Priya Raman", "Hailey Brooks", "Marcus Reed"] },
+  { unit: "610", property: "Union Street Lofts", meta: "Studio \u00b7 $1,320", vacant: "Sep 22", apps: 3, interest: 4, status: "covered", prospects: ["Chris Okafor", "Priya Raman", "Rob Feldman", "Dana Whitfield"] },
+];
+
+
+const HELP_PROMPTS = {
+  h1: {
+    cat: 0, icon: "trending_up", label: "How do I raise rents?",
+    kw: "raise rent increase rents recurring charges batch",
+    text: "Rent increases go through recurring charges. For a group of units, use Batch Charges so every lease gets the same effective date.",
+    steps: [
+      { n: 1, text: "Open Reports > Rent Roll to confirm current rents and lease end dates for the units you are raising." },
+      { n: 2, text: "Go to Transactions > Batch Charges, filter by property, and set Charge Type to Rent." },
+      { n: 3, text: "Enter the increase as a flat amount or a percentage, then set the effective date to the day after the current term ends." },
+      { n: 4, text: "Choose Preview. Rent Manager lists every tenant, the old rent, and the new rent." },
+      { n: 5, text: "Post the batch. The prior recurring charge closes on the old date and the new one starts on the effective date." },
+    ],
+    article: "Batch Charge Increases",
+    note: "Increases inside a signed term still need a lease amendment or renewal \u2014 posting a charge does not change the lease.",
+    actions: ["article", "related"],
+  },
+  h2: {
+    cat: 0, icon: "assignment_turned_in", label: "How do I send renewal offers?",
+    kw: "renewal offers renew lease expiration",
+    text: "Renewal offers come out of Lease History, then merge into a Letters & Notices template so the terms match the pending renewal.",
+    steps: [
+      { n: 1, text: "Run Reports > Lease Expiration for the window you are working, usually 90 to 120 days out." },
+      { n: 2, text: "Open the tenant, go to the Lease History tab, and choose Renew." },
+      { n: 3, text: "Enter the new term, rent, and any concessions. Save it as Pending so nothing posts yet." },
+      { n: 4, text: "Open Letters & Notices > Renewal Offer and merge the pending terms into the template." },
+      { n: 5, text: "Send through Tenant Web Access or print for delivery. When the tenant accepts, activate the pending renewal and the lease updates." },
+    ],
+    article: "Sending Renewal Offers",
+    actions: ["article", "related"],
+  },
+  h3: {
+    cat: 0, icon: "payments", label: "How do I pay bills?",
+    kw: "pay bills payable payables vendor check ach",
+    text: "Bill payment runs from the Payables Register in Accounts Payable. You can pay by check, ACH, or credit card in the same batch screen.",
+    steps: [
+      { n: 1, text: "Open Accounts Payable > Payables Register and filter to bills due in your date range." },
+      { n: 2, text: "Select the bills to pay, then choose Pay Bills." },
+      { n: 3, text: "Pick the bank account and the payment method for the batch." },
+      { n: 4, text: "Review the preview \u2014 vendor, property allocation, and amount \u2014 and adjust any partial payments." },
+      { n: 5, text: "Post the batch, then print checks or transmit the ACH file from the same screen." },
+    ],
+    article: "Paying Bills in Accounts Payable",
+    note: "Property allocation comes from the bill, not the payment. Fix allocation on the bill before you post the batch.",
+    actions: ["article", "related"],
+  },
+  h4: {
+    cat: 0, icon: "summarize", label: "What report will tell me who is behind on rent?",
+    kw: "report which tell delinquency behind rent aging receivables",
+    text: "Four reports answer that, depending on how you plan to use the number.",
+    bullets: [
+      "Delinquency Report \u2014 balance owed by tenant with aging buckets. The closest match to \u201cwho is behind.\u201d",
+      "Tenant Aged Receivables \u2014 0/30/60/90 aging. Best for working collections calls in order.",
+      "Rent Roll \u2014 current charges, lease dates, and balance for every unit, occupied or not.",
+      "Trial Balance by Property \u2014 confirms the delinquency total ties to the general ledger.",
+    ],
+    note: "Tell me the question you need answered and I will name the report and the filters to set on it.",
+    actions: ["related"],
+  },
+  h5: {
+    cat: 0, icon: "receipt_long", label: "Is there an easy way to enter expense receipts into Rent Manager?",
+    kw: "easy enter expense receipts receipt capture mobile scan",
+    text: "Yes \u2014 Receipt Capture in the Rent Manager mobile app. You photograph the receipt and it arrives in Accounts Payable as a pending bill with the image attached.",
+    steps: [
+      { n: 1, text: "Enable Receipt Capture under Tools > Program Defaults > Accounts Payable." },
+      { n: 2, text: "In the mobile app, tap Add Receipt and photograph the receipt." },
+      { n: 3, text: "Choose the property and expense GL account. Vendor, date, and amount are read from the image." },
+      { n: 4, text: "Submit. The receipt lands in the AP queue as a pending bill." },
+      { n: 5, text: "In Web, open Payables > Pending and approve to post it against the property." },
+    ],
+    article: "Receipt Capture",
+    note: "The image stays attached to the bill and the GL entry, so an audit does not need the paper copy.",
+    actions: ["article", "related"],
+  },
+};
+
+const DATA_PROMPTS = {
+  q1: {
+    reportName: "Occupancy Summary",
+    reportSource: "Rental Info \u00b7 Box Score",
+    cat: 1, icon: "donut_large", label: "What is my total occupancy?",
+    kw: "total occupancy occupied vacant units",
+    text: "Occupancy across the 10 properties in your scope is 94.2% \u2014 403 of 428 units occupied as of this morning.",
+    stats: [
+      { value: "94.2%", label: "Occupied units" },
+      { value: "25", label: "Vacant units" },
+      { value: "11", label: "Vacant over 30 days" },
+    ],
+    table: [
+      { a: "Riverview Apartments", b: "96.1% \u00b7 148 of 154", c: "Above", chip: GREEN },
+      { a: "Union Street Lofts", b: "95.2% \u00b7 100 of 105", c: "Above", chip: GREEN },
+      { a: "Crestline Business Park", b: "93.8% \u00b7 61 of 65", c: "Flat", chip: GRAY },
+      { a: "Hawthorne Ridge", b: "90.4% \u00b7 94 of 104", c: "Below", chip: RED },
+    ],
+    followups: ["occ_month", "occ_old", "occ_econ"],
+    tileName: "Portfolio Occupancy",
+    tileRows: [
+      { a: "Portfolio", b: "94.2% \u00b7 403 of 428", c: "Above", chip: GREEN },
+    ],
+    actions: ["print"],
+  },
+  q2: {
+    reportName: "Work Order History \u00b7 Over 7 Days",
+    reportSource: "Services \u00b7 Work Order Detail",
+    cat: 1, icon: "build", label: "Show me a list of maintenance requests that took more than 7 days to resolve",
+    kw: "maintenance requests list resolve resolved days work orders slow",
+    text: "14 work orders closed in the last 90 days took longer than 7 days. Average time to resolve on those was 12.4 days against a 3.1-day portfolio average.",
+    table: [
+      { a: "WO-4182 \u00b7 Riverview 204B", b: "Plumbing \u00b7 opened Jun 2 \u00b7 closed Jun 21", c: "19 d", chip: RED },
+      { a: "WO-4090 \u00b7 Hawthorne 1108", b: "HVAC \u00b7 vendor reschedule twice", c: "16 d", chip: RED },
+      { a: "WO-4213 \u00b7 Union 214", b: "Appliance \u00b7 part on backorder", c: "11 d", chip: ORANGE },
+      { a: "WO-4155 \u00b7 Riverview 305", b: "Electrical \u00b7 permit wait", c: "9 d", chip: ORANGE },
+    ],
+    findings: [
+      { text: "9 of the 14 sat in Assigned with no vendor acceptance for more than 3 days." },
+      { text: "Hawthorne Ridge accounts for 6 of the 14 \u2014 all HVAC, all the same vendor." },
+    ],
+    followups: ["mt_vendor", "mt_open", "mt_cat"],
+    tileName: "Slow Work Orders",
+    tileRows: [
+      { a: "Over 7 days", b: "14 work orders \u00b7 avg 12.4 days", c: "Watch", chip: RED },
+    ],
+    actions: ["print"],
+  },
+  q3: {
+    reportName: "Vehicle Register \u00b7 Riverview Apartments",
+    reportSource: "Rental Info \u00b7 Tenant Vehicles",
+    cat: 1, icon: "directions_car", label: "Who has a red Camaro in Riverview Apartments?",
+    kw: "camaro vehicle car red riverview plate parking",
+    text: "One tenant at Riverview Apartments has a red Camaro on the vehicle record.",
+    tenants: [
+      { id: "reed", name: "Marcus Reed", unit: "Riverview Apartments \u00b7 512", vehicle: "2019 Chevrolet Camaro \u00b7 Red \u00b7 Plate 8XKJ221", match: "exact" },
+      { id: "brooks", name: "Hailey Brooks", unit: "Riverview Apartments \u00b7 118", vehicle: "2021 Dodge Charger \u00b7 Red \u00b7 Plate 4TRM905", match: "near" },
+    ],
+    note: "Vehicle data comes from the tenant's Vehicles tab. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
+    followups: ["veh_parking", "veh_missing"],
+    actions: ["print"],
+  },
+  q4: {
+    reportName: "Unit Availability \u00b7 Filtered",
+    reportSource: "Rental Info \u00b7 Unit Availability",
+    cat: 1, icon: "apartment", label: "What units are on the 2nd floor, are waterfront, and available next month?",
+    kw: "units second floor waterfront available next month vacant",
+    text: "Three units match all three conditions \u2014 second floor, waterfront exposure, and available during September.",
+    table: [
+      { a: "Riverview 204B", b: "2 bed \u00b7 $1,890 \u00b7 waterfront", c: "Sep 30", chip: GREEN },
+      { a: "Riverview 212", b: "1 bed \u00b7 $1,610 \u00b7 waterfront", c: "Sep 5", chip: GREEN },
+      { a: "Harbor Flats 208", b: "2 bed \u00b7 $1,975 \u00b7 waterfront", c: "Sep 1", chip: GREEN },
+    ],
+    findings: [
+      { text: "Floor comes from the unit's Floor field; waterfront comes from the property amenity flag on Riverview and Harbor Flats." },
+      { text: "Riverview 212 has 2 interested prospects with a waterfront preference logged." },
+    ],
+    followups: ["unit_prospects", "unit_rents"],
+    tileName: "Waterfront Availability",
+    tileRows: [
+      { a: "2nd floor waterfront", b: "3 units available in September", c: "Open", chip: GREEN },
+    ],
+    actions: ["print"],
+  },
+  q5: {
+    reportName: "Profit & Loss \u00b7 MTD vs. Last Year",
+    reportSource: "Financial \u00b7 Comparative P&L",
+    cat: 1, icon: "assessment", label: "Run a P&L this month to date compared to last year same period",
+    kw: "profit loss statement compared last year period income expenses noi report",
+    text: "P&L for August 1\u201328, 2026 against August 1\u201328, 2025. All 10 properties, accrual basis.",
+    report: {
+      title: "Profit & Loss \u00b7 MTD vs. same period last year",
+      cols: ["Aug 1\u201328, 2026", "Aug 1\u201328, 2025", "Var"],
+      rows: [
+        { kind: "head", a: "Income" },
+        { kind: "row", a: "Rental Income", b: "$1,284,310", c: "$1,208,940", d: "+6.2%", dir: "up" },
+        { kind: "row", a: "Other Income", b: "$96,420", c: "$88,150", d: "+9.4%", dir: "up" },
+        { kind: "total", a: "Total Income", b: "$1,380,730", c: "$1,297,090", d: "+6.4%", dir: "up" },
+        { kind: "head", a: "Expenses" },
+        { kind: "row", a: "Repairs & Maintenance", b: "$214,880", c: "$176,220", d: "+21.9%", dir: "bad" },
+        { kind: "row", a: "Payroll", b: "$188,400", c: "$182,900", d: "+3.0%", dir: "flat" },
+        { kind: "row", a: "Utilities", b: "$96,140", c: "$101,600", d: "-5.4%", dir: "up" },
+        { kind: "row", a: "Turnover", b: "$74,310", c: "$58,940", d: "+26.1%", dir: "bad" },
+        { kind: "total", a: "Total Expenses", b: "$573,730", c: "$519,660", d: "+10.4%", dir: "bad" },
+        { kind: "total", a: "Net Operating Income", b: "$807,000", c: "$777,430", d: "+3.8%", dir: "up" },
+      ],
+    },
+    findings: [
+      { text: "Income growth is broad \u2014 8 of 10 properties are ahead on rental income." },
+      { text: "Expense growth is concentrated: Repairs & Maintenance and Turnover are 92% of the increase." },
+    ],
+    note: "This is the report summary, not the posted report. Ask me anything about these numbers and I will read the detail behind them.",
+    followups: ["pl_rm", "pl_noi", "pl_byprop"],
+    tileName: "NOI vs. Last Year",
+    tileRows: [
+      { a: "Portfolio NOI", b: "$807,000 \u00b7 was $777,430", c: "+3.8%", chip: GREEN },
+    ],
+    actions: ["print"],
+  },
+  q6: {
+    reportName: "Tenant Aged Receivables \u00b7 Same-Day Comparison",
+    reportSource: "Receivables \u00b7 Aged Receivables",
+    cat: 1, icon: "account_balance_wallet", label: "What are my open receivables today vs. the same day last month?",
+    kw: "open receivables today same day last month outstanding balance owed collected delinquency compare",
+    text: "Open receivables are $249,502 as of this morning, day 18 of the period. On day 18 last month you were at $226,092 \u2014 you are carrying $23,410 more, and collections are 2.22 points behind.",
+    stats: [
+      { value: "$249,502", label: "Open receivables today" },
+      { value: "$226,092", label: "Same day last month" },
+      { value: "+$23,410", label: "More outstanding \u00b7 +10.4%" },
+    ],
+    report: {
+      title: "Open Receivables \u00b7 day 18 this month vs. day 18 last month",
+      cols: ["Today", "Day 18 last month", "Var"],
+      rows: [
+        { kind: "head", a: "Aging" },
+        { kind: "row", a: "Current", b: "$118,940", c: "$121,300", d: "-1.9%", dir: "up" },
+        { kind: "row", a: "1\u201330 days", b: "$62,410", c: "$54,880", d: "+13.7%", dir: "bad" },
+        { kind: "row", a: "31\u201360 days", b: "$38,270", c: "$29,140", d: "+31.3%", dir: "bad" },
+        { kind: "row", a: "Over 60 days", b: "$29,882", c: "$20,772", d: "+43.9%", dir: "bad" },
+        { kind: "total", a: "Total Open Receivables", b: "$249,502", c: "$226,092", d: "+10.4%", dir: "bad" },
+        { kind: "head", a: "Collections" },
+        { kind: "row", a: "Charged this period", b: "$2,828,310", c: "$2,769,140", d: "+2.1%", dir: "flat" },
+        { kind: "row", a: "Collected this period", b: "$2,578,808", c: "$2,586,320", d: "-0.3%", dir: "bad" },
+        { kind: "total", a: "Percent Collected", b: "91.18%", c: "93.40%", d: "-2.22 pts", dir: "bad" },
+      ],
+    },
+    findings: [
+      { text: "Hawthorne Ridge is the whole gap: $64,870 open against $38,140 on the same day last month." },
+      { text: "Crestline Business Park improved, from $29,880 down to $26,012." },
+      { text: "Aging past 30 days grew $18,240, so this is slower payment rather than higher billing." },
+    ],
+    note: "Compares posted charges, receipts and tenant balances as of the same day in the prior period.",
+    followups: ["ar_prop", "ar_tenants", "ar_latefee"],
+    tileName: "Open Receivables vs. Last Month",
+    tileHead: ["Property", "Open vs. same day", "Pace"],
+    tileNote: "$249,502 open \u00b7 +$23,410 vs. day 18 last month \u00b7 91.18% collected",
+    tileRows: [
+      { a: "Hawthorne Ridge", b: "$64,870 \u00b7 was $38,140", c: "Behind", chip: RED },
+      { a: "Riverview Apartments", b: "$32,072 \u00b7 was $31,640", c: "Flat", chip: GRAY },
+      { a: "Crestline Business Park", b: "$26,012 \u00b7 was $29,880", c: "Ahead", chip: GREEN },
+    ],
+    tileFooter: "Day 18 of period \u00b7 same-day comparison \u00b7 refreshes daily",
+    actions: ["print"],
+  },
+  q7: {
+    reportName: "Delinquent Tenant List",
+    reportSource: "Receivables \u00b7 Delinquency",
+    cat: 1, icon: "money_off", label: "Show me all delinquent tenants",
+    kw: "show all delinquent tenants delinquency behind owes past due balance owing list who",
+    text: "62 tenants carry a past-due balance across the 10 properties in scope, totaling $249,502. Here they are, oldest balance first.",
+    stats: [
+      { value: "62", label: "Delinquent tenants" },
+      { value: "$249,502", label: "Total past due" },
+      { value: "9", label: "Past 60 days" },
+    ],
+    table: [
+      { a: "Terrance Boyd \u00b7 Hawthorne 1108", b: "$21,480 \u00b7 94 days \u00b7 promise logged", c: "94 d", chip: RED },
+      { a: "Delgado Holdings \u00b7 Crestline 120", b: "$18,900 \u00b7 71 days \u00b7 commercial", c: "71 d", chip: RED },
+      { a: "Anh Nguyen \u00b7 Hawthorne 410", b: "$11,640 \u00b7 68 days", c: "68 d", chip: RED },
+      { a: "Sam Ortega \u00b7 Riverview 512", b: "$9,280 \u00b7 62 days \u00b7 partial paid", c: "62 d", chip: RED },
+      { a: "Maria Delgado \u00b7 Riverview 204B", b: "$4,310 \u00b7 47 days", c: "47 d", chip: ORANGE },
+      { a: "Hailey Brooks \u00b7 Riverview 118", b: "$3,220 \u00b7 38 days \u00b7 payment plan", c: "38 d", chip: ORANGE },
+      { a: "Rob Feldman \u00b7 Union 214", b: "$1,845 \u00b7 22 days", c: "22 d", chip: GRAY },
+      { a: "Devon Marsh \u00b7 Harbor 702", b: "$1,190 \u00b7 11 days", c: "11 d", chip: GRAY },
+    ],
+    findings: [
+      { text: "Hawthorne Ridge holds 31 of the 62 tenants and $64,870 of the balance." },
+      { text: "12 tenants have an active payment plan and are current against it." },
+      { text: "5 tenants are inside the notice window and have no promise or plan logged." },
+    ],
+    note: "Balances are as of this morning, day 18 of the period. Showing the 8 largest of 62 \u2014 print the report for the full list.",
+    followups: ["del_notice", "del_plans", "ar_latefee"],
+    actions: ["print"],
+  },
+};
+
+const ACTION_PROMPTS = {
+  x1: {
+    cat: 2, icon: "ac_unit", label: "Add a $25 snow removal charge to all tenants at Riverview Apartments",
+    kw: "add snow removal charge all tenants riverview apartments batch post charges fee",
+    text: "I can stage this as a batch charge. Here is exactly what I will post \u2014 nothing is written until you post it.",
+    plan: {
+      title: "Batch Charge \u00b7 Snow Removal",
+      rows: [
+        { label: "Property", value: "Riverview Apartments" },
+        { label: "Applies to", value: "148 active tenants \u00b7 occupied units only" },
+        { label: "Charge type", value: "Snow Removal \u00b7 GL 4120 Other Income" },
+        { label: "Amount", value: "$25.00 each \u00b7 one time, not recurring" },
+        { label: "Charge date", value: "Aug 28, 2026 \u00b7 due Sep 1, 2026" },
+        { label: "Batch total", value: "$3,700.00" },
+        { label: "Excluded", value: "6 vacant units \u00b7 2 tenants on move-out notice" },
+      ],
+      warn: "Two tenants have a lease clause that caps ancillary charges. I left them in the batch but flagged them below \u2014 remove them before posting if that clause applies.",
+    },
+    findings: [
+      { text: "Flagged: Sam Ortega (512) and Anh Nguyen (902) \u2014 lease addendum limits pass-through charges." },
+      { text: "The charge type Snow Removal already exists, so no new setup is needed." },
+      { text: "Tenant Web Access will show the charge to residents as soon as it posts." },
+    ],
+    actions: ["post", "flagged", "cancel"],
+    posted: {
+      text: "Posted. 148 Snow Removal charges totaling $3,700.00 hit the Riverview Apartments tenant ledgers, dated Aug 28, 2026.",
+      stats: [
+        { value: "148", label: "Charges posted" },
+        { value: "$3,700.00", label: "Batch total" },
+        { value: "Batch 20458", label: "Reference \u00b7 reversible" },
+      ],
+      table: [
+        { a: "Marcus Reed \u00b7 512", b: "Snow Removal \u00b7 Aug 28", c: "$25.00", chip: GREEN },
+        { a: "Hailey Brooks \u00b7 118", b: "Snow Removal \u00b7 Aug 28", c: "$25.00", chip: GREEN },
+        { a: "Terrance Boyd \u00b7 1108", b: "Snow Removal \u00b7 Aug 28", c: "$25.00", chip: GREEN },
+      ],
+      note: "The batch is reversible from Transactions > Batch History for 30 days. Reversal restores every affected ledger.",
+    },
+    tileName: "Snow Removal Charge Collection",
+    tileHead: ["Property", "Charged \u00b7 paid", "Outstanding"],
+    tileNote: "$3,700.00 charged Aug 28 \u00b7 tracks payment against the batch",
+    tileRows: [
+      { a: "Riverview Apartments", b: "148 charged \u00b7 0 paid", c: "$3,700", chip: ORANGE },
+      { a: "Due Sep 1", b: "Appears on TWA today", c: "0%", chip: GRAY },
+      { a: "Flagged leases", b: "2 excluded by clause", c: "-$50", chip: GRAY },
+    ],
+    tileFooter: "Batch 20458 \u00b7 refreshes daily",
+  },
+};
+
+const BILLING_PROMPTS = {
+  x2: {
+    cat: 2, icon: "request_quote", label: "Find all unbilled maintenance requests to property owners and create the bills",
+    kw: "find all unbilled maintenance requests property owners create bills billable work orders rebill charge back",
+    text: "I found 23 completed work orders across 6 owners with billable cost and no owner charge posted against them. Here is the batch I would create \u2014 nothing posts until you say so.",
+    plan: {
+      title: "Owner Billing Batch \u00b7 Unbilled Maintenance",
+      rows: [
+        { label: "Source", value: "Completed work orders, Jun 1 \u2013 Aug 28, 2026" },
+        { label: "Found unbilled", value: "23 work orders \u00b7 6 owners \u00b7 9 properties" },
+        { label: "Billable cost", value: "$18,940.00 labor, parts and vendor invoices" },
+        { label: "Management markup", value: "10% per management agreement \u00b7 $1,894.00" },
+        { label: "Batch total", value: "$20,834.00 across 6 owner bills" },
+        { label: "Charge type", value: "Maintenance Reimbursement \u00b7 GL 5210" },
+        { label: "Bill date", value: "Aug 28, 2026 \u00b7 net 15" },
+        { label: "Held back", value: "4 work orders \u00b7 missing vendor invoice or cost" },
+      ],
+      warn: "Two work orders at Hawthorne Ridge exceed the $2,500 owner approval threshold in the management agreement and have no approval on file. They are excluded from the batch until approval is logged.",
+    },
+    table: [
+      { a: "Delgado Holdings", b: "7 work orders \u00b7 Riverview", c: "$6,842", chip: GRAY },
+      { a: "Ridgeline Partners LP", b: "5 work orders \u00b7 Ridgeline", c: "$5,214", chip: GRAY },
+      { a: "Harbor Equity Group", b: "4 work orders \u00b7 Harbor Flats", c: "$3,980", chip: GRAY },
+      { a: "Union Street Trust", b: "4 work orders \u00b7 Union Lofts", c: "$2,908", chip: GRAY },
+      { a: "Crestline Ventures", b: "2 work orders \u00b7 Crestline", c: "$1,890", chip: GRAY },
+    ],
+    findings: [
+      { text: "The oldest unbilled order is 84 days old \u2014 WO-4090, HVAC at Hawthorne 1108, $2,180." },
+      { text: "9 of the 23 have a vendor invoice attached, so those bills carry documentation automatically." },
+      { text: "4 orders are held back because cost is still $0 \u2014 vendor invoice not entered yet." },
+    ],
+    actions: ["postbills", "held", "cancel"],
+    posted: {
+      text: "Created. 6 owner bills totaling $20,834.00, dated Aug 28, 2026, each itemized by work order with the vendor invoice attached where one exists.",
+      stats: [
+        { value: "6", label: "Owner bills created" },
+        { value: "$20,834.00", label: "Billed \u00b7 incl. $1,894 markup" },
+        { value: "19", label: "Work orders marked billed" },
+      ],
+      table: [
+        { a: "Delgado Holdings", b: "Bill 10442 \u00b7 7 orders \u00b7 net 15", c: "$7,526", chip: GREEN },
+        { a: "Ridgeline Partners LP", b: "Bill 10443 \u00b7 5 orders \u00b7 net 15", c: "$5,735", chip: GREEN },
+        { a: "Harbor Equity Group", b: "Bill 10444 \u00b7 4 orders \u00b7 net 15", c: "$4,378", chip: GREEN },
+      ],
+      note: "Bills sit in Owner Statements as unsent. Review and send them from Owners > Pay Owners, or reverse the batch from Batch History within 30 days.",
+    },
+  },
+};
+
+const RM_REPORTS = {
+  q5: {
+    title: "Profit & Loss Comparison",
+    asOf: "August 1-28, 2026 vs. August 1-28, 2025",
+    param: "Property: 10 Selected Properties \u00b7 Accrual basis",
+    cols: [
+      { label: "Account", w: "1.6fr" },
+      { label: "Aug 1-28,", sub: "2026", w: "0.85fr", align: "right" },
+      { label: "Aug 1-28,", sub: "2025", w: "0.85fr", align: "right" },
+      { label: "Variance", w: "0.6fr", align: "right" },
+    ],
+    groups: [
+      {
+        name: "Income",
+        rows: [
+          ["Rental Income", "1,284,310.00", "1,208,940.00", "+6.2%"],
+          ["Other Income", "96,420.00", "88,150.00", "+9.4%"],
+        ],
+        total: ["Total Income", "1,380,730.00", "1,297,090.00", "+6.4%"],
+      },
+      {
+        name: "Expenses",
+        rows: [
+          ["Repairs & Maintenance", "214,880.00", "176,220.00", "+21.9%"],
+          ["Payroll", "188,400.00", "182,900.00", "+3.0%"],
+          ["Utilities", "96,140.00", "101,600.00", "-5.4%"],
+          ["Turnover", "74,310.00", "58,940.00", "+26.1%"],
+        ],
+        total: ["Total Expenses", "573,730.00", "519,660.00", "+10.4%"],
+      },
+      {
+        name: "Net Operating Income",
+        rows: [],
+        total: ["Total Income less Total Expenses", "807,000.00", "777,430.00", "+3.8%"],
+      },
+    ],
+    totals: {
+      title: "Report Totals & Counts",
+      cols: ["Aug 1-28, 2026", "Aug 1-28, 2025", "Variance", "Percent"],
+      rows: [
+        { label: "Total Income:", values: ["1,380,730.00", "1,297,090.00", "83,640.00", "+6.4%"] },
+        { label: "Total Expenses:", values: ["573,730.00", "519,660.00", "54,070.00", "+10.4%"] },
+        { label: "Net Operating Income:", values: ["807,000.00", "777,430.00", "29,570.00", "+3.8%"] },
+      ],
+    },
+  },
+  q7: {
+    title: "Balance Due",
+    asOf: "Current tenants as of 08/28/26",
+    param: "Property: All Selected Properties",
+    cols: [
+      { label: "Tenant", w: "1.5fr" },
+      { label: "Acc. #", w: "0.5fr" },
+      { label: "Unit", w: "0.5fr" },
+      { label: "Status", w: "0.7fr" },
+      { label: "Phone #:", sub: "Default", w: "0.9fr" },
+      { label: "Days", w: "0.5fr", align: "right" },
+      { label: "Balance", w: "0.8fr", align: "right" },
+    ],
+    groups: [
+      {
+        name: "Hawthorne Ridge",
+        rows: [
+          ["Boyd, Terrance", "1108", "1108", "Current", "513-446-6126", "94", "21,480.00"],
+          ["Nguyen, Anh", "410", "410", "Current", "513-287-0186", "68", "11,640.00"],
+          ["Whitfield, Dana", "902", "902", "Current", "", "58", "7,910.00"],
+          ["Marsh, Devon", "1204", "1204", "Current", "513-359-0258", "54", "6,440.00"],
+          ["Feldman, Rob", "318", "318", "Current", "", "51", "5,880.00"],
+          ["27 additional tenants", "", "<Multi>", "Current", "", "1-44", "11,520.00"],
+        ],
+        total: ["Totals for Hawthorne Ridge", "64,870.00"],
+      },
+      {
+        name: "Riverview Apartments",
+        rows: [
+          ["Ortega, Sam", "512", "512", "Current", "513-555-0142", "62", "9,280.00"],
+          ["Delgado, Maria", "204", "204B", "Current", "513-283-0182", "47", "4,310.00"],
+          ["Brooks, Hailey", "118", "118", "Current", "513-555-0198", "38", "3,220.00"],
+          ["Reed, Marcus", "215", "512", "Current", "513-398-0297", "7", "745.00"],
+          ["10 additional tenants", "", "<Multi>", "Current", "", "1-30", "14,517.00"],
+        ],
+        total: ["Totals for Riverview Apartments", "32,072.00"],
+      },
+      {
+        name: "Crestline Business Park",
+        rows: [
+          ["Delgado Holdings", "120", "120", "Current", "101-398-0297", "71", "18,900.00"],
+          ["5 additional tenants", "", "<Multi>", "Current", "", "1-40", "7,112.00"],
+        ],
+        total: ["Totals for Crestline Business Park", "26,012.00"],
+      },
+    ],
+    other: { label: "7 additional properties", value: "126,548.00" },
+    totals: {
+      title: "Report Totals & Counts",
+      cols: ["Tenants with credit balances", "Tenants with balances", "Zero balances", "Totals"],
+      rows: [
+        { label: "Balance Amounts:", values: ["0.00", "249,502.00", "0.00", "249,502.00"] },
+        { label: "Tenant Counts:", values: ["0", "62", "366", "428"] },
+      ],
+    },
+  },
+  q6: {
+    title: "Tenant Aged Receivables",
+    asOf: "Day 18 of period as of 08/28/26",
+    param: "Comparison: same day prior period \u00b7 Accrual basis",
+    cols: [
+      { label: "Property", w: "1.4fr" },
+      { label: "Tenants", w: "0.6fr", align: "right" },
+      { label: "Current", w: "0.8fr", align: "right" },
+      { label: "1-30", w: "0.8fr", align: "right" },
+      { label: "31-60", w: "0.8fr", align: "right" },
+      { label: "Over 60", w: "0.8fr", align: "right" },
+      { label: "Balance", w: "0.9fr", align: "right" },
+    ],
+    groups: [
+      {
+        name: "Open Receivables by Property",
+        rows: [
+          ["Hawthorne Ridge", "31", "24,180.00", "18,420.00", "11,290.00", "10,980.00", "64,870.00"],
+          ["Riverview Apartments", "14", "16,940.00", "8,110.00", "4,320.00", "2,702.00", "32,072.00"],
+          ["Crestline Business Park", "6", "3,110.00", "1,940.00", "2,062.00", "18,900.00", "26,012.00"],
+          ["Union Street Lofts", "7", "12,880.00", "5,140.00", "2,720.00", "1,200.00", "21,940.00"],
+          ["Harbor Flats", "4", "11,430.00", "4,900.00", "2,400.00", "1,100.00", "19,830.00"],
+          ["5 additional properties", "0", "50,400.00", "23,900.00", "15,478.00", "-5,000.00", "84,778.00"],
+        ],
+        total: ["Totals for all properties", "249,502.00"],
+      },
+    ],
+    totals: {
+      title: "Report Totals & Counts",
+      cols: ["Today", "Same day last month", "Variance", "Percent collected"],
+      rows: [
+        { label: "Open Receivables:", values: ["249,502.00", "226,092.00", "23,410.00", "91.18%"] },
+        { label: "Delinquent Tenants:", values: ["62", "54", "8", "93.40% prior"] },
+      ],
+    },
+  },
+  q1: {
+    title: "Box Score",
+    asOf: "Occupancy as of 08/28/26",
+    param: "Property: 10 Selected Properties",
+    cols: [
+      { label: "Property", w: "1.5fr" },
+      { label: "Units", w: "0.6fr", align: "right" },
+      { label: "Occupied", w: "0.7fr", align: "right" },
+      { label: "Vacant", w: "0.6fr", align: "right" },
+      { label: "Vacant", sub: "over 30 days", w: "0.8fr", align: "right" },
+      { label: "Occupancy", w: "0.8fr", align: "right" },
+    ],
+    groups: [
+      {
+        name: "Residential",
+        rows: [
+          ["Riverview Apartments", "154", "148", "6", "2", "96.1%"],
+          ["Union Street Lofts", "105", "100", "5", "1", "95.2%"],
+          ["Hawthorne Ridge", "104", "94", "10", "6", "90.4%"],
+          ["Harbor Flats", "0", "0", "0", "0", "\u2014"],
+        ],
+        total: ["Totals for Residential", "94.3%"],
+      },
+      {
+        name: "Commercial",
+        rows: [
+          ["Crestline Business Park", "65", "61", "4", "2", "93.8%"],
+        ],
+        total: ["Totals for Commercial", "93.8%"],
+      },
+    ],
+    totals: {
+      title: "Report Totals & Counts",
+      cols: ["Units", "Occupied", "Vacant", "Occupancy"],
+      rows: [
+        { label: "Physical:", values: ["428", "403", "25", "94.2%"] },
+        { label: "Economic:", values: ["428", "392", "36", "91.6%"] },
+      ],
+    },
+  },
+  q2: {
+    title: "Work Order History",
+    asOf: "Closed over 7 days \u00b7 last 90 days as of 08/28/26",
+    param: "Property: All Selected Properties \u00b7 Status: Closed",
+    cols: [
+      { label: "Work Order", w: "0.8fr" },
+      { label: "Unit", w: "0.9fr" },
+      { label: "Category", w: "0.8fr" },
+      { label: "Vendor", w: "1fr" },
+      { label: "Opened", w: "0.7fr" },
+      { label: "Days", w: "0.5fr", align: "right" },
+    ],
+    groups: [
+      {
+        name: "Hawthorne Ridge",
+        rows: [
+          ["WO-4090", "1108", "HVAC", "Summit HVAC", "06/02/26", "16"],
+          ["WO-4114", "410", "HVAC", "Summit HVAC", "06/18/26", "15"],
+          ["WO-4147", "902", "HVAC", "Summit HVAC", "07/02/26", "13"],
+          ["WO-4178", "1204", "HVAC", "Summit HVAC", "07/21/26", "8"],
+          ["2 additional work orders", "<Multi>", "HVAC", "Summit HVAC", "08/04/26", "8"],
+        ],
+        total: ["Totals for Hawthorne Ridge", "6 orders"],
+      },
+      {
+        name: "Riverview Apartments",
+        rows: [
+          ["WO-4182", "204B", "Plumbing", "Bexley Plumbing", "06/02/26", "19"],
+          ["WO-4155", "305", "Electrical", "Bexley Plumbing", "06/26/26", "9"],
+        ],
+        total: ["Totals for Riverview Apartments", "2 orders"],
+      },
+      {
+        name: "Other Properties",
+        rows: [
+          ["WO-4213", "Union 214", "Appliance", "In-house Maintenance", "07/09/26", "11"],
+          ["WO-4166", "Harbor 702", "Appliance", "In-house Maintenance", "07/14/26", "9"],
+          ["4 additional work orders", "<Multi>", "General", "In-house Maintenance", "08/01/26", "8"],
+        ],
+        total: ["Totals for Other Properties", "6 orders"],
+      },
+    ],
+    totals: {
+      title: "Report Totals & Counts",
+      cols: ["Work orders over 7 days", "Average days", "Portfolio average", "Total days"],
+      rows: [
+        { label: "Closed:", values: ["14", "12.4", "3.1", "173"] },
+        { label: "Still open past 7 days:", values: ["6", "9.2", "3.1", "55"] },
+      ],
+    },
+  },
+};
+
+const REPORT_BODIES = {
+  q1: {
+    pages: 2,
+    head: ["Property", "Occupied \u00b7 total units", "Occupancy"],
+    total: ["Total \u00b7 10 properties", "403 of 428 units occupied", "94.2%"],
+    rows: [
+      ["Riverview Apartments", "148 of 154 \u00b7 6 vacant", "96.1%"],
+      ["Union Street Lofts", "100 of 105 \u00b7 5 vacant", "95.2%"],
+      ["Crestline Business Park", "61 of 65 \u00b7 4 vacant", "93.8%"],
+      ["Hawthorne Ridge", "94 of 104 \u00b7 10 vacant", "90.4%"],
+      ["6 additional properties", "See page 2 \u00b7 no vacancy over 30 days", "97.4%"],
+      ["Vacant over 30 days", "11 units \u00b7 4 past 60 days", "2.6%"],
+      ["Economic occupancy", "Concessions and delinquency applied", "91.6%"],
+    ],
+  },
+  q3: {
+    pages: 1,
+    head: ["Tenant \u00b7 Unit", "Vehicle on file", "Match"],
+    total: ["Total \u00b7 4 vehicles", "Riverview Apartments \u00b7 red vehicles", "1 exact"],
+    rows: [
+      ["Reed, Marcus \u00b7 512", "2019 Chevrolet Camaro \u00b7 Red \u00b7 8XKJ221", "Exact"],
+      ["Reed, Marcus \u00b7 512", "2016 Honda Civic \u00b7 Gray \u00b7 2LMD884", "\u2014"],
+      ["Brooks, Hailey \u00b7 118", "2021 Dodge Charger \u00b7 Red \u00b7 4TRM905", "Red only"],
+      ["Okafor, Chris \u00b7 902", "2018 Kia Soul \u00b7 Red \u00b7 7PLM334", "Red only"],
+      ["Units with no vehicle record", "41 of 148 occupied units", "\u2014"],
+    ],
+  },
+  q4: {
+    pages: 1,
+    head: ["Unit", "Type \u00b7 rent \u00b7 amenity", "Available"],
+    total: ["Total \u00b7 3 units", "2nd floor, waterfront, available September", "$5,475/mo"],
+    rows: [
+      ["Riverview 204B", "2 bed \u00b7 $1,890 \u00b7 waterfront", "Sep 30"],
+      ["Riverview 212", "1 bed \u00b7 $1,610 \u00b7 waterfront", "Sep 5"],
+      ["Harbor Flats 208", "2 bed \u00b7 $1,975 \u00b7 waterfront", "Sep 1"],
+      ["Excluded \u00b7 wrong floor", "9 waterfront units, floors 1 and 3", "\u2014"],
+      ["Excluded \u00b7 not available", "4 second-floor waterfront, leased", "\u2014"],
+    ],
+  },
+  d1: {
+    pages: 2,
+    head: ["Property", "Outstanding vs. same day", "Pace"],
+    total: ["Total \u00b7 portfolio", "91.18% collected \u00b7 was 93.40%", "-2.22 pts"],
+    rows: [
+      ["Hawthorne Ridge", "$64,870.00 \u00b7 was $38,140.00", "Behind"],
+      ["Riverview Apartments", "$32,072.00 \u00b7 was $31,640.00", "Flat"],
+      ["Crestline Business Park", "$26,012.00 \u00b7 was $29,880.00", "Ahead"],
+      ["Union Street Lofts", "$21,940.00 \u00b7 was $22,610.00", "Ahead"],
+      ["Harbor Flats", "$19,830.00 \u00b7 was $18,940.00", "Flat"],
+      ["5 additional properties", "See page 2", "Flat"],
+      ["Tenants over 60 days", "9 tenants \u00b7 all with promises logged", "$29,882.00"],
+    ],
+  },
+  d2: {
+    pages: 2,
+    head: ["Unit", "Vacant \u00b7 applications", "Interest"],
+    total: ["Total \u00b7 14 units", "9 applications \u00b7 23 interested prospects", "5 uncovered"],
+    rows: [
+      ["305 \u00b7 Ridgeline", "Sep 12 \u00b7 2 pending", "4"],
+      ["610 \u00b7 Union Street Lofts", "Sep 22 \u00b7 3 pending", "4"],
+      ["214 \u00b7 Union Street Lofts", "Sep 15 \u00b7 2 pending", "3"],
+      ["1108 \u00b7 Harbor Flats", "Sep 19 \u00b7 1 pending", "3"],
+      ["118 \u00b7 Ridgeline", "Sep 30 \u00b7 1 pending", "2"],
+      ["512 \u00b7 Riverview", "Sep 26 \u00b7 none", "2"],
+      ["902 \u00b7 Riverview", "Oct 4 \u00b7 none", "2"],
+      ["208 \u00b7 Willowbrook", "Sep 29 \u00b7 none", "2"],
+      ["431 \u00b7 Harbor Flats", "Oct 2 \u00b7 none", "1"],
+      ["420 \u00b7 Ridgeline", "Sep 24 \u00b7 none \u00b7 6 preference matches", "0"],
+      ["702 \u00b7 Harbor Flats", "Sep 28 \u00b7 none", "0"],
+      ["145 \u00b7 Willowbrook", "Oct 1 \u00b7 none", "0"],
+      ["318 \u00b7 Crestline", "Oct 3 \u00b7 none", "0"],
+      ["1204 \u00b7 Hawthorne Ridge", "Oct 5 \u00b7 none", "0"],
+    ],
+  },
+  d3: {
+    pages: 1,
+    head: ["Resident \u00b7 Unit", "Signals logged", "Sentiment"],
+    total: ["Total \u00b7 7 residents", "19 escalated signals \u00b7 3 renew \u226460 days", "-23 avg"],
+    rows: [
+      ["Delgado, Maria \u00b7 204B", "3 ticket re-opens \u00b7 2 complaints \u00b7 survey 4/10", "-38"],
+      ["Boyd, Terrance \u00b7 1108", "Voicemail: noise \u00b7 1 escalation", "-19"],
+      ["Nguyen, Anh \u00b7 512", "2 portal messages unresolved 9 days", "-12"],
+      ["Marsh, Devon \u00b7 702", "Noise complaint \u00b7 same building", "-11"],
+      ["Feldman, Rob \u00b7 318", "Survey 5/10 \u00b7 cites noise", "-9"],
+      ["Carter, Nia \u00b7 610", "1 ticket re-open", "-7"],
+      ["Okafor, Chris \u00b7 902", "Late maintenance response", "-5"],
+    ],
+  },
+  d4: {
+    pages: 4,
+    head: ["Prospect", "Stage \u00b7 days in stage", "Score"],
+    total: ["Total \u00b7 34 leads", "8 scoring 81\u2013100", "66 avg"],
+    rows: [
+      ["Raman, Priya", "Application \u00b7 4 days \u00b7 2 replies", "91"],
+      ["Wells, Jordan", "Property Tour \u00b7 6 days \u00b7 2 tours", "84"],
+      ["Okafor, Chris", "Guest Card \u00b7 2 days", "72"],
+      ["Brooks, Hailey", "Application \u00b7 8 days", "68"],
+      ["Ortega, Sam", "Toured \u00b7 12 days silent", "52"],
+      ["Whitfield, Dana", "Screening \u00b7 11 days stalled", "41"],
+      ["Carter, Nia", "Guest Card \u00b7 34 days \u00b7 no visits", "28"],
+      ["27 additional leads", "See pages 2\u20134", "64 avg"],
+    ],
+  },
+  d5: {
+    pages: 1,
+    head: ["Showing", "Top match \u00b7 rent", "Fit"],
+    total: ["Total \u00b7 2 showings", "5 units ranked against preferences", "93 avg"],
+    rows: [
+      ["2:30 PM \u00b7 Wells, Jordan", "Unit 305 \u00b7 $1,795 \u00b7 5 of 5 preferences", "96"],
+      ["2:30 PM \u00b7 alternate", "Unit 118 \u00b7 $1,825 \u00b7 4 of 5", "81"],
+      ["2:30 PM \u00b7 fallback", "Unit 420 \u00b7 $1,900 \u00b7 over budget", "63"],
+      ["4:15 PM \u00b7 Okafor, Chris", "Unit 610 \u00b7 $1,320 \u00b7 4 of 4", "90"],
+      ["4:15 PM \u00b7 alternate", "Unit 214 \u00b7 $1,410 \u00b7 3 of 4", "77"],
+    ],
+  },
+  n1: {
+    pages: 2,
+    head: ["Prospect", "Last contact \u00b7 stage", "Days"],
+    total: ["Total \u00b7 21 prospects", "12 at 7\u201314 days \u00b7 6 at 15\u201330 \u00b7 3 past 30", "18 avg"],
+    rows: [
+      ["Carter, Nia", "Guest Card \u00b7 no visit logged", "34 d"],
+      ["Whitfield, Dana", "Screening \u00b7 waiting on income docs", "31 d"],
+      ["Feldman, Rob", "Inquiry \u00b7 email only", "30 d"],
+      ["Brooks, Hailey", "Applied \u00b7 no follow-up", "19 d"],
+      ["Ortega, Sam", "Toured \u00b7 went quiet after 5 touches", "12 d"],
+      ["Marsh, Devon", "Toured \u00b7 unit still available", "10 d"],
+      ["Reed, Marcus", "Inquiry \u00b7 preference match open", "8 d"],
+      ["14 additional prospects", "See page 2", "9 d"],
+    ],
+  },
+  q7: {
+    pages: 4,
+    head: ["Tenant \u00b7 Unit", "Detail", "Past Due"],
+    total: ["Total \u00b7 62 tenants", "Portfolio, all aging buckets", "$249,502.00"],
+    rows: [
+      ["Boyd, Terrance \u00b7 Hawthorne 1108", "94 days \u00b7 promise logged \u00b7 plan missed x2", "$21,480.00"],
+      ["Delgado Holdings \u00b7 Crestline 120", "71 days \u00b7 commercial \u00b7 no contact", "$18,900.00"],
+      ["Nguyen, Anh \u00b7 Hawthorne 410", "68 days \u00b7 no contact", "$11,640.00"],
+      ["Ortega, Sam \u00b7 Riverview 512", "62 days \u00b7 partial paid \u00b7 plan missed", "$9,280.00"],
+      ["Whitfield, Dana \u00b7 Hawthorne 902", "58 days \u00b7 promise logged", "$7,910.00"],
+      ["Marsh, Devon \u00b7 Hawthorne 1204", "54 days \u00b7 NSF Aug 3", "$6,440.00"],
+      ["Feldman, Rob \u00b7 Hawthorne 318", "51 days \u00b7 no contact", "$5,880.00"],
+      ["Delgado, Maria \u00b7 Riverview 204B", "47 days \u00b7 dispute logged", "$4,310.00"],
+      ["Okafor, Chris \u00b7 Union 214", "44 days \u00b7 promise logged", "$3,760.00"],
+      ["Brooks, Hailey \u00b7 Riverview 118", "38 days \u00b7 payment plan 4 of 6", "$3,220.00"],
+      ["Carter, Nia \u00b7 Union 610", "41 days \u00b7 no contact", "$2,940.00"],
+      ["Raman, Priya \u00b7 Ridgeline 305", "33 days \u00b7 payment plan current", "$2,610.00"],
+      ["Wells, Jordan \u00b7 Ridgeline 118", "29 days \u00b7 promise logged", "$2,180.00"],
+      ["Feldman, Rob \u00b7 Union 214", "22 days \u00b7 partial paid", "$1,845.00"],
+      ["Nguyen, Anh \u00b7 Harbor 431", "19 days \u00b7 payment plan current", "$1,520.00"],
+      ["Marsh, Devon \u00b7 Harbor 702", "11 days \u00b7 first notice sent", "$1,190.00"],
+      ["Boyd, Terrance \u00b7 Harbor 1108", "9 days \u00b7 current on plan", "$980.00"],
+      ["Reed, Marcus \u00b7 Riverview 512", "7 days \u00b7 late fee posted", "$745.00"],
+      ["44 additional tenants", "1\u201330 days \u00b7 see pages 2\u20134", "$140,771.00"],
+    ],
+  },
+  q6: {
+    pages: 1,
+    head: ["Aging Bucket", "Detail", "Amount"],
+    total: ["Total Open Receivables", "Day 18 \u00b7 vs. $226,092.00 last month", "$249,502.00"],
+    rows: [
+      ["Current", "Charged this period, not yet due", "$118,940.00"],
+      ["1\u201330 days", "Was $54,880.00 same day last month", "$62,410.00"],
+      ["31\u201360 days", "Was $29,140.00 same day last month", "$38,270.00"],
+      ["Over 60 days", "9 tenants \u00b7 was $20,772.00", "$29,882.00"],
+      ["Hawthorne Ridge", "31 tenants \u00b7 was $38,140.00", "$64,870.00"],
+      ["Riverview Apartments", "14 tenants \u00b7 was $31,640.00", "$32,072.00"],
+      ["Crestline Business Park", "6 tenants \u00b7 was $29,880.00", "$26,012.00"],
+      ["Union Street Lofts", "7 tenants \u00b7 was $22,610.00", "$21,940.00"],
+      ["Harbor Flats", "4 tenants \u00b7 was $18,940.00", "$19,830.00"],
+    ],
+  },
+  q2: {
+    pages: 2,
+    head: ["Work Order \u00b7 Unit", "Category \u00b7 vendor", "Days"],
+    total: ["Total \u00b7 14 work orders", "Average 12.4 days to resolve", "173 d"],
+    rows: [
+      ["WO-4182 \u00b7 Riverview 204B", "Plumbing \u00b7 Bexley Plumbing", "19 d"],
+      ["WO-4090 \u00b7 Hawthorne 1108", "HVAC \u00b7 Summit HVAC", "16 d"],
+      ["WO-4114 \u00b7 Hawthorne 410", "HVAC \u00b7 Summit HVAC", "15 d"],
+      ["WO-4147 \u00b7 Hawthorne 902", "HVAC \u00b7 Summit HVAC", "13 d"],
+      ["WO-4213 \u00b7 Union 214", "Appliance \u00b7 in-house", "11 d"],
+      ["WO-4155 \u00b7 Riverview 305", "Electrical \u00b7 Bexley", "9 d"],
+      ["WO-4166 \u00b7 Harbor 702", "Appliance \u00b7 in-house", "9 d"],
+      ["WO-4178 \u00b7 Hawthorne 1204", "HVAC \u00b7 Summit HVAC", "8 d"],
+      ["6 additional work orders", "8 days each \u00b7 see page 2", "48 d"],
+    ],
+  },
+};
+
+const FOLLOWUPS = {
+  del_notice: {
+    q: "Who is eligible for a notice?",
+    text: "Five tenants are past the grace period with no promise, plan or partial payment logged \u2014 the usual bar for a pay-or-quit notice.",
+    table: [
+      { a: "Anh Nguyen \u00b7 Hawthorne 410", b: "$11,640 \u00b7 68 days \u00b7 no contact", c: "Eligible", chip: RED },
+      { a: "Delgado Holdings \u00b7 Crestline 120", b: "$18,900 \u00b7 71 days \u00b7 commercial terms", c: "Eligible", chip: RED },
+      { a: "Nia Carter \u00b7 Union 610", b: "$2,940 \u00b7 41 days \u00b7 no contact", c: "Eligible", chip: ORANGE },
+    ],
+    note: "Notice templates live in Letters & Notices. I can surface the list and the balances; generating and serving the notice is yours.",
+    followups: ["del_plans"],
+  },
+  del_plans: {
+    q: "Which tenants are on a payment plan?",
+    text: "Twelve tenants have an active plan. Ten are current against it; two have missed an installment.",
+    table: [
+      { a: "Hailey Brooks \u00b7 Riverview 118", b: "$3,220 \u00b7 4 of 6 installments paid", c: "Current", chip: GREEN },
+      { a: "Sam Ortega \u00b7 Riverview 512", b: "$9,280 \u00b7 missed Aug 15 installment", c: "Missed", chip: RED },
+      { a: "Terrance Boyd \u00b7 Hawthorne 1108", b: "$21,480 \u00b7 missed 2 installments", c: "Missed", chip: RED },
+    ],
+    followups: ["del_notice"],
+  },
+  ar_prop: {
+    q: "Which properties moved the most?",
+    text: "Four properties account for the change. Hawthorne Ridge is the only one materially worse.",
+    table: [
+      { a: "Hawthorne Ridge", b: "$64,870 open \u00b7 was $38,140", c: "+$26,730", chip: RED },
+      { a: "Riverview Apartments", b: "$32,072 open \u00b7 was $31,640", c: "+$432", chip: GRAY },
+      { a: "Union Street Lofts", b: "$21,940 open \u00b7 was $22,610", c: "-$670", chip: GREEN },
+      { a: "Crestline Business Park", b: "$26,012 open \u00b7 was $29,880", c: "-$3,868", chip: GREEN },
+    ],
+    followups: ["ar_tenants", "ar_latefee"],
+  },
+  ar_tenants: {
+    q: "Who owes the most right now?",
+    text: "Nine tenants are past 60 days. These four carry $61,300 of the $249,502 open.",
+    table: [
+      { a: "Terrance Boyd \u00b7 Hawthorne 1108", b: "$21,480 \u00b7 94 days \u00b7 promise logged", c: "94 d", chip: RED },
+      { a: "Delgado Holdings \u00b7 Crestline 120", b: "$18,900 \u00b7 71 days \u00b7 commercial", c: "71 d", chip: RED },
+      { a: "Anh Nguyen \u00b7 Hawthorne 410", b: "$11,640 \u00b7 68 days", c: "68 d", chip: RED },
+      { a: "Sam Ortega \u00b7 Riverview 512", b: "$9,280 \u00b7 62 days \u00b7 partial paid", c: "62 d", chip: ORANGE },
+    ],
+    findings: [
+      { text: "Seven of the nine over-60 tenants are at Hawthorne Ridge." },
+      { text: "All nine have a promised payment logged and no receipt against it." },
+    ],
+    followups: ["ar_latefee"],
+  },
+  ar_latefee: {
+    q: "Were late fees posted this period?",
+    text: "Not everywhere. Late fees posted on 8 of your 10 properties. Hawthorne Ridge and Crestline were skipped, and Hawthorne has now missed two of the last three cycles.",
+    bullets: [
+      "Unposted late fees at Hawthorne Ridge total roughly $4,900 across 31 delinquent leases.",
+      "Hawthorne is also the property where aging past 30 days grew the most, which usually follows missed fee posting.",
+    ],
+    note: "Post Late Fees can be run for a single property, so this does not require re-running the whole portfolio.",
+    followups: ["ar_prop"],
+  },
+  occ_month: {
+    q: "How does that compare to last month?",
+    text: "Occupancy was 95.0% on July 28, so you are down 0.8 points \u2014 four net move-outs, three of them at Hawthorne Ridge.",
+    table: [
+      { a: "Hawthorne Ridge", b: "90.4% \u00b7 was 93.3%", c: "-2.9 pts", chip: RED },
+      { a: "Riverview Apartments", b: "96.1% \u00b7 was 95.5%", c: "+0.6 pts", chip: GREEN },
+      { a: "Union Street Lofts", b: "95.2% \u00b7 was 95.2%", c: "Flat", chip: GRAY },
+    ],
+    followups: ["occ_old", "occ_econ"],
+  },
+  occ_old: {
+    q: "Which vacancies are oldest?",
+    text: "Eleven units have been vacant more than 30 days. These four are past 60.",
+    table: [
+      { a: "Hawthorne Ridge 902", b: "Vacant 94 days \u00b7 2 bed", c: "94 d", chip: RED },
+      { a: "Hawthorne Ridge 410", b: "Vacant 78 days \u00b7 1 bed", c: "78 d", chip: RED },
+      { a: "Crestline Suite 120", b: "Vacant 71 days \u00b7 commercial", c: "71 d", chip: RED },
+      { a: "Union Street Lofts 214", b: "Vacant 63 days \u00b7 studio", c: "63 d", chip: ORANGE },
+    ],
+    followups: ["occ_econ"],
+  },
+  occ_econ: {
+    q: "What is the economic occupancy?",
+    text: "Physical occupancy is 94.2%; economic occupancy is 91.6%. The 2.6-point gap is concessions and unpaid rent, not empty units.",
+    bullets: [
+      "Concessions in place on 18 leases \u2014 $14,200 of monthly rent forgiven.",
+      "Delinquency over 30 days on 22 leases \u2014 $31,480 billed but uncollected.",
+    ],
+  },
+  mt_vendor: {
+    q: "Which vendors are slowest?",
+    text: "Three vendors carry the delay. Average days from assignment to first on-site visit:",
+    table: [
+      { a: "Summit HVAC", b: "6 work orders \u00b7 avg 9.2 days to first visit", c: "Slow", chip: RED },
+      { a: "Bexley Plumbing", b: "4 work orders \u00b7 avg 5.8 days", c: "Watch", chip: ORANGE },
+      { a: "In-house Maintenance", b: "31 work orders \u00b7 avg 0.9 days", c: "On time", chip: GREEN },
+    ],
+    followups: ["mt_open"],
+  },
+  mt_open: {
+    q: "Are any of these still open?",
+    text: "All 14 are closed. Separately, 6 open work orders are already past 7 days \u2014 those are the ones worth attention now.",
+    findings: [
+      { text: "4 of the 6 are assigned to Summit HVAC and have no accepted date." },
+      { text: "2 are waiting on tenant access after two failed entry attempts." },
+    ],
+    followups: ["mt_vendor"],
+  },
+  mt_cat: {
+    q: "Which categories run longest?",
+    text: "By average days to resolve over the last 90 days:",
+    table: [
+      { a: "HVAC", b: "22 work orders \u00b7 avg 8.4 days", c: "8.4 d", chip: RED },
+      { a: "Appliance", b: "17 work orders \u00b7 avg 5.1 days", c: "5.1 d", chip: ORANGE },
+      { a: "Plumbing", b: "34 work orders \u00b7 avg 2.6 days", c: "2.6 d", chip: GREEN },
+      { a: "General", b: "58 work orders \u00b7 avg 1.8 days", c: "1.8 d", chip: GREEN },
+    ],
+  },
+  veh_parking: {
+    q: "Which parking space is assigned to that unit?",
+    text: "Unit 512 has one assigned space, P-212 in the covered garage, on the lease as a $75 monthly recurring charge.",
+    bullets: [
+      "Second vehicle on file for the unit \u2014 2016 Honda Civic, gray \u2014 has no assigned space.",
+      "Riverview has 7 unassigned covered spaces available this month.",
+    ],
+  },
+  veh_missing: {
+    q: "How many tenants have no vehicle on file?",
+    text: "At Riverview Apartments, 41 of 148 occupied units have no vehicle record. 19 of those have a parking charge on the lease, which is usually a data-entry gap rather than a tenant without a car.",
+    followups: ["veh_parking"],
+  },
+  unit_prospects: {
+    q: "Who is interested in those units?",
+    text: "Six prospects have a waterfront preference logged and an active guest card.",
+    table: [
+      { a: "Priya Raman", b: "Application on Riverview 212 \u00b7 4 days", c: "91", chip: GREEN },
+      { a: "Jordan Wells", b: "Toured Riverview 204B \u00b7 6 days", c: "84", chip: GREEN },
+      { a: "Sam Ortega", b: "Guest card \u00b7 no visit yet", c: "52", chip: ORANGE },
+    ],
+  },
+  unit_rents: {
+    q: "How do those rents compare to the property average?",
+    text: "All three are priced above their property average, which is consistent with the waterfront premium on file.",
+    table: [
+      { a: "Riverview 204B", b: "$1,890 \u00b7 2 bed average $1,742", c: "+8.5%", chip: GREEN },
+      { a: "Riverview 212", b: "$1,610 \u00b7 1 bed average $1,505", c: "+7.0%", chip: GREEN },
+      { a: "Harbor Flats 208", b: "$1,975 \u00b7 2 bed average $1,860", c: "+6.2%", chip: GREEN },
+    ],
+  },
+  pl_rm: {
+    q: "Why is Repairs & Maintenance up?",
+    text: "Repairs & Maintenance is up $38,660 against last August. Three items account for $34,100 of it.",
+    bullets: [
+      "Hawthorne Ridge roof repairs \u2014 $18,400 across two work orders, no comparable spend last year.",
+      "Riverview HVAC compressor replacements \u2014 $9,900 on three units.",
+      "Turn-related drywall and paint at Union Street Lofts \u2014 $5,800, tied to 9 turns this month against 4 last August.",
+    ],
+    note: "The roof work is capital-eligible. Moving it out of R&M would put the category at +3.7% year over year.",
+    followups: ["pl_noi", "pl_byprop"],
+  },
+  pl_noi: {
+    q: "Which property drove the NOI change?",
+    text: "NOI is up $29,570. Riverview carried it; Hawthorne Ridge is the only property down year over year.",
+    table: [
+      { a: "Riverview Apartments", b: "NOI $341,200 \u00b7 was $318,600", c: "+7.1%", chip: GREEN },
+      { a: "Union Street Lofts", b: "NOI $198,400 \u00b7 was $191,050", c: "+3.8%", chip: GREEN },
+      { a: "Crestline Business Park", b: "NOI $151,900 \u00b7 was $149,800", c: "+1.4%", chip: GRAY },
+      { a: "Hawthorne Ridge", b: "NOI $115,500 \u00b7 was $117,980", c: "-2.1%", chip: RED },
+    ],
+    followups: ["pl_rm", "pl_byprop"],
+  },
+  pl_byprop: {
+    q: "Show the same period by property",
+    text: "Income and expense for August 1\u201328, 2026, by property, with the year-over-year variance on total income.",
+    table: [
+      { a: "Riverview Apartments", b: "Income $521,400 \u00b7 Expense $180,200", c: "+7.4%", chip: GREEN },
+      { a: "Union Street Lofts", b: "Income $312,900 \u00b7 Expense $114,500", c: "+5.1%", chip: GREEN },
+      { a: "Crestline Business Park", b: "Income $268,300 \u00b7 Expense $116,400", c: "+2.2%", chip: GRAY },
+      { a: "Hawthorne Ridge", b: "Income $278,130 \u00b7 Expense $162,630", c: "+1.1%", chip: ORANGE },
+    ],
+    note: "I can export this summary to the Financial Analytics board or build it as a dashboard tile.",
+  },
+};
+
+const TENANT_RECORDS = {
+  reed: {
+    name: "Marcus Reed",
+    meta: "Riverview Apartments \u00b7 Unit 512 \u00b7 Tenant since Mar 2023",
+    fields: [
+      { label: "Lease Term", value: "Mar 1, 2026 \u2013 Feb 28, 2027" },
+      { label: "Rent", value: "$1,545 monthly" },
+      { label: "Balance", value: "$0.00" },
+      { label: "Phone", value: "(513) 555-0142" },
+      { label: "Email", value: "m.reed@example.com" },
+      { label: "Parking Space", value: "P-212 \u00b7 covered garage" },
+    ],
+    vehicle: { label: "Vehicle", value: "2019 Chevrolet Camaro \u00b7 Red", meta: "Plate 8XKJ221 \u00b7 Ohio \u00b7 added Mar 4, 2023" },
+    second: "Second vehicle on file: 2016 Honda Civic \u00b7 Gray \u00b7 Plate 2LMD884",
+  },
+  brooks: {
+    name: "Hailey Brooks",
+    meta: "Riverview Apartments \u00b7 Unit 118 \u00b7 Tenant since Aug 2024",
+    fields: [
+      { label: "Lease Term", value: "Aug 1, 2026 \u2013 Jul 31, 2027" },
+      { label: "Rent", value: "$1,610 monthly" },
+      { label: "Balance", value: "$0.00" },
+      { label: "Phone", value: "(513) 555-0198" },
+      { label: "Email", value: "h.brooks@example.com" },
+      { label: "Parking Space", value: "Unassigned" },
+    ],
+    vehicle: { label: "Vehicle", value: "2021 Dodge Charger \u00b7 Red", meta: "Plate 4TRM905 \u00b7 Kentucky \u00b7 added Aug 12, 2024" },
+    second: "",
+  },
+};
+
+const CATS = [
+  { label: "Answers from Express Help", hint: "I look this up in Rent Manager documentation and walk you through it." },
+  { label: "Summarize my data", hint: "I read your records across modules and consolidate what I find." },
+  { label: "Tell me what to do next", hint: "I read your records, then rank what needs attention and why." },
+];
+
+Object.assign(PROMPTS, HELP_PROMPTS, DATA_PROMPTS, ACTION_PROMPTS, BILLING_PROMPTS);
+
+const DASHBOARDS = [
+  { name: "My Leasing Dashboard", meta: "12 tiles \u00b7 private to you" },
+  { name: "Prospect Snapshot", meta: "8 tiles \u00b7 shared with your team" },
+  { name: "Lease Renewals", meta: "6 tiles \u00b7 shared with your team" },
+  { name: "New dashboard\u2026", meta: "Named after this tile" },
+];
+
+class Component extends DCLogic {
+  state = { cat: 0, messages: [], thinking: null, sheetOpen: false, dashSel: 0, draft: "", w: 640, h: 860 };
+
+  startDrag(e, axes) {
+    e.preventDefault();
+    const x0 = e.clientX, y0 = e.clientY, w0 = this.state.w, h0 = this.state.h;
+    const move = ev => {
+      const next = {};
+      if (axes.indexOf("w") >= 0) next.w = Math.max(480, Math.min(1180, w0 - (ev.clientX - x0)));
+      if (axes.indexOf("h") >= 0) next.h = Math.max(420, Math.min(880, h0 + (ev.clientY - y0)));
+      this.setState(next);
+    };
+    const up = () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseup", up);
+    };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("mouseup", up);
+  }
+
+  match(q) {
+    const words = q.toLowerCase().match(/[a-z&]{3,}/g) || [];
+    let best = null, bestScore = 1;
+    Object.keys(PROMPTS).forEach(id => {
+      const hay = (PROMPTS[id].label + " " + (PROMPTS[id].kw || "")).toLowerCase();
+      const score = words.filter(w => hay.includes(w)).length;
+      if (score > bestScore) { bestScore = score; best = id; }
+    });
+    return best;
+  }
+
+  botMsg(id) {
+    const p = PROMPTS[id];
+    return {
+      role: "bot", src: id, text: p.text, steps: p.steps, stats: p.stats, findings: p.findings,
+      bullets: p.bullets, table: p.resultTable || p.table, report: p.report, tenants: p.tenants, plan: p.plan,
+      article: p.article, note: p.note, followups: p.followups, actions: p.actions,
+    };
+  }
+
+  output(fmt, id, print) {
+    const p = id ? PROMPTS[id] : null;
+    const body = (id && REPORT_BODIES[id]) || null;
+    let head, src, total;
+    if (body) {
+      head = body.head;
+      src = body.rows;
+      total = body.total;
+    } else if (p && p.report) {
+      head = [p.report.title.split(" \u00b7 ")[0], p.report.cols[0] + " vs. " + p.report.cols[1], p.report.cols[2]];
+      const rows = p.report.rows;
+      src = rows.slice(0, -1).map(r => r.kind === "head"
+        ? [r.a.toUpperCase(), "", ""]
+        : [r.a, r.b + "  /  " + r.c, r.d]);
+      const last = rows[rows.length - 1];
+      total = [last.a, last.b + "  /  " + last.c, last.d];
+    } else {
+      head = ["Record", "Detail", "Value"];
+      src = ((p && (p.table || p.tileRows)) || []).map(r => [r.a, r.b, r.c]);
+      const n = src.length;
+      total = ["Total \u00b7 " + n + (n === 1 ? " record" : " records"), "", ""];
+    }
+    const pages = (body && body.pages) || (src.length > 14 ? 4 : src.length > 8 ? 2 : 1);
+    const msg = {
+      Print: "Sent to your default printer, 2-sided, letter.",
+      PDF: "Generated as a PDF.",
+      Excel: "Exported to Excel with one row per record.",
+    };
+    const rmr = id ? RM_REPORTS[id] : null;
+    const doc = rmr ? {
+      kind: "rm",
+      title: rmr.title,
+      asOf: rmr.asOf,
+      param: rmr.param,
+      cols: rmr.cols,
+      groups: rmr.groups,
+      other: rmr.other || null,
+      totals: rmr.totals || null,
+      page: "Page 1 of " + pages,
+      printed: "Printed 08/28/26 9:42 AM",
+      source: (p && p.reportSource) || "Custom report",
+      format: fmt,
+    } : {
+        kind: "rm",
+        title: print.name,
+        asOf: "As of 08/28/26",
+        param: (p && p.reportSource) ? "Report: " + p.reportSource : "Custom \u00b7 built from this result",
+        cols: [{ label: head[0], w: "1.5fr" }, { label: head[1], w: "1.7fr" }, { label: head[2], w: "0.7fr", align: "right" }],
+        groups: [{ name: "All Selected Properties", rows: src, total: [total[0], total[1] || "", total[2] || ""] }],
+        other: null,
+        totals: null,
+        page: "Page 1 of " + pages,
+        printed: "Printed 08/28/26 9:42 AM",
+        source: (p && p.reportSource) || "Custom report",
+        format: fmt,
+    };
+    if (typeof this.props.onOpenReport === "function") {
+      this.props.onOpenReport(doc);
+      this.push([{
+        role: "bot",
+        text: msg[fmt] + " It is open in the report viewer \u2014 close the viewer to come back here.",
+        note: "Report parameters are saved, so you can re-run this from My Reports without asking me again.",
+      }]);
+      return;
+    }
+    this.push([{
+      role: "bot",
+      text: msg[fmt] + " Open this screen inside My Workspace to see the report viewer.",
+      note: "Report parameters are saved, so you can re-run this from My Reports without asking me again.",
+    }]);
+  }
+
+  followUp(key) {
+    const f = FOLLOWUPS[key];
+    if (!f) return;
+    this.setState({ sheetOpen: false });
+    this.push([{ role: "user", text: f.q }]);
+    this.setState({ thinking: "Reading the detail behind that" });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ thinking: null });
+      this.push([{
+        role: "bot", text: f.text, bullets: f.bullets, table: f.table, findings: f.findings,
+        stats: f.stats, note: f.note, followups: f.followups,
+      }]);
+    }, 800);
+  }
+
+  openTenant(tid) {
+    const r = TENANT_RECORDS[tid];
+    if (!r) return;
+    this.push([{ role: "user", text: "Open " + r.name + "." }]);
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.push([{
+        role: "bot",
+        text: r.name + " \u2014 the vehicle on file is highlighted below.",
+        record: r,
+        followups: ["veh_parking", "veh_missing"],
+      }]);
+    }, 500);
+  }
+
+  submit() {
+    const q = (this.state.draft || "").trim();
+    if (!q) return;
+    const id = this.match(q);
+    this.setState({ draft: "", sheetOpen: false });
+    if (id) {
+      const p = PROMPTS[id];
+      this.push([{ role: "user", text: q }]);
+      this.setState({ thinking: p.cat === 0 ? "Searching Express Help" : "Reading your data" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        this.push([this.botMsg(id)]);
+      }, 900);
+      return;
+    }
+    this.push([{ role: "user", text: q }]);
+    this.setState({ thinking: "Searching Express Help" });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ thinking: null });
+      this.push([{ role: "bot", text: "I could not find a confident answer for that yet. Try rephrasing with a module name, or open Prompt Suggestions for a close match.", actions: ["browse"] }]);
+    }, 900);
+  }
+
+  componentDidUpdate() { const el = this._scroll; if (el) el.scrollTop = el.scrollHeight; }
+  componentWillUnmount() { clearTimeout(this._t); }
+
+  push(msgs) { this.setState(s => ({ messages: s.messages.concat(msgs) })); }
+
+  ask(id) {
+    const p = PROMPTS[id];
+    this.setState({ sheetOpen: false });
+    this.push([{ role: "user", text: p.label }]);
+    this.setState({ thinking: p.cat === 0 ? "Searching Express Help" : "Reading your data" });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => {
+      this.setState({ thinking: null });
+      this.push([this.botMsg(id)]);
+    }, 900);
+  }
+
+  act(key, id) {
+    const p = PROMPTS[id];
+    if (key === "article") {
+      this.push([{ role: "bot", text: "Opening " + p.article + " in a new tab. The steps above are the short version.", article: p.article, actions: ["related"] }]);
+      return;
+    }
+    if (key === "related") { this.push([{ role: "bot", text: "Related prompts you can try next:", actions: ["browse"] }]); return; }
+    if (key === "browse") { this.setState({ sheetOpen: true }); return; }
+    if (key === "flagged") {
+      this.push([{
+        role: "user", text: "Remove the two flagged tenants from the batch.",
+      }, {
+        role: "bot", src: id,
+        text: "Removed. The batch is now 146 tenants at $25.00 each, $3,650.00 total. Sam Ortega and Anh Nguyen are excluded and I noted the lease clause on both records.",
+        actions: ["post", "cancel"],
+      }]);
+      return;
+    }
+    if (key === "cancel") {
+      this.push([{ role: "bot", text: "Nothing was posted. The batch is staged \u2014 tell me what to change and I will restage it, or ask me to discard it.", actions: ["browse"] }]);
+      return;
+    }
+    if (key === "print") {
+      const rows = (p.table || p.tileRows || []).length;
+      this.push([{
+        role: "bot", src: id,
+        text: "I can format this result as a report. Here is what it will contain.",
+        print: {
+          name: p.reportName || p.tileName || "Result Summary",
+          pages: rows > 8 ? "4 pages" : rows > 4 ? "2 pages" : "1 page",
+          params: [
+            { label: "Report", value: p.reportSource || "Custom \u00b7 built from this result" },
+            { label: "Properties", value: "10 selected \u00b7 lcs-rmexpress" },
+            { label: "As of", value: "Aug 28, 2026 \u00b7 day 18 of period" },
+            { label: "Layout", value: "Summary with detail rows, landscape, letter" },
+          ],
+        },
+      }]);
+      return;
+    }
+    if (key === "held") {
+      this.push([{
+        role: "user", text: "What is holding back the other 4?",
+      }, {
+        role: "bot", src: id,
+        text: "Four work orders have no cost recorded, so a bill would post at $0. Two more are over the owner approval threshold.",
+        table: [
+          { a: "WO-4318 \u00b7 Hawthorne 1108", b: "HVAC \u00b7 Summit HVAC \u00b7 no invoice", c: "$0", chip: RED },
+          { a: "WO-4327 \u00b7 Riverview 512", b: "Plumbing \u00b7 in-house \u00b7 no labor logged", c: "$0", chip: RED },
+          { a: "WO-4290 \u00b7 Hawthorne 902", b: "Roof \u00b7 over $2,500, no approval", c: "$3,140", chip: ORANGE },
+          { a: "WO-4291 \u00b7 Hawthorne 410", b: "Roof \u00b7 over $2,500, no approval", c: "$2,780", chip: ORANGE },
+        ],
+        note: "Enter the vendor invoices and log owner approval, then ask me again and I will restage those four.",
+        actions: ["postbills", "cancel"],
+      }]);
+      return;
+    }
+    if (key === "postbills") {
+      this.push([{ role: "user", text: "Create the bills." }]);
+      this.setState({ thinking: "Creating owner bills" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        const d = p.posted;
+        this.push([{ role: "bot", src: id, text: d.text, stats: d.stats, table: d.table, note: d.note }]);
+      }, 1100);
+      return;
+    }
+    if (key === "post") {
+      this.push([{ role: "user", text: "Post the charges." }]);
+      this.setState({ thinking: "Posting the batch" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        const d = p.posted;
+        this.push([{
+          role: "bot", src: id, text: d.text, stats: d.stats, table: d.table, note: d.note,
+          actions: ["print"],
+        }]);
+      }, 1000);
+      return;
+    }
+    if (key === "nextsteps") {
+      this.push([{ role: "user", text: "What do you suggest I do next?" }]);
+      this.setState({ thinking: "Ranking what needs attention" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        this.push([{
+          role: "bot", src: id, text: "Here is the order I would work it, with the reason for each.",
+          steps: p.nextSteps.map((n, i) => ({ n: i + 1, text: n.title + " \u2014 " + n.detail })),
+          note: "I can organize and track this. Writing or sending messages is not available yet, so these are yours to act on.",
+          actions: ["list"],
+        }]);
+      }, 800);
+      return;
+    }
+    if (key === "list") {
+      if (p.unitList) {
+        this.push([{
+          role: "bot", src: id,
+          text: "All 14 units vacating in the next 30 days, ordered from least interest to most so the exposure is at the top.",
+          unitList: true, actions: [],
+        }]);
+        return;
+      }
+      this.push([{ role: "bot", src: id, text: "The full list, ordered the same way:", table: p.table || p.tileRows, actions: [] }]);
+      return;
+    }
+    if (key === "tile") {
+      this.push([{ role: "user", text: "Create a dashboard tile so I can keep an eye on this." }]);
+      this.setState({ thinking: "Building the tile" });
+      clearTimeout(this._t);
+      this._t = setTimeout(() => {
+        this.setState({ thinking: null });
+        this.push([{ role: "bot", src: id, text: "I built the " + p.tileName + " tile. It reads live from the same records, so it stays current.", tile: true, picker: true }]);
+      }, 800);
+    }
+  }
+
+  addTile(id) {
+    const p = PROMPTS[id];
+    const name = this.state.dashSel === 3 ? p.tileName : DASHBOARDS[this.state.dashSel].name;
+    if (typeof this.props.onTileAdded === "function") {
+      this.props.onTileAdded({
+        name: p.tileName,
+        dashboard: name,
+        note: p.tileNote || "",
+        head: p.tileHead || ["", "", ""],
+        rows: p.tileRows || [],
+        footer: p.tileFooter || "",
+      });
+    }
+    this.push([{
+      role: "bot",
+      text: p.tileName + " was added to " + name + ". It refreshes each morning at 6:00 AM, and you can move or resize it from the dashboard.",
+      link: { label: "Open " + name, hint: "View the tile and work through your next steps there", href: "Orion%20Dashboard%20Tile%20Ideas%20v3.dc.html" },
+      note: "Want it tracked differently? Tell me what to change and I will rebuild the tile.",
+      actions: ["browse"],
+    }]);
+  }
+
+  chip(bg, color) {
+    return "justify-self: end; display: inline-flex; align-items: center; justify-content: center; min-width: 58px; height: 22px; padding: 0 8px; border-radius: 2px; font-size: 13px; font-weight: 500; background: " + bg + "; color: " + color;
+  }
+
+  btn(primary) {
+    return primary
+      ? "height: 32px; padding: 0 14px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer"
+      : "height: 32px; padding: 0 14px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 14px; cursor: pointer";
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ACTION_LABELS = {
+      nextsteps: ["Suggest next steps", true],
+      tile: ["Create a dashboard tile", false],
+      list: ["Show me the full list", false],
+      article: ["Open the article", true],
+      related: ["Something else", false],
+      browse: ["Prompt Suggestions", false],
+      post: ["Post the charges", true],
+      postbills: ["Create the bills", true],
+      held: ["Why are 4 held back?", false],
+      print: ["Print a report", false],
+      flagged: ["Remove the 2 flagged tenants", false],
+      cancel: ["Do not post", false],
+    };
+
+    const messages = s.messages.map(m => {
+      const isUser = m.role === "user";
+      const p = m.src ? PROMPTS[m.src] : null;
+      return {
+        isUser, isBot: !isUser,
+        rowStyle: "display: flex; animation: eh-in 180ms ease-out",
+        text: m.text,
+        hasSteps: !!m.steps, steps: m.steps || [],
+        hasStats: !!m.stats, stats: m.stats || [],
+        hasBullets: !!m.bullets, bullets: (m.bullets || []).map(t => ({ text: t })),
+        hasUnitList: !!m.unitList,
+        units: m.unitList ? UNITS.map(u => ({
+          unit: u.unit + " \u00b7 " + u.property,
+          meta: u.meta,
+          vacant: u.vacant,
+          apps: u.apps === 0 ? "None" : u.apps + " pending",
+          appStyle: "display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; font-size: 12px; font-weight: 500; background: "
+            + (u.apps === 0 ? "#fdeceb" : "#e2f1da") + "; color: " + (u.apps === 0 ? "#eb343c" : "#4a7d2c"),
+          interest: u.interest === 0 ? "0 interested" : u.interest + (u.interest === 1 ? " interested" : " interested"),
+          interestStyle: "font-size: 13px; text-align: right; font-weight: 500; color: " + (u.interest === 0 ? "#eb343c" : u.interest < 3 ? "#a1541a" : "#4a7d2c"),
+          prospects: u.prospects.length ? u.prospects.join(", ") : (u.matches ? "No interest logged \u00b7 " + u.matches + " preference matches" : "No interest logged"),
+          prospectStyle: "font-size: 12px; line-height: 17px; color: " + (u.prospects.length ? "#666" : "#b3b3b3")
+            + (u.prospects.length ? "" : "; font-style: italic"),
+        })) : [],
+        hasTile: !!m.tile,
+        tileName: p ? p.tileName : "",
+        tileNote: p ? p.tileNote : "",
+        hasTileNote: !!(p && m.tile && p.tileNote),
+        tileFooter: p ? p.tileFooter : "",
+        tileHeadA: p && p.tileHead ? p.tileHead[0] : "",
+        tileHeadB: p && p.tileHead ? p.tileHead[1] : "",
+        tileHeadC: p && p.tileHead ? p.tileHead[2] : "",
+        tileRows: p && m.tile && p.tileRows ? p.tileRows.map(r => ({ a: r.a, b: r.b, c: r.c, chipStyle: this.chip(r.chip[0], r.chip[1]) })) : [],
+        isVacancyTile: !!(m.tile && p && p.tileKind === "vacancy"),
+        isRowTile: !!(m.tile && p && p.tileKind !== "vacancy" && p.tileRows),
+        hasFindings: !!m.findings, findings: m.findings || [],
+        hasTable: !!m.table,
+        table: (m.table || []).map(r => ({ a: r.a, b: r.b, c: r.c, chipStyle: this.chip(r.chip[0], r.chip[1]) })),
+        hasPlan: !!m.plan,
+        planTitle: m.plan ? m.plan.title : "",
+        planRows: m.plan ? m.plan.rows : [],
+        hasPlanWarn: !!(m.plan && m.plan.warn),
+        planWarn: m.plan ? m.plan.warn : "",
+        hasReport: !!m.report,
+        reportTitle: m.report ? m.report.title : "",
+        reportCols: m.report ? m.report.cols.map(c => ({ label: c })) : [],
+        reportRows: m.report ? m.report.rows.map(r => ({
+          a: r.a, b: r.b || "", c: r.c || "", d: r.d || "",
+          rowStyle: "display: grid; grid-template-columns: 1.6fr 0.95fr 0.95fr 0.7fr; gap: 8px; align-items: center; padding: "
+            + (r.kind === "head" ? "7px 12px" : "8px 12px") + "; font-size: 14px; border-bottom: 1px solid #ebf1f5; background: "
+            + (r.kind === "head" ? "#f5f8fa" : "#fff")
+            + (r.kind === "total" ? "; border-top: 1px solid #cedbe7" : ""),
+          labelStyle: "color: #13314c; font-weight: " + (r.kind === "row" ? "400" : "500"),
+          numStyle: "text-align: right; font-variant-numeric: tabular-nums; color: " + (r.kind === "total" ? "#13314c" : "#424e5b")
+            + "; font-weight: " + (r.kind === "total" ? "500" : "400"),
+          varStyle: "text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; color: "
+            + (r.dir === "bad" ? "#eb343c" : r.dir === "up" ? "#4a7d2c" : "#666"),
+        })) : [],
+        hasTenants: !!m.tenants,
+        tenants: (m.tenants || []).map(t => ({
+          name: t.name, unit: t.unit, vehicle: t.vehicle,
+          badge: t.match === "exact" ? "Exact match" : "Red, not a Camaro",
+          badgeStyle: "display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 2px; font-size: 12px; font-weight: 500; background: "
+            + (t.match === "exact" ? "#e2f1da" : "#ebf1f5") + "; color: " + (t.match === "exact" ? "#4a7d2c" : "#424e5b"),
+          onClick: () => this.openTenant(t.id),
+        })),
+        hasRecord: !!m.record,
+        recordName: m.record ? m.record.name : "",
+        recordMeta: m.record ? m.record.meta : "",
+        recordFields: m.record ? m.record.fields : [],
+        vehicleLabel: m.record ? m.record.vehicle.label : "",
+        vehicleValue: m.record ? m.record.vehicle.value : "",
+        vehicleMeta: m.record ? m.record.vehicle.meta : "",
+        hasSecondVehicle: !!(m.record && m.record.second),
+        secondVehicle: m.record ? m.record.second : "",
+        hasFollowups: !!(m.followups && m.followups.length),
+        followups: (m.followups || []).filter(k => FOLLOWUPS[k]).map(k => ({
+          label: FOLLOWUPS[k].q,
+          style: "border: 1px solid #cedbe7; background: #fff; color: #195ca4; border-radius: 999px; padding: 7px 13px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer; text-align: left",
+          onClick: () => this.followUp(k),
+        })),
+        hasDoc: !!m.doc,
+        docTitle: m.doc ? m.doc.title : "",
+        docSubtitle: m.doc ? m.doc.subtitle : "",
+        docScope: m.doc ? m.doc.scope : "",
+        docPrinted: m.doc ? m.doc.printed : "",
+        docPage: m.doc ? m.doc.page : "",
+        docSource: m.doc ? m.doc.source : "",
+        docHeadA: m.doc ? m.doc.head[0] : "",
+        docHeadB: m.doc ? m.doc.head[1] : "",
+        docHeadC: m.doc ? m.doc.head[2] : "",
+        docRows: m.doc ? m.doc.rows.map((r, i) => ({
+          a: r[0], b: r[1], c: r[2],
+          rowStyle: "display: grid; grid-template-columns: 1.5fr 1.7fr 0.55fr; gap: 12px; padding: 5px 0; font-size: 12px; line-height: 17px; background: "
+            + (i % 2 ? "#f7fbfd" : "#fff"),
+        })) : [],
+        docTotalLabel: m.doc ? m.doc.total[0] : "",
+        docTotalDetail: m.doc ? m.doc.total[1] : "",
+        docTotalValue: m.doc ? m.doc.total[2] : "",
+        hasPrint: !!m.print,
+        printName: m.print ? m.print.name : "",
+        printPages: m.print ? m.print.pages : "",
+        printParams: m.print ? m.print.params : [],
+        printFormats: m.print ? [
+          { label: "Print", icon: "print" },
+          { label: "PDF", icon: "picture_as_pdf" },
+          { label: "Excel", icon: "table_view" },
+        ].map((o, i) => ({
+          label: o.label, icon: o.icon,
+          style: this.btn(i === 0) + "; display: inline-flex; align-items: center; gap: 6px",
+          onClick: () => this.output(o.label, m.src, m.print),
+        })) : [],
+        hasArticle: !!m.article, articleTitle: m.article,
+        hasNote: !!m.note, note: m.note,
+        hasLink: !!m.link,
+        linkLabel: m.link ? m.link.label : "",
+        linkHint: m.link ? m.link.hint : "",
+        linkHref: m.link ? m.link.href : "",
+        onLink: e => {
+          if (!m.link) return;
+          if (e && e.preventDefault) e.preventDefault();
+          if (typeof this.props.onViewDashboard === "function") { this.props.onViewDashboard(); return; }
+          const url = m.link.href;
+          try { if (window.top && window.top !== window) { window.top.location.href = url; return; } } catch (err) {}
+          try { if (window.parent && window.parent !== window) { window.parent.location.href = url; return; } } catch (err) {}
+          window.location.href = url;
+        },
+        hasPicker: !!m.picker,
+        onAddTile: () => this.addTile(m.src),
+        hasActions: !!(m.actions && m.actions.length),
+        actions: (m.actions || []).map(k => ({ label: ACTION_LABELS[k][0], style: this.btn(ACTION_LABELS[k][1]), onClick: () => this.act(k, m.src) })),
+      };
+    });
+
+    const cats = CATS.map((c, i) => ({
+      label: c.label,
+      style: "padding: 7px 12px; border-radius: 999px; font-size: 13px; cursor: pointer; border: 1px solid "
+        + (s.cat === i ? "#008dd5" : "#cedbe7") + "; background: " + (s.cat === i ? "#ebf1f5" : "#fff")
+        + "; color: " + (s.cat === i ? "#195ca4" : "#424e5b"),
+      onClick: () => this.setState({ cat: i }),
+    }));
+
+    const promptList = Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === s.cat).map(k => ({
+      label: PROMPTS[k].label,
+      icon: PROMPTS[k].icon,
+      iconStyle: "font-size: 20px; color: " + (PROMPTS[k].cat === 0 ? "#8fa3b3" : "#008dd5"),
+      onClick: () => this.ask(k),
+    }));
+
+    const dashboards = DASHBOARDS.map((db, i) => ({
+      ...db,
+      style: "display: flex; align-items: center; gap: 10px; border-radius: 6px; padding: 9px 11px; cursor: pointer; border: 1px solid "
+        + (s.dashSel === i ? "#008dd5" : "#cedbe7") + "; background: " + (s.dashSel === i ? "#ebf1f5" : "#fff"),
+      radioStyle: "width: 15px; height: 15px; flex: none; border-radius: 999px; box-sizing: border-box; background: #fff; border: "
+        + (s.dashSel === i ? "5px solid #008dd5" : "1px solid #cedbe7"),
+      onClick: () => this.setState({ dashSel: i }),
+    }));
+
+    return {
+      vacLegend: [
+        { label: "Covered \u2014 application pending", count: 5, color: "#6eb744" },
+        { label: "Interest logged, no application", count: 4, color: "#f58220" },
+        { label: "No interest logged", count: 5, color: "#eb343c" },
+      ].map(l => ({
+        label: l.label, count: l.count,
+        dotStyle: "width: 10px; height: 10px; flex: none; border-radius: 999px; background: " + l.color,
+      })),
+      panelW: s.w,
+      panelH: s.h,
+      startW: e => this.startDrag(e, "w"),
+      startH: e => this.startDrag(e, "h"),
+      startBoth: e => this.startDrag(e, "wh"),
+      isHome: s.messages.length === 0,
+      messages, cats, promptList, dashboards,
+      catHint: CATS[s.cat].hint,
+      thinking: !!s.thinking, thinkingText: s.thinking || "",
+      sheetOpen: s.sheetOpen,
+      toggleSheet: () => this.setState({ sheetOpen: !s.sheetOpen }),
+      closeSheet: () => this.setState({ sheetOpen: false }),
+      browseStyle: "height: 30px; padding: 0 11px; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; background: "
+        + (s.sheetOpen ? "#ebf1f5" : "#fff") + "; border: 1px solid " + (s.sheetOpen ? "#008dd5" : "#cedbe7")
+        + "; color: " + (s.sheetOpen ? "#195ca4" : "#424e5b"),
+      newChat: () => this.setState({ messages: [], thinking: null, sheetOpen: false }),
+      onClose: this.props.onClose,
+      scrollRef: el => { this._scroll = el; },
+      draft: s.draft,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      onDraftKey: e => { if (e.key === "Enter") { e.preventDefault(); this.submit(); } },
+      submitDraft: () => this.submit(),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/colors_and_type.css">
+<link rel="stylesheet" href="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/preview/_card.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Symbols+Outlined" rel="stylesheet">
+<script src="_ds/rmx-design-system-019dd9a2-6db7-79d2-bf37-c82345a95d1d/_ds_bundle.js"></script>
+<style>
+  body { margin: 0; background: #eef4f8; }
+  a { color: #008dd5; text-decoration: none; }
+  a:hover { color: #0071aa; text-decoration: underline; }
+  .ms { font-family: "Material Symbols Outlined"; font-weight: 400; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; }
+</style>
+</helmet>
+
+<section id="2a" class="rmx" style="width: 1720px; padding: 28px; background: repeating-linear-gradient(135deg, #eaf2f7 0 8px, #eef5f9 8px 16px); font-family: Roboto, system-ui, sans-serif; color: #666; display: flex; flex-direction: column; gap: 20px">
+
+  <div style="display: flex; align-items: center; gap: 12px">
+    <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 2px; background: #13314c; color: #fff; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500">2a</span>
+    <span style="font-size: 12px; line-height: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: #8fa3b3; font-weight: 500">Orion Assistant (write-only) &middot; Leasing Agent &middot; tile ideas in dashboard chrome</span>
+  </div>
+
+  <!-- APP SHELL -->
+  <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(19,49,76,0.10)">
+
+    <!-- Navy header -->
+    <div style="height: 56px; background: #13314c; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; gap: 16px">
+      <img src="assets/logo-rentmanager-white.svg" alt="Rent Manager" style="height: 26px; width: auto; display: block">
+      <div style="display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center">
+        <div style="display: flex; gap: 4px">
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center">menu</span>
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center">list_alt</span>
+          <span class="ms" style="font-size: 20px; color: #fff; background: #425a70; width: 32px; height: 32px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center">star</span>
+        </div>
+        <div style="width: 520px; height: 32px; background: #425a70; border-radius: 4px; display: flex; align-items: center; gap: 8px; padding: 0 10px">
+          <span class="ms" style="font-size: 18px; color: #cedbe7">search</span>
+          <span style="font-size: 14px; font-style: italic; color: #cedbe7">Command Launch</span>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px">
+        <div style="text-align: right; color: #fff"><div style="font-size: 12px; line-height: 15px; color: #cedbe7">Company Code</div><div style="font-size: 13px; line-height: 16px">lcs-rmexpress</div></div>
+        <span class="ms" style="font-size: 20px; color: #008dd5">notifications</span>
+        <span style="width: 30px; height: 30px; border-radius: 999px; background: #008dd5; color: #fff; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center">DS</span>
+      </div>
+    </div>
+
+    <div style="padding: 16px; display: flex; flex-direction: column; gap: 16px; background: #f5f8fa">
+
+      <!-- Dashboard toolbar -->
+      <div style="display: flex; align-items: stretch; gap: 12px">
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; padding: 8px 12px; display: flex; align-items: center; gap: 12px; min-width: 300px">
+          <div>
+            <div style="font-size: 12px; line-height: 16px; color: #666">Dashboard</div>
+            <div style="display: flex; align-items: center; gap: 6px"><span class="ms" style="font-size: 20px; color: #008dd5">auto_awesome</span><span style="font-size: 18px; line-height: 24px; font-weight: 500; color: #13314c">Orion &mdash; Leasing Agent</span></div>
+          </div>
+          <span class="ms" style="margin-left: auto; font-size: 20px; color: #fff; background: #008dd5; width: 28px; height: 28px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">keyboard_double_arrow_right</span>
+        </div>
+        <div style="flex: 1; background: #fff; border: 1px solid #cedbe7; border-radius: 4px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px">
+          <div style="display: flex; align-items: center; gap: 20px">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c"><span class="ms" style="font-size: 18px; color: #008dd5">apartment</span>10 selected<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></div>
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c"><span class="ms" style="font-size: 18px; color: #008dd5">calendar_today</span>Next 30 days<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></div>
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #13314c"><span class="ms" style="font-size: 18px; color: #008dd5">person</span>My prospects<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 4px; font-size: 14px; color: #008dd5; cursor: pointer">Options<span class="ms" style="font-size: 18px">arrow_drop_down</span></div>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px">
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #008dd5; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">Active Prospects</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">148</span><span style="display: inline-flex; align-items: center; gap: 3px; height: 22px; padding: 0 7px; border-radius: 4px; background: #e2f1da; color: #4a7d2c; font-size: 13px; font-weight: 500"><span class="ms" style="font-size: 15px">trending_up</span>6%</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #eb343c; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">At-Risk Residents</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">7</span><span style="font-size: 13px; color: #666">3 renew &le;60 days</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #6eb744; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c">Follow-Ups Due</div>
+          <div style="display: flex; align-items: center; gap: 10px"><span style="font-size: 32px; line-height: 40px; font-weight: 700; color: #13314c">21</span><span style="font-size: 13px; color: #666">no contact 7+ days</span></div>
+        </div>
+        <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; border-left: 5px solid #008dd5; padding: 14px 18px">
+          <div style="font-size: 16px; line-height: 22px; color: #13314c; margin-bottom: 6px">Run Reports</div>
+          <div style="display: flex; align-items: center; gap: 18px; font-size: 14px">
+            <span style="color: #008dd5; display: inline-flex; align-items: center; gap: 4px; cursor: pointer">Prospect Stage Listing<span class="ms" style="font-size: 15px">open_in_new</span></span>
+            <span style="color: #008dd5; display: inline-flex; align-items: center; gap: 4px; cursor: pointer">Lease Expiration<span class="ms" style="font-size: 15px">open_in_new</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO COLUMNS -->
+      <div style="display: grid; grid-template-columns: 1fr 1.04fr; gap: 16px; align-items: start">
+
+        <!-- LEFT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Lead Conversion Score -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Lead Conversion Score</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">Last 6 Months<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="display: flex; border-bottom: 1px solid #cedbe7">
+                <div style="flex: 1; text-align: center; padding: 10px 0; font-size: 14px; color: #008dd5; border-bottom: 2px solid #008dd5; margin-bottom: -1px">List</div>
+                <div style="flex: 1; text-align: center; padding: 10px 0; font-size: 14px; color: #666">Chart</div>
+              </div>
+              <div style="padding: 12px 14px 4px">
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding-bottom: 8px; border-bottom: 1px solid #cedbe7">
+                  <div>Prospect</div><div>Stage</div><div style="text-align: right">Days</div><div style="text-align: right">Score</div><div style="text-align: right">Next Step</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; border-bottom: 1px solid #ebf1f5">
+                  <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #6eb744"></span>Priya Raman</div>
+                  <div>Application</div><div style="text-align: right">4</div>
+                  <div style="text-align: right"><span style="display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; border-radius: 2px; background: #e2f1da; color: #4a7d2c; font-weight: 500; font-size: 13px">91</span></div>
+                  <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Call</span></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; border-bottom: 1px solid #ebf1f5">
+                  <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #6eb744"></span>Jordan Wells</div>
+                  <div>Property Tour</div><div style="text-align: right">6</div>
+                  <div style="text-align: right"><span style="display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; border-radius: 2px; background: #e2f1da; color: #4a7d2c; font-weight: 500; font-size: 13px">84</span></div>
+                  <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Write Email</span></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; border-bottom: 1px solid #ebf1f5">
+                  <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #008dd5"></span>Chris Okafor</div>
+                  <div>Guest Card</div><div style="text-align: right">2</div>
+                  <div style="text-align: right"><span style="display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; border-radius: 2px; background: #ebf1f5; color: #195ca4; font-weight: 500; font-size: 13px">72</span></div>
+                  <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Send Text</span></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; border-bottom: 1px solid #ebf1f5">
+                  <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #f58220"></span>Dana Whitfield</div>
+                  <div>Screening</div><div style="text-align: right">11</div>
+                  <div style="text-align: right"><span style="display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 20px; border-radius: 2px; background: #fdf0e5; color: #a1541a; font-weight: 500; font-size: 13px">41</span></div>
+                  <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Write Email</span></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1.5fr 1fr 0.7fr 0.9fr 0.8fr; gap: 8px; align-items: center; font-size: 14px; padding: 9px 0; background: #f5f8fa; font-weight: 500; color: #13314c">
+                  <div>Average &mdash; 34 leads</div><div></div><div style="text-align: right">7</div><div style="text-align: right">66</div><div></div>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="border-left: 3px solid #008dd5; background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Of my current leads, who is most likely to convert &mdash; based on history/notes, stage and time in each stage? Create a lead-scoring dashboard so I can prioritize who I talk to.</div>
+            </sc-if>
+          </div>
+
+          <!-- Engagement Drop-Off -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Engagement Drop-Off</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">Weekly<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 12px 14px; display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; align-items: center; gap: 18px; font-size: 13px">
+                  <span style="display: inline-flex; align-items: center; gap: 5px"><span style="width: 9px; height: 9px; border-radius: 999px; background: #008dd5"></span>Touches logged</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px"><span style="width: 9px; height: 9px; border-radius: 999px; background: #eb343c"></span>Gone quiet</span>
+                </div>
+                <div style="display: flex; align-items: flex-end; gap: 18px; height: 150px; padding: 0 4px; border-bottom: 1px solid #cedbe7">
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #13314c; font-weight: 500">62</span><div style="width: 100%; height: 124px; background: #008dd5; border-radius: 2px 2px 0 0"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #13314c; font-weight: 500">54</span><div style="width: 100%; height: 108px; background: #008dd5; border-radius: 2px 2px 0 0"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #13314c; font-weight: 500">38</span><div style="width: 100%; height: 76px; background: #008dd5; border-radius: 2px 2px 0 0"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #13314c; font-weight: 500">21</span><div style="width: 100%; height: 42px; background: #4fb0e4; border-radius: 2px 2px 0 0"></div></div>
+                  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px"><span style="font-size: 11px; color: #eb343c; font-weight: 500">9</span><div style="width: 100%; height: 18px; background: #eb343c; border-radius: 2px 2px 0 0"></div></div>
+                </div>
+                <div style="display: flex; gap: 18px; padding: 0 4px; font-size: 12px; color: #666"><span style="flex: 1; text-align: center">Wk 1</span><span style="flex: 1; text-align: center">Wk 2</span><span style="flex: 1; text-align: center">Wk 3</span><span style="flex: 1; text-align: center">Wk 4</span><span style="flex: 1; text-align: center">Now</span></div>
+                <div style="display: flex; flex-direction: column; gap: 0">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #ebf1f5; font-size: 14px"><span style="color: #13314c">Sam Ortega</span><span style="color: #666; font-size: 13px">5 touches &rarr; 0 in 12 days</span><span style="color: #008dd5; cursor: pointer">Re-engage</span></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #ebf1f5; font-size: 14px"><span style="color: #13314c">Hailey Brooks</span><span style="color: #666; font-size: 13px">Toured, silent 9 days</span><span style="color: #008dd5; cursor: pointer">Re-engage</span></div>
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #ebf1f5; font-size: 14px"><span style="color: #13314c">Devon Marsh</span><span style="color: #666; font-size: 13px">Application abandoned 15 days</span><span style="color: #008dd5; cursor: pointer">Re-engage</span></div>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Flag leads that have gone quiet after strong initial engagement &mdash; check history/note entries, communication and visits that have trended down over time.</div>
+            </sc-if>
+          </div>
+
+          <!-- Follow-Up Aging -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Follow-Up Aging</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">7+ Days<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; align-items: center; gap: 22px">
+                <div style="width: 168px; height: 168px; border-radius: 999px; flex: none; background: conic-gradient(#eb343c 0 14.3%, #f58220 14.3% 42.9%, #008dd5 42.9% 100%); display: flex; align-items: center; justify-content: center">
+                  <div style="width: 96px; height: 96px; border-radius: 999px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 20px; font-weight: 500; color: #13314c">21</span><span style="font-size: 12px; color: #666; text-align: center; line-height: 14px">Awaiting<br>Contact</span></div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #008dd5"></span><span style="flex: 1; color: #13314c">7&ndash;14 days</span><span style="color: #666">12</span><span style="width: 46px; text-align: right; color: #666">57.1%</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #f58220"></span><span style="flex: 1; color: #13314c">15&ndash;30 days</span><span style="color: #666">6</span><span style="width: 46px; text-align: right; color: #666">28.6%</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #eb343c"></span><span style="flex: 1; color: #13314c">30+ days</span><span style="color: #666">3</span><span style="width: 46px; text-align: right; color: #666">14.3%</span></div>
+                  <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px; padding: 10px; border: 1px solid #cedbe7; border-radius: 4px; background: #f5f8fa">
+                    <span class="ms" style="font-size: 18px; color: #008dd5">auto_awesome</span>
+                    <span style="flex: 1; font-size: 13px; line-height: 18px; color: #424e5b">Draft a prompt for Orion Writing Assistant for these 21 prospects?</span>
+                    <button style="height: 28px; padding: 0 12px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Yes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Show me all my active prospects who have had no communication or status update in the last 7 days so I can follow up with them.</div>
+            </sc-if>
+          </div>
+
+          <!-- Renewal Risk x Sentiment -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Renewal Risk &times; Sentiment</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">Next 6 Months<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: grid; grid-template-columns: 92px 1fr 1fr 1fr; gap: 8px; align-items: center">
+                  <div></div>
+                  <div style="font-size: 12px; color: #666; text-align: center">&le;60 days</div>
+                  <div style="font-size: 12px; color: #666; text-align: center">61&ndash;120 days</div>
+                  <div style="font-size: 12px; color: #666; text-align: center">121&ndash;180 days</div>
+                  <div style="font-size: 13px; color: #13314c; font-weight: 500">Negative</div>
+                  <div style="height: 44px; border-radius: 4px; background: #eb343c; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">3</div>
+                  <div style="height: 44px; border-radius: 4px; background: #f58220; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">2</div>
+                  <div style="height: 44px; border-radius: 4px; background: #f79b4d; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">2</div>
+                  <div style="font-size: 13px; color: #13314c; font-weight: 500">Neutral</div>
+                  <div style="height: 44px; border-radius: 4px; background: #cedbe7; color: #13314c; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">8</div>
+                  <div style="height: 44px; border-radius: 4px; background: #ebf1f5; color: #424e5b; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">14</div>
+                  <div style="height: 44px; border-radius: 4px; background: #ebf1f5; color: #424e5b; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">11</div>
+                  <div style="font-size: 13px; color: #13314c; font-weight: 500">Positive</div>
+                  <div style="height: 44px; border-radius: 4px; background: #6eb744; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">6</div>
+                  <div style="height: 44px; border-radius: 4px; background: #e2f1da; color: #4a7d2c; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">9</div>
+                  <div style="height: 44px; border-radius: 4px; background: #e2f1da; color: #4a7d2c; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer">7</div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #666"><span>Select a cell to load those residents into the watchlist.</span><span style="color: #eb343c; font-weight: 500">3 need attention this month</span></div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Are any of these residents up for renewal in the next 6 months? Cross-reference renewal date against sentiment so I know who to work first.</div>
+            </sc-if>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div style="display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Resident Sentiment Watchlist -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-size: 15px; font-weight: 500; color: #13314c">Resident Sentiment Watchlist</span>
+                  <span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #fdeceb; color: #eb343c; font-size: 12px; font-weight: 500">7 flagged</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">30 Days<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="display: flex; border-bottom: 1px solid #cedbe7">
+                <div style="flex: 1; text-align: center; padding: 10px 0; font-size: 14px; color: #008dd5; border-bottom: 2px solid #008dd5; margin-bottom: -1px">List</div>
+                <div style="flex: 1; text-align: center; padding: 10px 0; font-size: 14px; color: #666">Chart</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div>Resident</div><div>Sentiment</div><div>Signals</div><div>Renewal</div><div style="text-align: right">Next Step</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #eb343c"></span><div><div style="color: #13314c">Maria Delgado</div><div style="font-size: 12px; color: #8fa3b3">204B &middot; Ridgeline</div></div></div>
+                <div style="display: flex; align-items: center; gap: 5px; color: #eb343c; font-weight: 500">-38<span class="ms" style="font-size: 16px">trending_down</span></div>
+                <div style="font-size: 13px">3 ticket re-opens, 2 complaints, survey 4/10</div>
+                <div style="color: #eb343c; font-weight: 500">Oct 31</div>
+                <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Write Email</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #f58220"></span><div><div style="color: #13314c">Terrance Boyd</div><div style="font-size: 12px; color: #8fa3b3">1108 &middot; Harbor Flats</div></div></div>
+                <div style="display: flex; align-items: center; gap: 5px; color: #f58220; font-weight: 500">-19<span class="ms" style="font-size: 16px">trending_down</span></div>
+                <div style="font-size: 13px">Smart voicemail (noise), 1 escalated ticket</div>
+                <div style="color: #13314c">Dec 31</div>
+                <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Send Text</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #f58220"></span><div><div style="color: #13314c">Anh Nguyen</div><div style="font-size: 12px; color: #8fa3b3">512 &middot; Ridgeline</div></div></div>
+                <div style="display: flex; align-items: center; gap: 5px; color: #f58220; font-weight: 500">-12<span class="ms" style="font-size: 16px">trending_flat</span></div>
+                <div style="font-size: 13px">2 portal messages unresolved 9 days</div>
+                <div style="color: #13314c">Feb 28</div>
+                <div style="text-align: right"><span style="color: #008dd5; cursor: pointer">Write Email</span></div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.5fr 1fr 1.7fr 1fr 1fr; gap: 8px; align-items: center; padding: 10px 14px; font-size: 14px; background: #f5f8fa; font-weight: 500; color: #13314c">
+                <div>Watchlist Total</div><div>-23 avg</div><div>7 residents</div><div>3 &le;60 days</div><div style="text-align: right"><span style="color: #008dd5; cursor: pointer">View All</span></div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Review maintenance notes, portal messages, surveys and smart voicemails to flag escalated residents before they vacate. Create a watchlist tile that tracks the communication going forward.</div>
+            </sc-if>
+          </div>
+
+          <!-- Upcoming Vacancy Coverage -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Upcoming Vacancy Coverage</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #13314c">Days<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <div style="display: flex; align-items: center; gap: 0; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden"><span class="ms" style="font-size: 16px; color: #666; width: 24px; height: 22px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">remove</span><span style="width: 32px; text-align: center; font-size: 13px; color: #13314c; border-left: 1px solid #cedbe7; border-right: 1px solid #cedbe7">30</span><span class="ms" style="font-size: 16px; color: #666; width: 24px; height: 22px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">add</span></div>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #cedbe7">
+                <div style="width: 152px; height: 152px; border-radius: 999px; flex: none; background: conic-gradient(#6eb744 0 36%, #f58220 36% 64%, #eb343c 64% 100%); display: flex; align-items: center; justify-content: center">
+                  <div style="width: 88px; height: 88px; border-radius: 999px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 20px; font-weight: 500; color: #13314c">14</span><span style="font-size: 12px; color: #666">Vacating</span></div>
+                </div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #6eb744"></span><span style="flex: 1; color: #13314c">Covered &mdash; application pending</span><span style="color: #666">5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #f58220"></span><span style="flex: 1; color: #13314c">Interest logged, no application</span><span style="color: #666">4</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0; border-bottom: 1px solid #ebf1f5"><span style="width: 9px; height: 9px; border-radius: 999px; background: #eb343c"></span><span style="flex: 1; color: #13314c">No interest logged</span><span style="color: #666">5</span></div>
+                  <div style="display: flex; align-items: center; gap: 8px; padding: 7px 0"><span style="flex: 1; color: #13314c; font-weight: 500">Interested prospects across all units</span><span style="color: #13314c; font-weight: 500">23</span></div>
+                </div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.4fr 0.8fr 1fr 1.6fr; gap: 8px; font-size: 13px; color: #13314c; font-weight: 500; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div>Unit</div><div>Vacant</div><div>Applications</div><div>Interested Prospects</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.4fr 0.8fr 1fr 1.6fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div><div style="color: #13314c">305 &middot; Ridgeline</div><div style="font-size: 12px; color: #8fa3b3">2 bed &middot; $1,795</div></div>
+                <div>Sep 12</div>
+                <div><span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #e2f1da; color: #4a7d2c; font-size: 12px; font-weight: 500">2 pending</span></div>
+                <div style="font-size: 13px">Jordan Wells, Priya Raman, +2</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.4fr 0.8fr 1fr 1.6fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div><div style="color: #13314c">1108 &middot; Harbor Flats</div><div style="font-size: 12px; color: #8fa3b3">1 bed &middot; $1,450</div></div>
+                <div>Sep 19</div>
+                <div><span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #ebf1f5; color: #424e5b; font-size: 12px; font-weight: 500">1 pending</span></div>
+                <div style="font-size: 13px">Dana Whitfield</div>
+              </div>
+              <div style="display: grid; grid-template-columns: 1.4fr 0.8fr 1fr 1.6fr; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid #ebf1f5; font-size: 14px">
+                <div><div style="color: #13314c">420 &middot; Ridgeline</div><div style="font-size: 12px; color: #8fa3b3">2 bed &middot; $1,900</div></div>
+                <div>Sep 24</div>
+                <div><span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #fdeceb; color: #eb343c; font-size: 12px; font-weight: 500">None</span></div>
+                <div style="font-size: 13px; font-style: italic; color: #b3b3b3">No interest logged</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: #f5f8fa; font-size: 14px">
+                <span style="color: #13314c; font-weight: 500">Portfolio Total &mdash; 14 units &middot; 9 applications</span>
+                <span style="color: #008dd5; cursor: pointer">Draft availability email</span>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Show me all units vacant in the next 30 days with any pending applications, then expand it to show prospects currently interested in those units.</div>
+            </sc-if>
+          </div>
+
+          <!-- Pre-Tour Briefings -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <span style="font-size: 15px; font-weight: 500; color: #13314c">Pre-Tour Briefings</span>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: inline-flex; align-items: center; gap: 2px; font-size: 13px; color: #13314c">Today<span class="ms" style="font-size: 18px; color: #666">arrow_drop_down</span></span>
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 14px; display: flex; flex-direction: column; gap: 12px">
+                <div style="border: 1px solid #008dd5; background: #ebf1f5; border-radius: 4px; padding: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.10); display: flex; flex-direction: column; gap: 10px">
+                  <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+                    <div><div style="font-size: 14px; color: #13314c; font-weight: 500">2:30 PM &middot; Jordan Wells &middot; Ridgeline</div><div style="font-size: 13px; color: #424e5b">2 bed &middot; pet friendly &middot; &le;$1,850 &middot; in-unit W/D</div></div>
+                    <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 4px; background: #008dd5; color: #fff; font-size: 12px; font-weight: 500">Emails at 2:00 PM</span>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 6px">
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px"><span style="width: 30px; height: 20px; border-radius: 2px; background: #6eb744; color: #fff; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center">96</span><span style="width: 72px; color: #13314c; font-weight: 500">Unit 305</span><span style="flex: 1; height: 6px; border-radius: 2px; background: #fff"><span style="display: block; width: 96%; height: 6px; border-radius: 2px; background: #6eb744"></span></span><span style="color: #666; width: 132px; text-align: right">$1,795 &middot; 5 of 5 met</span></div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px"><span style="width: 30px; height: 20px; border-radius: 2px; background: #6eb744; color: #fff; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center">88</span><span style="width: 72px; color: #13314c; font-weight: 500">Unit 118</span><span style="flex: 1; height: 6px; border-radius: 2px; background: #fff"><span style="display: block; width: 88%; height: 6px; border-radius: 2px; background: #6eb744"></span></span><span style="color: #666; width: 132px; text-align: right">$1,825 &middot; no W/D</span></div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px"><span style="width: 30px; height: 20px; border-radius: 2px; background: #f58220; color: #fff; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; justify-content: center">63</span><span style="width: 72px; color: #13314c; font-weight: 500">Unit 420</span><span style="flex: 1; height: 6px; border-radius: 2px; background: #fff"><span style="display: block; width: 63%; height: 6px; border-radius: 2px; background: #f58220"></span></span><span style="color: #666; width: 132px; text-align: right">$1,900 &middot; over budget</span></div>
+                  </div>
+                </div>
+                <div style="border: 1px solid #cedbe7; border-radius: 4px; padding: 12px; display: flex; align-items: center; justify-content: space-between">
+                  <div><div style="font-size: 14px; color: #13314c; font-weight: 500">4:15 PM &middot; Chris Okafor &middot; Union Street Lofts</div><div style="font-size: 13px; color: #8fa3b3">Studio &middot; downtown &middot; move-in Oct 1</div></div>
+                  <span style="font-size: 14px; color: #008dd5; cursor: pointer">Preview briefing</span>
+                </div>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Create a pre-tour briefing: pull unit preferences, cross-reference availability, rank units by fit, and email it to me 30 minutes before the showing.</div>
+            </sc-if>
+          </div>
+
+          <!-- Orion Next Steps -->
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div style="background: #fff; border: 1px solid #cedbe7; border-radius: 4px; overflow: hidden">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid #cedbe7">
+                <div style="display: flex; align-items: center; gap: 8px"><span class="ms" style="font-size: 19px; color: #008dd5">auto_awesome</span><span style="font-size: 15px; font-weight: 500; color: #13314c">Orion Next Steps</span><span style="display: inline-flex; align-items: center; height: 20px; padding: 0 7px; border-radius: 2px; background: #ebf1f5; color: #424e5b; font-size: 12px; font-weight: 500">Drafts only</span></div>
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span class="ms" style="font-size: 19px; color: #008dd5; cursor: pointer">refresh</span>
+                  <span class="ms" style="font-size: 19px; color: #666; cursor: pointer">more_vert</span>
+                </div>
+              </div>
+              <div style="padding: 4px 14px">
+                <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #ebf1f5">
+                  <span class="ms" style="font-size: 20px; color: #eb343c; margin-top: 2px">priority_high</span>
+                  <div style="flex: 1">
+                    <div style="font-size: 14px; color: #13314c; font-weight: 500">Renewal check-in &mdash; Maria Delgado</div>
+                    <div style="font-size: 13px; line-height: 18px; color: #666">3 open complaints, renews Oct 31. Acknowledge the maintenance history and offer a walkthrough.</div>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Write Email</button>
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="border-color: #008dd5; color: #008dd5">Send Text</button>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid #ebf1f5">
+                  <span class="ms" style="font-size: 20px; color: #f58220; margin-top: 2px">group</span>
+                  <div style="flex: 1">
+                    <div style="font-size: 14px; color: #13314c; font-weight: 500">Re-engage 9 quiet leads</div>
+                    <div style="font-size: 13px; line-height: 18px; color: #666">One Orion Writing Assistant prompt, personalized per lead by last unit viewed.</div>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Draft Prompt</button>
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="border-color: #008dd5; color: #008dd5">Review List</button>
+                  </div>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 0">
+                  <span class="ms" style="font-size: 20px; color: #008dd5; margin-top: 2px">meeting_room</span>
+                  <div style="flex: 1">
+                    <div style="font-size: 14px; color: #13314c; font-weight: 500">Fill Unit 420 &mdash; no interest logged</div>
+                    <div style="font-size: 13px; line-height: 18px; color: #666">Notify the 6 prospects whose preferences match this unit.</div>
+                  </div>
+                  <div style="display: flex; gap: 8px">
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #008dd5; background: #008dd5; color: #fff; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="background: #0071aa; border-color: #0071aa">Write Email</button>
+                    <button style="height: 30px; padding: 0 12px; border: 1px solid #cedbe7; background: #fff; color: #666; border-radius: 4px; font-family: Roboto, sans-serif; font-size: 13px; cursor: pointer" style-hover="border-color: #008dd5; color: #008dd5">Dismiss</button>
+                  </div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #f5f8fa; border-top: 1px solid #cedbe7">
+                <span class="ms" style="font-size: 18px; color: #666">lock</span>
+                <span style="font-size: 13px; color: #666">Orion drafts and creates tiles. Nothing sends without your approval.</span>
+              </div>
+            </div>
+            <sc-if value="{{ showPrompts }}" hint-placeholder-val="{{ true }}">
+              <div style="background: #fff; border: 1px solid #cedbe7; border-left: 3px solid #008dd5; padding: 8px 12px; font-size: 13px; line-height: 18px; color: #424e5b"><span style="font-weight: 500; color: #13314c">Prompt &rsaquo;</span> Do you want me to draft a prompt for Orion Writing Assistant for these prospects? &mdash; Next steps: Write Email / Send Text.</div>
+            </sc-if>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPrompts&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Board&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { showPrompts: this.props.showPrompts ?? true };
+  }
+}
+</script>
+</body>
+</html>

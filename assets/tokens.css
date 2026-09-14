@@ -1,0 +1,111 @@
+/* ============================================================
+   RMX Foundations tokens — GENERATED SHAPE, PARTIALLY VERIFIED
+   ------------------------------------------------------------
+   Naming rule (reproducible by scripts/sync.md):
+     Figma variable path -> lowercase -> "/" becomes "-"
+     -> drop a parent segment whose word already appears in the leaf
+     -> collapse an immediately repeated word.
+     Background/Button/primary-button  ->  --background-primary-button
+     Text/text-primary                 ->  --text-primary
+     Container/tertiary-dark           ->  --container-tertiary-dark
+
+   Provenance:
+     [M] measured off the live component library, 27 Aug 2026
+     [N] name confirmed in RMX Foundations, VALUE NOT YET VERIFIED
+         (carried from the v1 stylesheet — replace from the plugin export)
+
+   Values marked [N] are the reason scripts/sync.md exists. Do not treat
+   them as authoritative.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing (collection "1. Base") ---- */
+  --spacing-none: 0px;    /* [M] */
+  --spacing-xxs:  4px;    /* [M] */
+  --spacing-xs:   8px;    /* [M] */
+  --spacing-sm:  12px;    /* [M] */
+  --spacing-md:  16px;    /* [M] */
+  --spacing-lg:  20px;    /* [M] — confirmed on Header 18:2314 (Icon/User gap) */
+  --spacing-xl:  24px;    /* [N] */
+  --spacing-2xl: 32px;    /* [M] — confirmed on Header 18:2314 (Manage gap) */
+  --spacing-3xl: 40px;    /* [N] */
+  /* 4xl–9xl exist in Foundations; add them from the export. */
+
+  /* ---- Radius ---- */
+  --radius-sm:    4px;    /* [M] buttons, inputs, tiles, lozenges, toasts */
+  --radius-lg:   12px;    /* [M] Pill */
+  --radius-round: 999px;  /* [M] avatars, Add Photo (authored as 200) */
+
+  /* ---- Text ---- */
+  --text-primary:   #666666;  /* [M] default body/label gray */
+  --text-secondary: #13314c;  /* [N] headings, entered values */
+  --text-link:      #008dd5;  /* [N] clickable items ONLY — not labels */
+  --text-label:     #008dd5;  /* [N] static labels above inputs; white in dark mode */
+  --text-disabled:  #b3b3b3;  /* [N] also placeholder, which is additionally italic */
+  --text-inverse:   #ffffff;  /* [M] — confirmed on Header 18:2314 (avatar initials) */
+  --text-ondark:    #ffffff;  /* [M] — confirmed on Header 18:2314 */
+  --text-onlight:   #13314c;  /* [N] */
+  --text-error:     #eb343c;  /* [N] */
+  --text-success:   #6eb744;  /* [N] */
+
+  /* ---- Icon ---- */
+  --icon-attention: #f58220;  /* [M] checked checkbox */
+  --icon-brand:     #008dd5;  /* [N] */
+  --icon-tertiary:  #666666;  /* [N] */
+  --icon-notice:    #faa61c;  /* [N] */
+  --icon-success:   #6eb744;  /* [N] */
+  --icon-error:     #eb343c;  /* [N] */
+  --icon-disabled:  #b3b3b3;  /* [N] */
+  --icon-ondark:    #ffffff;  /* [N] */
+
+  /* ---- Border ---- */
+  --border-primary:   #cedbe7;  /* [M] the default hairline */
+  --border-secondary: #008dd5;  /* [M] active / selected / focus, tile header underline, ACTIVE TAB */
+  --border-disabled:  #ebf1f5;  /* [M] register row hairlines — production ships #CCCCCC, see notes */
+  --border-attention: #f58220;  /* [M] checked checkbox stroke */
+
+  /* ---- Background ---- */
+  --background-ui-primary:   #f3f4f8;  /* [M] the page ground in Express */
+  --background-ui-secondary: #f2f2f2;  /* [M] disabled / empty media */
+  --background-card:         #ffffff;  /* [M] Dialog Overlay */
+  --background-footer:       #f5f8fa;  /* [M] Overlay Footer */
+  --background-tile:         #ffffff;  /* [M] Tile surface */
+  --background-primary-button:   #008dd5;  /* [M] */
+  --background-secondary-button: #ffffff;  /* [M] */
+  --background-tertiary-button:  #f79b4d;  /* [M] the Marketing button */
+  --background-brand-primary-disabled: rgba(0,141,213,.5); /* [N] */
+
+  /* ---- Container ---- */
+  --container-primary:        #ffffff;  /* [M] */
+  --container-tertiary:       #f5f8fa;  /* [N] subtle surface */
+  --container-tertiary-dark:  #737373;  /* [M] register header row */
+  --container-secondary-dark: #13314c;  /* [M] Action Bar rail */
+  --container-secondary:      #008dd5;  /* [M] avatar fill in the app bar, from node 18:2314 */
+
+  /* ---- Component ---- */
+  --component-main-header:          #13314c;  /* [M] app bar */
+  --component-command-launch:       #425a70;  /* [M] app-bar icon buttons + Command Launch search field, from node 18:2314 */
+  --component-context-header:       #008dd5;  /* [M] context bar */
+  --component-input-default:        #f5f8fa;  /* [M] input fill */
+  --component-input-secondary:      #ffffff;  /* [M] Orion input fill */
+  --component-register-row-default: #ffffff;  /* [M] Cell fill */
+  --component-row-selected:         #e8f6fa;  /* [M] */
+  --component-lozenge-success:      #e2f1da;  /* [M] */
+  --component-lozenge-error:        #fbd6d8;  /* [N] */
+  --component-lozenge-brand:        #cce8f7;  /* [N] */
+  --component-lozenge-caution:      #feedd2;  /* [N] note: Caution, not "notice" */
+  --component-toast-brand:          #008dd5;  /* [M] Toast State=Action, Bulk Action */
+  --component-toast-success:        #6eb744;  /* [M] Reminder */
+
+  /* ---- Layout ---- */
+  --content-contentpadding: 16px;   /* [M] context bar side padding */
+  --display-display:      1920px;   /* [M] full-bleed bar width */
+  --cell-height:            36px;   /* [M] authored as "Cell/Cell Heigth" (sic) */
+
+  /* ---- Orion (not Foundations variables — measured off components) ---- */
+  --orion-border-gradient: linear-gradient(90deg, #008dd5, #6eb744); /* [M] a BORDER, not a fill */
+  --orion-glow:   0 0 12.6px rgba(0,141,213,.20);  /* [M] Action Bar */
+  --orion-glow-lg:0 0 12.6px rgba(0,141,213,.25);  /* [M] Overlay */
+  --orion-radius-overlay: 8px;   /* [M] */
+  --orion-radius-bar:    24px;   /* [M] */
+}
