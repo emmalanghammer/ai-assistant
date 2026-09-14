@@ -100,14 +100,25 @@ surface resolves to a named Foundations style.
    Header variant in the library. The notification **count badge** is the same
    story — the bell is in the component, the counter is not.
 
-2. **Blue action text still underlines on hover.** The house rule is no
-   underline in either state. `rmx.css` 4.0.0 still underlines
-   `.rmx-btn--text:hover .rmx-btn__label` and `.rmx-text--link:hover`, and
-   nothing resets the browser's own underline on a bare `<a>`. Overridden
-   locally at the top of `assets/orion.css`.
+2. **Links: no underline, and not browser-blue.** ~~Open~~ — **fixed in
+   rmx-prototyping 4.1.0**, prepared at `~/claude/_skill/`. `rmx.css` 4.0.0
+   underlined `.rmx-btn--text:hover` and `.rmx-text--link:hover`, and set no
+   colour at all on a bare `<a>`, so any anchor without `.rmx-text--link` came
+   out underlined and `#0000EE`. On the app-bar logo — `fill: currentColor` —
+   that rendered the wordmark bright blue on the navy bar. 4.1.0 sets
+   `a { color: var(--text-link); text-decoration: none }` and drops both hover
+   underlines, and adds `link-underlined` / `link-browser-blue` audit rules so
+   it cannot regress.
 
-3. **An unchecked `.rmx-check` renders a grey tick.** `rmx.css` colours the glyph
-   white when checked but never hides it when unchecked. Overridden locally.
+3. **An unchecked `.rmx-check` renders a grey tick.** ~~Open~~ — **fixed in
+   4.1.0**. The glyph was coloured white when checked but never hidden when
+   unchecked.
+
+   **Both overrides are still in `assets/orion.css`** and stay until 4.1.0 is
+   published, because until then `check.mjs --fix` reinstates the 4.0.0
+   stylesheet and the bugs come back. Once the prototype is on 4.1.0 the block
+   marked *"Corrections to the shipped foundation"* can be deleted — verified
+   against a 4.1.0 copy: same 16 deliberate errors, no new findings.
 
 4. **No primary-button hover token.** DESIGN.md §7.1 specifies `#0071AA`;
    Foundations ships no token and `rmx.css` defines no primary hover at all.
