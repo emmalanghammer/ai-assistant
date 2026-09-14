@@ -4665,8 +4665,18 @@ if (document.readyState !== 'loading') restoreConversation();
    parameter on load.
    ============================================================ */
 function screenPath(file) {
-  /* Screens sit beside each other in screens/; index.html is one level up. */
-  return /\/screens\//.test(location.pathname) ? file : 'screens/' + file;
+  /* Screens are always siblings of each other — in screens/ in the repo, and
+     flat in dist/ once bundled. So the link is just the filename.
+
+     The old version tested for "/screens/" in the path and otherwise prepended
+     "screens/", which was right for the repo and wrong for dist/, where it
+     produced dist/screens/report-viewer.html and a 404. bundle.mjs rewrites
+     hrefs in the markup but cannot rewrite a path built at runtime.
+
+     The guard is for a non-screen page that somehow loads this: every screen
+     carries the app bar, and index.html — the one page above screens/ — does
+     not, and does not load orion.js today. */
+  return document.querySelector('.rmx-appbar') ? file : 'screens/' + file;
 }
 
 function openTenantPage(tid) {
