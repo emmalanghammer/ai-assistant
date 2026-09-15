@@ -131,7 +131,7 @@ a { color: var(--text-link); }
 .history-search { background:var(--container-tertiary); border:1px solid var(--border-primary); border-radius:var(--radius-sm); height:36px; display:flex; align-items:center; gap:8px; padding:0 8px; }
 .history-search .rmx-icon { color:var(--text-disabled); width:20px; height:20px; }
 .history-search input { border:none; background:none; outline:none; flex:1; min-width:0; font-size:14px; color:var(--text-secondary); }
-.history-search input::placeholder { color:var(--text-disabled); font-style:italic; }
+.history-search input::placeholder { color:var(--text-primary); font-style:italic; }
 .history-section-label { padding:16px 16px 0; font:600 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .history-row { display:flex; align-items:flex-start; gap:8px; padding:20px; cursor:pointer; border:none; background:none; width:100%; text-align:left; font-family:'Roboto',sans-serif; }
 .history-row:hover { background:var(--container-tertiary); }
@@ -156,18 +156,23 @@ a { color: var(--text-link); }
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
 .home-ask-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; }
-/* Orion_Input Fields — Figma 2983:17176. Horizontal auto-layout, 8px padding,
-   8px gap, radius 4, white on a border-primary hairline. The field grows and
-   the text wraps; align-items:flex-end is the counterAxisAlignItems:MAX in the
-   component, and it is what keeps the send arrow on the last line rather than
-   floating in the middle of a tall box. */
+/* Orion_Input Fields, Style=Square — RMX Components 7086:2817. 36px at rest,
+   radius 4, white on a 1px border-primary hairline, 8px gap, placeholder 14
+   italic #666666, 20px send icon in brand blue. The Separator in the
+   component is set to visible:false, so there is no divider.
+
+   On the padding: Figma draws the 1px stroke INSIDE the 36px frame and
+   measures its 8px padding from the frame edge, so the stroke overlaps the
+   padding. CSS puts the border outside the padding box, so 8px padding plus
+   a 1px border comes to 38. 7px + 1px reproduces both the 8px visual inset
+   and the 36px total. */
 .home-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs); width:100%;
   background:var(--container-primary); border:1px solid var(--border-primary);
-  border-radius: var(--radius-sm); padding:var(--spacing-xs); }
+  border-radius: var(--radius-sm); padding:7px; }
 .home-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
   font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
   resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
-.home-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
+.home-ask textarea::placeholder { color:var(--text-primary); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
 .home-disclaimer { font: italic 400 12px 'Roboto',sans-serif; color: var(--text-primary); text-align:center; max-width:360px; margin:0 auto; }
 .browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
@@ -391,12 +396,12 @@ a { color: var(--text-link); }
    token) on 11/14 padding. */
 .orion-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs);
   border:1px solid var(--border-primary); border-radius:var(--radius-sm);
-  padding:var(--spacing-xs); background:var(--container-primary);
+  padding:7px; background:var(--container-primary);
   box-shadow:0 1px 2px rgba(76,76,76,.08); }
 .orion-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
   font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
   resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
-.orion-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
+.orion-ask textarea::placeholder { color:var(--text-primary); font-style:italic; }
 .orion-ask .rmx-icon.send { width:20px; height:20px; color:var(--text-link); cursor:pointer; flex:none; }
 .browse-btn { height:32px; padding:0 12px; border-radius:var(--radius-sm); font:400 14px/20px 'Roboto',sans-serif; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); }
 .browse-btn.active { background:var(--bg-hover); border-color:var(--border-secondary); color:var(--text-link); }

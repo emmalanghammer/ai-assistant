@@ -235,7 +235,7 @@
         </div>
         <div class="orion-composer">
           <div class="orion-ask">
-            <input type="text" id="rvChatInput" placeholder="Ask anything..." onclick="pnlAutoFollowUp()" onkeydown="if(event.key==='Enter')submitReportChat()">
+            <textarea id="rvChatInput" rows="1" placeholder="Ask anything..." onclick="pnlAutoFollowUp()" oninput="growAsk(this)" onkeydown="askKey(event, submitReportChat)"></textarea>
             <svg class="rmx-icon send" onclick="submitReportChat()"><use href="#send"></use></svg>
           </div>
         </div>

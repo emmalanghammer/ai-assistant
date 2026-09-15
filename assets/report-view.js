@@ -176,6 +176,7 @@ function submitReportChat(){
   const q = (el.value || '').trim();
   if (!q) return;
   el.value = '';
+  resetAsk('rvChatInput');
   RPT_CHAT.messages.push({ role:'user', text:q });
   const id = matchPrompt(q);
   RPT_CHAT.thinking = id && PROMPTS[id].cat === 0 ? 'Searching Express Help' : 'Reading your data';
@@ -466,6 +467,7 @@ function pnlAutoFollowUp(){
   let i = 0;
   const typeNext = () => {
     if (token !== pnlTypeToken) return;
+    growAsk(el);
     i++;
     el.value = PNL_FOLLOWUP_Q.slice(0, i);
     if (i < PNL_FOLLOWUP_Q.length){
