@@ -3238,7 +3238,7 @@ const ACTION_PROMPTS = {
     posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Riverview Apartments tenant ledgers, dated Aug 28, 2026.',
       stats:[ ['148','Charges posted'], ['$3,700.00','Batch total'], ['#20458','Batch reference number'] ] },
     tileName:'Snow Removal Charge Collection', tileRows:[ ['Riverview Apartments','148 charged · 0 paid','$3,700',ORANGE], ['Due Sep 1','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
-  x3: { icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
+  x3: { cat:2, icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
     kw:'add credit tenant accounts open maintenance requests over 7 days goodwill',
     text:'I can stage this as a batch credit. Here is exactly what I will post — nothing is written until you post it.',
     plan:{ title:'Batch Credit · Maintenance Delay Goodwill', rows:[
@@ -3255,7 +3255,7 @@ const ACTION_PROMPTS = {
       stats:[ ['14','Credits posted'], ['$350.00','Batch total'], ['#20512','Batch reference number'] ] },
     tileName:'Maintenance Delay Credits', tileRows:[ ['This batch','14 tenants · $350.00 credited','Posted',GREEN] ],
     reportName:'Batch Credit · Maintenance Delay Goodwill', reportSource:'Transactions · Batch Credits' },
-  x4: { icon:'local_parking', label:'Add a parking violation for red Camaro at Riverview Apartments',
+  x4: { cat:2, icon:'local_parking', label:'Add a parking violation for red Camaro at Riverview Apartments',
     kw:'add parking violation red camaro riverview',
     text:"I found the vehicle. Marcus Reed's 2019 Chevrolet Camaro is the only exact red Camaro match at Riverview Apartments — here's the violation I'll log.",
     tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'} ],
@@ -3268,7 +3268,7 @@ const ACTION_PROMPTS = {
     actions:['log_violation','cancel'],
     posted:{ text:'Logged. A parking violation was added to Marcus Reed’s tenant record, dated Aug 28, 2026.',
       stats:[ ['1','Violation logged'], ['P-118','Space parked in'], ['#PV-3042','Violation reference number'] ] } },
-  x5: { icon:'assignment_late', label:'Help me prioritize the maintenance requests submitted via the resident portal this week',
+  x5: { cat:2, icon:'assignment_late', label:'Help me prioritize the maintenance requests submitted via the resident portal this week',
     kw:'prioritize maintenance requests resident portal this week triage',
     text:'Six new requests came in through the resident portal this week. I ranked them by urgency — I can set these priority levels in Rent Manager if you approve.',
     table:[ ['4402 · Hawthorne 902','No heat reported · HVAC','Urgent',RED], ['4405 · Riverview 118','Water leak under sink · Plumbing','Urgent',RED], ['4410 · Union 214','Garbage disposal not working · Appliance','High',ORANGE], ['4412 · Willowbrook 145','Smoke detector chirping · General','High',ORANGE], ['4415 · Crestline 220','Light fixture flickering · Electrical','Medium',GRAY], ['4418 · Ridgeline 420','Squeaky door hinge · General','Low',GRAY] ],
@@ -3276,7 +3276,7 @@ const ACTION_PROMPTS = {
     actions:['apply_priorities','cancel'],
     posted:{ text:'Applied. Priority levels were set on all 6 issues — the 2 urgent requests now show at the top of the technician queue.',
       stats:[ ['6','Priorities updated'], ['2','Marked urgent'], ['Aug 28, 2026','Applied date'] ] } },
-  x6: { icon:'drafts', label:'Draft follow-up emails to all my leads that haven’t responded in over 7 days',
+  x6: { cat:2, icon:'drafts', label:'Draft follow-up emails to all my leads that haven’t responded in over 7 days',
     kw:'draft follow up emails leads no response 7 days prospects',
     text:'Six leads have gone quiet for more than 7 days after real engagement. I drafted a short, personalized check-in for each — nothing sends until you approve.',
     table:[ ['Devon Marsh','22 days silent · last touch: guest card','Draft ready',GRAY], ['Dana Whitfield','18 days silent · last touch: toured Riverview 212','Draft ready',GRAY], ['Simone Baptiste','17 days silent · last touch: application','Draft ready',GRAY], ['Felicia Ward','16 days silent · last touch: toured','Draft ready',GRAY], ['Aaron Blake','15 days silent · last touch: toured','Draft ready',GRAY], ['Miguel Torres','14 days silent · last touch: application','Draft ready',GRAY] ],
@@ -3287,7 +3287,7 @@ const ACTION_PROMPTS = {
 };
 
 const BILLING_PROMPTS = {
-  x2: { icon:'request_quote', label:'Find all unbilled maintenance requests to property owners and create the bills',
+  x2: { cat:2, icon:'request_quote', label:'Find all unbilled maintenance requests to property owners and create the bills',
     kw:'find all unbilled maintenance requests property owners create bills billable issues rebill charge back',
     text:'I found 23 completed issues across 6 owners with billable cost and no owner charge posted against them. Here is the batch I would create — nothing posts until you say so.',
     plan:{ title:'Owner Billing Batch · Unbilled Maintenance', rows:[
