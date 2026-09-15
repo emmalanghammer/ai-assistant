@@ -1926,19 +1926,26 @@ if (document.readyState !== 'loading') restoreConversation();
    the panel comes back with it. Each target screen reads its own
    parameter on load.
    ============================================================ */
+/* Where the other screens live, relative to whatever page is running this.
+   Three layouts, and the rule differs in each:
+
+     repo root      index.html        the workspace -> others are in screens/
+     repo screens   screens/*.html    siblings, and home is one level up
+     bundle         dist/*.html       bundle.mjs flattens everything
+
+   Matching the other RMX prototype repos, the root URL IS the workspace, so
+   emmalanghammer.github.io/ai-assistant/ opens it with no index in between. */
+function inBundle() { return /\/dist\//.test(location.pathname); }
+function inScreensDir() { return /\/screens\//.test(location.pathname); }
+
 function screenPath(file) {
-  /* Screens are always siblings of each other — in screens/ in the repo, and
-     flat in dist/ once bundled. So the link is just the filename.
+  if (inBundle()) return file;
+  return inScreensDir() ? file : 'screens/' + file;
+}
 
-     The old version tested for "/screens/" in the path and otherwise prepended
-     "screens/", which was right for the repo and wrong for dist/, where it
-     produced dist/screens/report-viewer.html and a 404. bundle.mjs rewrites
-     hrefs in the markup but cannot rewrite a path built at runtime.
-
-     The guard is for a non-screen page that somehow loads this: every screen
-     carries the app bar, and index.html — the one page above screens/ — does
-     not, and does not load orion.js today. */
-  return document.querySelector('.rmx-appbar') ? file : 'screens/' + file;
+function homePath() {
+  if (inBundle()) return 'index.html';
+  return inScreensDir() ? '../index.html' : 'index.html';
 }
 
 function openTenantPage(tid) {
@@ -1953,14 +1960,14 @@ function openReport(id) {
 
 function showDashboard() {
   saveConversation();
-  location.href = screenPath('my-workspace.html');
+  location.href = homePath();
 }
 
 /* "View it on my dashboard" on a tile Orion just built. */
 function onLinkClick(e) {
   e.preventDefault();
   saveConversation();
-  location.href = screenPath('my-workspace.html') + '#orionTilesCol';
+  location.href = homePath() + '#orionTilesCol';
 }
 
 /* The Rent Manager logo is the way back to My Workspace from anywhere. */
