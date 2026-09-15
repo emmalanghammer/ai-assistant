@@ -1084,8 +1084,7 @@ a { color: var(--text-link); }
 
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
-.home-prompt { font: 400 18px/24px 'Roboto',sans-serif; color: var(--text-secondary); text-align:center; margin:0; }
-.home-ask-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; }
+.home-prompt { font: 400 18px/24px 'Roboto',sans-serif; color: var(--text-secondary); text-align:left; margin:0; }
 /* Orion_Input Fields, Style=Square — RMX Components 7086:2817. 36px at rest,
    radius 4, white on a 1px border-primary hairline, 8px gap, placeholder 14
    italic #666666, 20px send icon in brand blue. The Separator in the
@@ -1104,7 +1103,6 @@ a { color: var(--text-link); }
   resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
 .home-ask textarea::placeholder { color:var(--text-primary); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
-.home-disclaimer { font: italic 400 12px 'Roboto',sans-serif; color: var(--text-primary); text-align:center; max-width:360px; margin:0 auto; }
 .browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
 .browse-link:hover .lbl { text-decoration:underline; }
 #messagesWrap:empty { display:none !important; }
@@ -2952,12 +2950,9 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         <p class="hi">Hi Charlie!</p>
         <div class="home-card">
           <p class="home-prompt">How can I help?</p>
-          <div class="home-ask-wrap">
-            <div class="home-ask">
-              <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
-              <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
-            </div>
-            <div class="home-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
+          <div class="home-ask">
+            <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
+            <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
         <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#list"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>

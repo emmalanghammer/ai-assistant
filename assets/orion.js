@@ -89,12 +89,9 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         <p class="hi">Hi Charlie!</p>
         <div class="home-card">
           <p class="home-prompt">How can I help?</p>
-          <div class="home-ask-wrap">
-            <div class="home-ask">
-              <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
-              <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
-            </div>
-            <div class="home-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
+          <div class="home-ask">
+            <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
+            <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
         <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#list"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
