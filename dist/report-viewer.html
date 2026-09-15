@@ -1203,7 +1203,13 @@ a { color: var(--text-link); }
 .mrecord .second .rmx-icon { width:18px; height:18px; color:var(--text-disabled); }
 .mrecord .second .t { font-size:12.5px; color:var(--text-primary); }
 
-.mfollow-label { font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--text-primary); }
+/* The follow-ups close the answer, so they get air above them and a hairline
+   to separate them from the result rather than reading as one more row of it.
+   The .content flex gap is 10px; this adds to it. */
+.mfollow { margin-top: var(--spacing-md); padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-disabled); }
+.mfollow-label { font: 600 12px/16px 'Roboto',sans-serif; text-transform:uppercase;
+  letter-spacing:.04em; color:var(--text-primary); margin-bottom: var(--spacing-xs); }
 .mfollow-wrap { display:flex; flex-direction:column; gap:6px; }
 .follow-chip { display:flex; align-items:center; gap:10px; border:1px solid var(--border-primary); background:#fff; border-radius:6px; padding:10px 12px; font-family:'Roboto',sans-serif; cursor:pointer; text-align:left; }
 .follow-chip:hover { border-color:var(--border-secondary); background:var(--container-tertiary); }
@@ -3732,22 +3738,25 @@ function renderMessage(m, idx, animate){
      pass rather than typed itself. */
   if (m.rich) inner += wrapOne(`<div class="mrich">${m.rich}</div>`);
   if (m.steps) inner += `<div class="mstep-list">${m.steps.map((s,i)=>`<div class="mstep${rv}"${hid}><span class="n">${i+1}</span><span class="t">${esc(s)}</span></div>`).join('')}</div>`;
+
+  /* Order is deliberate: prose, then the data, then anything that
+     qualifies the data, then what you can DO with it, and the follow-up
+     questions last. Bullets, findings and the note used to be interleaved
+     with the grids — a finding landing above the table it described — so
+     they are grouped underneath now. */
+
+  /* the data */
   if (m.stats) inner += `<div class="mstats">${m.stats.map(s=>`<div class="mstat${rv}"${hid}><div class="v">${esc(s[0])}</div><div class="l">${esc(s[1])}</div></div>`).join('')}</div>`;
-  if (m.bullets) inner += `<div class="mbullet-list">${m.bullets.map(b=>`<div class="mbullet${rv}"${hid}><span class="dot"></span><span class="t">${esc(b)}</span></div>`).join('')}</div>`;
   if (m.unitList) inner += wrapOne(renderUnitList());
-  if (m.findings) inner += `<div class="mfind-list">${m.findings.map(f=>`<div class="mfind${rv}"${hid}><svg class="rmx-icon"><use href="#check-circle"></use></svg><span class="t">${esc(f)}</span></div>`).join('')}</div>`;
   if (m.plan) inner += wrapOne(renderPlan(m.plan));
   if (m.table) inner += `<div class="mtable">${m.table.map(r=>`<div class="row${rv}"${hid}><span class="a">${esc(r[0])}</span><span class="b">${esc(r[1])}</span>${r.length>2?`<span class="rmx-lozenge rmx-lozenge--${toneClass(r[3])}" data-rmx-component="Lozenge">${esc(r[2])}</span>`:''}</div>`).join('')}</div>`;
   if (m.report) inner += wrapOne(renderReport(m.report));
   if (m.tenants) inner += wrapOne(renderTenants(m.tenants, idx, m.showAllMatches));
   if (m.record) inner += wrapOne(renderRecord(m.record));
-  if (m.followups && m.followups.length) inner += wrapOne(renderFollowups(m.followups));
-  if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
-  if (m.article) inner += wrapOne(`<div class="marticle" onclick="act('article','${m.src||''}')"><span class="lab">Suggested Article</span><span class="t">${esc(m.article)}</span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></div>`);
-  if (m.tile) inner += wrapOne(renderTilePreview(p));
-  if (m.picker) inner += wrapOne(renderPicker(m.src));
-  if (m.reportLink) inner += wrapOne(`<a class="mlink" href="#" onclick="event.preventDefault(); openReport('${m.reportLink.id}')"><svg class="rmx-icon"><use href="#description"></use></svg><span class="lcol"><span class="t">${esc(m.reportLink.label)}</span><span class="h">${esc(m.reportLink.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
-  if (m.link) inner += wrapOne(`<a class="mlink" href="#" onclick="onLinkClick(event)"><svg class="rmx-icon"><use href="#dashboard"></use></svg><span class="lcol"><span class="t">${esc(m.link.label)}</span><span class="h">${esc(m.link.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
+
+  /* what qualifies it, underneath the grids */
+  if (m.bullets) inner += `<div class="mbullet-list">${m.bullets.map(b=>`<div class="mbullet${rv}"${hid}><span class="dot"></span><span class="t">${esc(b)}</span></div>`).join('')}</div>`;
+  if (m.findings) inner += `<div class="mfind-list">${m.findings.map(f=>`<div class="mfind${rv}"${hid}><svg class="rmx-icon"><use href="#check-circle"></use></svg><span class="t">${esc(f)}</span></div>`).join('')}</div>`;
   if (m.note){
     const hiddenMatches = m.tenants ? m.tenants.filter(t => t.match !== 'exact').length : 0;
     const toggle = hiddenMatches && !m.showAllMatches
@@ -3757,11 +3766,22 @@ function renderMessage(m, idx, animate){
       : '';
     inner += wrapOne(`<div class="mnote"><svg class="rmx-icon"><use href="#info"></use></svg><span class="t">${esc(m.note)}${toggle}</span></div>`);
   }
+
+  /* what you can do with it — Print a report sits above the follow-ups */
+  if (m.article) inner += wrapOne(`<div class="marticle" onclick="act('article','${m.src||''}')"><span class="lab">Suggested Article</span><span class="t">${esc(m.article)}</span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></div>`);
+  if (m.tile) inner += wrapOne(renderTilePreview(p));
+  if (m.picker) inner += wrapOne(renderPicker(m.src));
+  if (m.reportLink) inner += wrapOne(`<a class="mlink" href="#" onclick="event.preventDefault(); openReport('${m.reportLink.id}')"><svg class="rmx-icon"><use href="#description"></use></svg><span class="lcol"><span class="t">${esc(m.reportLink.label)}</span><span class="h">${esc(m.reportLink.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
+  if (m.link) inner += wrapOne(`<a class="mlink" href="#" onclick="onLinkClick(event)"><svg class="rmx-icon"><use href="#dashboard"></use></svg><span class="lcol"><span class="t">${esc(m.link.label)}</span><span class="h">${esc(m.link.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
+  if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
   if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${m.actions.map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
     const variant = k === 'print' ? 'text' : (ACTION_LABELS[k][1] ? 'primary' : 'secondary');
     return `<button class="mact-btn ${variant}" onclick="act('${k}','${m.src||''}')">${esc(ACTION_LABELS[k][0])}</button>`;
   }).join('')}</div>`);
+
+  /* and the follow-up questions last */
+  if (m.followups && m.followups.length) inner += wrapOne(renderFollowups(m.followups));
 
   return `<div class="msg-row" data-idx="${idx}"><div class="msg-bot"><span class="avatar-logo">${orionMark(24)}</span><div class="content">${inner}</div></div></div>`;
 }
@@ -3842,7 +3862,7 @@ function renderRecord(r){
 function renderFollowups(keys){
   const items = keys.filter(k=>FOLLOWUPS[k]);
   if (!items.length) return '';
-  return `<div><div class="mfollow-label">Ask about this result</div><div class="mfollow-wrap">
+  return `<div class="mfollow"><div class="mfollow-label">Ask about this result</div><div class="mfollow-wrap">
     ${items.map(k=>`<button class="follow-chip" onclick="followUp('${k}')"><span class="fl">${esc(FOLLOWUPS[k].q)}</span><svg class="rmx-icon chev"><use href="#chevron-right"></use></svg></button>`).join('')}
   </div></div>`;
 }

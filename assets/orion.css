@@ -281,7 +281,13 @@ a { color: var(--text-link); }
 .mrecord .second .rmx-icon { width:18px; height:18px; color:var(--text-disabled); }
 .mrecord .second .t { font-size:12.5px; color:var(--text-primary); }
 
-.mfollow-label { font-size:11.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:var(--text-primary); }
+/* The follow-ups close the answer, so they get air above them and a hairline
+   to separate them from the result rather than reading as one more row of it.
+   The .content flex gap is 10px; this adds to it. */
+.mfollow { margin-top: var(--spacing-md); padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-disabled); }
+.mfollow-label { font: 600 12px/16px 'Roboto',sans-serif; text-transform:uppercase;
+  letter-spacing:.04em; color:var(--text-primary); margin-bottom: var(--spacing-xs); }
 .mfollow-wrap { display:flex; flex-direction:column; gap:6px; }
 .follow-chip { display:flex; align-items:center; gap:10px; border:1px solid var(--border-primary); background:#fff; border-radius:6px; padding:10px 12px; font-family:'Roboto',sans-serif; cursor:pointer; text-align:left; }
 .follow-chip:hover { border-color:var(--border-secondary); background:var(--container-tertiary); }
