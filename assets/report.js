@@ -43,11 +43,11 @@ function rptMeta(id){
     id: id,
     name: p.reportName || p.tileName || 'Result Summary',
     source: p.reportSource || 'Custom · built from this result',
-    options: (p.reportSource || 'Custom · built from this result') + ' — 10 properties selected · lcs-rmexpress',
+    options: (p.reportSource || 'Custom · built from this result') + ' — 10 properties selected · class60',
     dateRange: 'As of Aug 28, 2026',
     params: [
       ['Report', p.reportSource || 'Custom · built from this result'],
-      ['Properties', '10 selected · lcs-rmexpress'],
+      ['Properties', '10 selected · class60'],
       ['As of', 'Aug 28, 2026 · day 18 of period'],
       ['Layout', 'Summary with detail rows, portrait, letter'],
     ],

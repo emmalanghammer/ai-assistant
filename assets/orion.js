@@ -1336,7 +1336,7 @@ function buildOccupancySummaryReport(){
           <span class="rpt-title">${esc(p.reportName)}</span>
           <span class="rpt-daterange">As of Aug 28, 2026</span>
         </div>
-        <div class="rpt-options">${esc(p.reportSource)} — 10 properties selected · lcs-rmexpress</div>
+        <div class="rpt-options">${esc(p.reportSource)} — 10 properties selected · class60</div>
       </div>
 
       <div class="rpt-body">
