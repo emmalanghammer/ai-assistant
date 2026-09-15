@@ -171,16 +171,20 @@ function resetAsk(id) {
    Keeping the scrollbar's width as padding avoids the page jumping sideways
    as it locks, which is the usual giveaway of a crude overflow:hidden. */
 function lockPageScroll(on) {
-  const b = document.body;
+  const b = document.body, h = document.documentElement;
   if (on) {
     if (b.dataset.scrollLocked) return;
-    const gap = window.innerWidth - document.documentElement.clientWidth;
+    const gap = window.innerWidth - h.clientWidth;
     b.dataset.scrollLocked = '1';
     b.dataset.prevPaddingRight = b.style.paddingRight || '';
+    /* Both, not just body: the page scrolls on the ROOT element, so locking
+       body alone leaves the wheel working — which is what happened first. */
+    h.style.overflow = 'hidden';
     b.style.overflow = 'hidden';
     if (gap > 0) b.style.paddingRight = gap + 'px';
   } else {
     if (!b.dataset.scrollLocked) return;
+    h.style.overflow = '';
     b.style.overflow = '';
     b.style.paddingRight = b.dataset.prevPaddingRight || '';
     delete b.dataset.scrollLocked;
