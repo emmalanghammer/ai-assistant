@@ -175,7 +175,7 @@
 </header>
 
 <div class="rmx-contextbar" data-rmx-component="Context Bar">
-  <div class="rmx-contextbar__leading"><a class="rmx-contextbar__back" href="../index.html"><svg class="rmx-icon"><use href="#chevron-left"></use></svg>My Workspace</a><span class="rmx-contextbar__title" id="rptContextTitle">Report</span></div>
+  <div class="rmx-contextbar__leading"><span class="rmx-contextbar__title" id="rptContextTitle">Report</span></div>
   <div class="rmx-contextbar__trailing">
     <svg class="rmx-icon" role="button" tabindex="0" title="Rerun with different parameters" onclick="rvToast('Report options are not built in this prototype — ask Orion to rerun it with different parameters instead.')"><use href="#autorenew"></use></svg>
     <svg class="rmx-icon" role="button" tabindex="0" title="Help" onclick="rvToast('Express Help is not built in this prototype.')"><use href="#help"></use></svg>
@@ -219,7 +219,7 @@
            Summarize/Print a report sit under a chat answer. -->
       <button class="rv-orion" id="rptOrionBtn" onclick="openReportChat()">
         <span class="t">Analyze with Orion</span>
-        <svg class="rmx-icon ico" style="width:18px;height:18px"><use href="#orion"></use></svg>
+        <span class="ico"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#orion"></use></svg></span>
       </button>
 
       <div class="rv-orion-chat" id="rvOrionChat" hidden>

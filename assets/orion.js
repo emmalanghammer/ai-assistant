@@ -2047,7 +2047,11 @@ function restoreConversation() {
     HISTORY.length = 0; saved.history.forEach(h => HISTORY.push(h));
   }
   if (state.messages.length) render();
-  if (saved.orionOpen) openOrion();
+  /* The panel does NOT reopen. Following a result to another screen is a
+     deliberate move away from the conversation, and having the assistant
+     reappear over the page you just asked for covers the thing you went to
+     look at. The conversation is still here — reopening shows it. */
+  state.orionOpen = false;
 }
 
 /* Every entry point that changes the conversation persists it. */

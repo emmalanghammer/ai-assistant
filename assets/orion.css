@@ -536,7 +536,13 @@ a { color: var(--text-link); }
 .rv-orion:hover { width:190px; background: linear-gradient(var(--bg-hover),var(--bg-hover)) padding-box, var(--orion-border-gradient) border-box; }
 .rv-orion .t { width:0; overflow:hidden; opacity:0; transition: width .2s ease, opacity .12s ease; }
 .rv-orion:hover .t { width:138px; opacity:1; padding-left:14px; }
-.rv-orion .ico { flex:none; width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
+/* The icon box fills whatever the button's content box actually is, rather
+   than being pinned to 40px. The button is 40px wide with a 1.5px border, so
+   a fixed 40px child overflowed by 3px and justify-content:flex-end pushed it
+   off-centre — 10px of gap on one side, 12px on the other. flex:1 lets it
+   take the real space and centre the mark in it, collapsed or expanded. */
+.rv-orion .ico { flex:1 0 auto; min-width:0; height:100%;
+  display:flex; align-items:center; justify-content:center; }
 
 .rv-orion-chat { position:absolute; right:20px; bottom:20px; z-index:5;
   width:380px; height:520px; max-height:calc(100% - 40px);
