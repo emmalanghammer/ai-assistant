@@ -1711,24 +1711,45 @@ a { color: var(--text-link); }
 .rmx-tilerow { display: flex; gap: var(--spacing-lg); align-items: stretch; }
 .rmx-tilerow > .rmx-tile { flex: 1; min-width: 0; }
 
-.rmx-scoreboard { box-shadow: var(--shadow-sm); }
-.rmx-scoreboard__content { justify-content: space-between; flex-wrap: wrap;
-  padding: var(--spacing-sm) var(--spacing-md); }
-.rmx-scoreboard .leading { display: flex; flex-direction: column;
-  gap: var(--spacing-md); justify-content: center; }
-.rmx-scoreboard .id-row { display: flex; align-items: center;
-  gap: var(--spacing-3xl); flex-wrap: wrap; }
-/* Web/Paragraph/L/SemiBold — the entity name in a Scoreboard. */
-.rmx-scoreboard .entity-name { font: 600 16px/24px Roboto, sans-serif; color: var(--text-secondary); }
-.rmx-scoreboard .meta-row { display: flex; align-items: center;
-  gap: var(--spacing-2xl); flex-wrap: wrap; }
-.rmx-scoreboard .meta-row .item { display: flex; align-items: center; gap: var(--spacing-xs);
-  font-size: 14px; color: var(--text-secondary); }
-.rmx-scoreboard .meta-row .rmx-icon { color: var(--icon-tertiary); }
-.rmx-scoreboard .trailing { display: flex; align-items: center; gap: var(--spacing-xs); }
+/* Scoreboard Header — Tenant Scoreboard, node 11560:8512. 112px tall, a 16px
+   #425A70 colour bar, then content at 16/32 padding. One row, space-between:
+   identity and meta on the left, figures and Split Buttons on the right. */
+.rmx-scoreboard { box-shadow: var(--shadow-sm); min-height: 112px; }
+.rmx-scoreboard__content { display: block; padding: var(--spacing-md) var(--spacing-2xl); }
+.sb-row { display: flex; align-items: center; justify-content: space-between;
+  gap: var(--spacing-md); flex-wrap: wrap; height: 100%; }
+.sb-leading { display: flex; flex-direction: column; justify-content: center;
+  gap: var(--spacing-md); }
+
+/* Identity row: 40px gaps, 32px tall. Name is Web/Paragraph/L/SemiBold; the
+   account number is the same size in italic, which is the one place italic is
+   not a placeholder. */
+.sb-identity { display: flex; align-items: center; gap: var(--spacing-3xl); flex-wrap: wrap; }
+.sb-name { font: 600 16px/24px 'Roboto', sans-serif; color: var(--text-secondary); }
+.sb-account { font: italic 400 16px/24px 'Roboto', sans-serif; color: var(--text-secondary); }
+
+/* Meta row: Scoreboard Items, Style=Icon Item — 20px tall, 32px apart. */
+.sb-meta { display: flex; align-items: center; gap: var(--spacing-2xl); flex-wrap: wrap; }
+.sb-item { display: inline-flex; align-items: center; gap: var(--spacing-xs);
+  height: 20px; font-size: 14px; color: var(--text-secondary); }
+.sb-item .rmx-icon { color: var(--icon-tertiary); }
+
+/* Trailing: the figures column then the buttons, 32px apart. */
+.sb-trailing { display: flex; align-items: center; gap: var(--spacing-2xl); }
+.sb-figures { display: flex; flex-direction: column; align-items: flex-end;
+  gap: var(--spacing-lg); }
+/* Balance Item — label, then the value right-aligned in its own box. */
+.sb-balance { display: inline-flex; align-items: baseline; gap: var(--spacing-xl);
+  font-size: 16px; color: var(--text-secondary); }
+.sb-balance .v { min-width: 86px; text-align: right; font-weight: 600; }
+.sb-buttons { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+.sb-buttons .rmx-split { width: 153px; }
+.sb-buttons .rmx-split__main { flex: 1; justify-content: center; }
 
 /* The Action Bar is a full-height rail pinned to the right edge of the page. */
-.rmx-shell { min-height: calc(100vh - 88px); background: var(--container-primary); }
+/* A detail page sits on the grey ground (#F2F2F2), with the Tiles as the
+   white surfaces on top of it. */
+.rmx-shell { min-height: calc(100vh - 88px); background: var(--background-ui-secondary); }
 
 /* A screen whose content manages its own padding — the workspace dashboard
    and the report viewer both run edge to edge. */
@@ -3006,6 +3027,32 @@ function resetAsk(id) {
   el.style.overflowY = 'hidden';
 }
 
+
+/* While the assistant is open the page behind it does not scroll — only the
+   conversation does. The scrim already stops clicks reaching the page; this
+   stops the wheel, which otherwise scrolls the workspace out from under the
+   panel and makes the dim look broken.
+
+   Keeping the scrollbar's width as padding avoids the page jumping sideways
+   as it locks, which is the usual giveaway of a crude overflow:hidden. */
+function lockPageScroll(on) {
+  const b = document.body;
+  if (on) {
+    if (b.dataset.scrollLocked) return;
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    b.dataset.scrollLocked = '1';
+    b.dataset.prevPaddingRight = b.style.paddingRight || '';
+    b.style.overflow = 'hidden';
+    if (gap > 0) b.style.paddingRight = gap + 'px';
+  } else {
+    if (!b.dataset.scrollLocked) return;
+    b.style.overflow = '';
+    b.style.paddingRight = b.dataset.prevPaddingRight || '';
+    delete b.dataset.scrollLocked;
+    delete b.dataset.prevPaddingRight;
+  }
+}
+
 function mountOrionPanel() {
   if (document.getElementById('orionPanel')) return;
   const host = document.createElement('div');
@@ -3424,15 +3471,15 @@ const FOLLOWUPS = {
 };
 
 const TENANT_RECORDS = {
-  reed: { name:'Marcus Reed', meta:'Riverview Apartments · Unit 512 · Tenant since Mar 2023',
+  reed: { account:'516', balance:'0.00', deposit:'1,170.00', name:'Marcus Reed', meta:'Riverview Apartments · Unit 512 · Tenant since Mar 2023',
     fields:[ ['Lease Term','Mar 1, 2026 – Feb 28, 2027'], ['Rent','$1,545 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0142'], ['Email','m.reed@example.com'], ['Parking Space','P-212 · covered garage'] ],
     vehicle:{ label:'Vehicle', value:'2019 Chevrolet Camaro · Red', meta:'Plate 8XKJ221 · Ohio · added Mar 4, 2023' },
     second:'Second vehicle on file: 2016 Honda Civic · Gray · Plate 2LMD884' },
-  brooks: { name:'Hailey Brooks', meta:'Riverview Apartments · Unit 118 · Tenant since Aug 2024',
+  brooks: { account:'742', balance:'0.00', deposit:'1,610.00', name:'Hailey Brooks', meta:'Riverview Apartments · Unit 118 · Tenant since Aug 2024',
     fields:[ ['Lease Term','Aug 1, 2026 – Jul 31, 2027'], ['Rent','$1,610 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0198'], ['Email','h.brooks@example.com'], ['Parking Space','Unassigned'] ],
     vehicle:{ label:'Vehicle', value:'2021 Dodge Charger · Red', meta:'Plate 4TRM905 · Kentucky · added Aug 12, 2024' },
     second:'' },
-  cho: { name:'Elena Cho', meta:'Riverview Apartments · Unit 204B · Tenant since Jan 2025',
+  cho: { account:'883', balance:'340.00', deposit:'1,495.00', name:'Elena Cho', meta:'Riverview Apartments · Unit 204B · Tenant since Jan 2025',
     fields:[ ['Lease Term','Jan 1, 2026 – Dec 31, 2026'], ['Rent','$1,495 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0176'], ['Email','e.cho@example.com'], ['Parking Space','P-118 · surface lot'] ],
     vehicle:{ label:'Vehicle', value:'2020 Honda Civic · Red', meta:'Plate 6PLM230 · Ohio · added Jan 9, 2025' },
     second:'' },
@@ -4648,6 +4695,7 @@ function openOrion(){
   state.orionOpen = true;
   const scrim = document.getElementById('orionScrim');
   if (scrim) scrim.hidden = false;
+  lockPageScroll(true);
   document.getElementById('orionPanel').hidden = false;
   document.getElementById('orionEntry').classList.add('open');
   document.getElementById('orionEntry').classList.remove('pulsing');
@@ -4781,6 +4829,7 @@ function closeOrion(){
   state.orionOpen = false;
   const scrim = document.getElementById('orionScrim');
   if (scrim) scrim.hidden = true;
+  lockPageScroll(false);
   const panel = document.getElementById('orionPanel');
   panel.hidden = true;
   /* Forget any manual drag/resize — next open always starts back at the

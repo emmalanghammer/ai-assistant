@@ -22,14 +22,36 @@
 
   const esc = s => (s == null ? '' : String(s)).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c]));
   const parts = r.meta.split(' · ');
+  const get = label => {
+    const f = (r.fields || []).find(x => (x.label ?? x[0]) === label);
+    return f ? (f.value ?? f[1]) : '';
+  };
 
-  document.getElementById('tdTitle').textContent = r.name;
-  document.getElementById('tdName').textContent = r.name;
+  /* The page title is the register this record belongs to, not the record —
+     Context Bar, node 10861:12222, carries one Title Text item. The record's
+     own name is the Scoreboard's job. */
   document.title = r.name + ' — Rent Manager Express';
+  document.getElementById('tdName').textContent = r.name;
 
+  /* Scoreboard Header, node 11560:8512. Identity row at 40px gaps: name,
+     italic account number, status Lozenge at h32. Meta row at 32px gaps:
+     four Icon Items — property, unit, email, phone. */
+  document.getElementById('tdAccount').textContent = 'Account #: ' + (r.account || '—');
+
+  const item = (icon, text) => text
+    ? `<span class="sb-item"><svg class="rmx-icon"><use href="#${icon}"></use></svg>${esc(text)}</span>` : '';
   document.getElementById('tdMeta').innerHTML =
-    `<span class="item"><svg class="rmx-icon"><use href="#rental-info"></use></svg>${esc(parts[0])}</span>` +
-    `<span class="item"><svg class="rmx-icon"><use href="#occupancy"></use></svg>${esc(parts[1] || '')}</span>`;
+      item('properties', parts[0])
+    + item('units', parts[1])
+    + item('mail', get('Email'))
+    + item('call', get('Phone'));
+
+  /* Trailing figures column: Balance Items, right-aligned, label then value. */
+  const balance = (label, value) =>
+    `<span class="sb-balance"><span class="l">${esc(label)}</span><span class="v">${esc(value)}</span></span>`;
+  document.getElementById('tdFigures').innerHTML =
+      balance('Balance Due:', '$' + (r.balance || '0.00'))
+    + balance('Security Deposit:', '$' + (r.deposit || '0.00'));
 
   const field = f => `<div class="rmx-ro"><span class="rmx-ro__label">${esc(f.label ?? f[0])}</span>` +
                      `<span class="rmx-ro__value">${esc(f.value ?? f[1])}</span></div>`;

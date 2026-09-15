@@ -175,7 +175,7 @@
 </header>
 
 <div class="rmx-contextbar" data-rmx-component="Context Bar">
-  <div class="rmx-contextbar__leading"><a class="rmx-contextbar__back" href="../index.html"><svg class="rmx-icon"><use href="#chevron-left"></use></svg>My Workspace</a><span class="rmx-contextbar__title" id="tdTitle">Tenant</span></div>
+  <div class="rmx-contextbar__leading"><span class="rmx-contextbar__title" id="tdTitle">Tenants</span></div>
   <div class="rmx-contextbar__trailing">
     <svg class="rmx-icon" role="button" tabindex="0" data-rmx-todo="Print is not built on this screen"><use href="#print"></use></svg>
     <svg class="rmx-icon" role="button" tabindex="0" data-rmx-todo="Refresh is not built in this prototype"><use href="#autorenew"></use></svg>
@@ -188,16 +188,22 @@
       <div class="rmx-scoreboard" data-rmx-component="Scoreboard Header">
         <div class="rmx-scoreboard__bar"></div>
         <div class="rmx-scoreboard__content">
-          <div class="leading">
-            <div class="id-row">
-              <span class="entity-name" id="tdName">—</span>
-              <span class="rmx-lozenge rmx-lozenge--success" data-rmx-component="Lozenge" style="height:26px;">Active</span>
+          <div class="sb-row">
+            <div class="sb-leading">
+              <div class="sb-identity">
+                <span class="sb-name" id="tdName">&mdash;</span>
+                <span class="sb-account" id="tdAccount"></span>
+                <span class="rmx-lozenge rmx-lozenge--success rmx-lozenge--32" data-rmx-component="Lozenge">Current</span>
+              </div>
+              <div class="sb-meta" id="tdMeta"></div>
             </div>
-            <div class="meta-row" id="tdMeta"></div>
-          </div>
-          <div class="trailing">
-            <button class="rmx-btn rmx-btn--secondary" data-rmx-component="Button">Move Out</button>
-            <button class="rmx-btn rmx-btn--secondary" data-rmx-component="Button">Renew</button>
+            <div class="sb-trailing">
+              <div class="sb-figures" id="tdFigures"></div>
+              <div class="sb-buttons">
+                <div class="rmx-split" data-rmx-component="Button" data-variant="Type=Split Button, State=Default, Size=Default"><button class="rmx-split__main">Add Charge</button><button class="rmx-split__caret" aria-label="Add Charge options" data-rmx-todo="The split-button menu is not built in this prototype"><svg class="rmx-icon"><use href="#arrow-drop-down"></use></svg></button></div>
+                <div class="rmx-split" data-rmx-component="Button" data-variant="Type=Split Button, State=Default, Size=Default"><button class="rmx-split__main">Refund Deposit</button><button class="rmx-split__caret" aria-label="Refund Deposit options" data-rmx-todo="The split-button menu is not built in this prototype"><svg class="rmx-icon"><use href="#arrow-drop-down"></use></svg></button></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

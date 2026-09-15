@@ -162,6 +162,32 @@ function resetAsk(id) {
   el.style.overflowY = 'hidden';
 }
 
+
+/* While the assistant is open the page behind it does not scroll — only the
+   conversation does. The scrim already stops clicks reaching the page; this
+   stops the wheel, which otherwise scrolls the workspace out from under the
+   panel and makes the dim look broken.
+
+   Keeping the scrollbar's width as padding avoids the page jumping sideways
+   as it locks, which is the usual giveaway of a crude overflow:hidden. */
+function lockPageScroll(on) {
+  const b = document.body;
+  if (on) {
+    if (b.dataset.scrollLocked) return;
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    b.dataset.scrollLocked = '1';
+    b.dataset.prevPaddingRight = b.style.paddingRight || '';
+    b.style.overflow = 'hidden';
+    if (gap > 0) b.style.paddingRight = gap + 'px';
+  } else {
+    if (!b.dataset.scrollLocked) return;
+    b.style.overflow = '';
+    b.style.paddingRight = b.dataset.prevPaddingRight || '';
+    delete b.dataset.scrollLocked;
+    delete b.dataset.prevPaddingRight;
+  }
+}
+
 function mountOrionPanel() {
   if (document.getElementById('orionPanel')) return;
   const host = document.createElement('div');
@@ -580,15 +606,15 @@ const FOLLOWUPS = {
 };
 
 const TENANT_RECORDS = {
-  reed: { name:'Marcus Reed', meta:'Riverview Apartments · Unit 512 · Tenant since Mar 2023',
+  reed: { account:'516', balance:'0.00', deposit:'1,170.00', name:'Marcus Reed', meta:'Riverview Apartments · Unit 512 · Tenant since Mar 2023',
     fields:[ ['Lease Term','Mar 1, 2026 – Feb 28, 2027'], ['Rent','$1,545 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0142'], ['Email','m.reed@example.com'], ['Parking Space','P-212 · covered garage'] ],
     vehicle:{ label:'Vehicle', value:'2019 Chevrolet Camaro · Red', meta:'Plate 8XKJ221 · Ohio · added Mar 4, 2023' },
     second:'Second vehicle on file: 2016 Honda Civic · Gray · Plate 2LMD884' },
-  brooks: { name:'Hailey Brooks', meta:'Riverview Apartments · Unit 118 · Tenant since Aug 2024',
+  brooks: { account:'742', balance:'0.00', deposit:'1,610.00', name:'Hailey Brooks', meta:'Riverview Apartments · Unit 118 · Tenant since Aug 2024',
     fields:[ ['Lease Term','Aug 1, 2026 – Jul 31, 2027'], ['Rent','$1,610 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0198'], ['Email','h.brooks@example.com'], ['Parking Space','Unassigned'] ],
     vehicle:{ label:'Vehicle', value:'2021 Dodge Charger · Red', meta:'Plate 4TRM905 · Kentucky · added Aug 12, 2024' },
     second:'' },
-  cho: { name:'Elena Cho', meta:'Riverview Apartments · Unit 204B · Tenant since Jan 2025',
+  cho: { account:'883', balance:'340.00', deposit:'1,495.00', name:'Elena Cho', meta:'Riverview Apartments · Unit 204B · Tenant since Jan 2025',
     fields:[ ['Lease Term','Jan 1, 2026 – Dec 31, 2026'], ['Rent','$1,495 monthly'], ['Balance','$0.00'], ['Phone','(513) 555-0176'], ['Email','e.cho@example.com'], ['Parking Space','P-118 · surface lot'] ],
     vehicle:{ label:'Vehicle', value:'2020 Honda Civic · Red', meta:'Plate 6PLM230 · Ohio · added Jan 9, 2025' },
     second:'' },
@@ -1804,6 +1830,7 @@ function openOrion(){
   state.orionOpen = true;
   const scrim = document.getElementById('orionScrim');
   if (scrim) scrim.hidden = false;
+  lockPageScroll(true);
   document.getElementById('orionPanel').hidden = false;
   document.getElementById('orionEntry').classList.add('open');
   document.getElementById('orionEntry').classList.remove('pulsing');
@@ -1937,6 +1964,7 @@ function closeOrion(){
   state.orionOpen = false;
   const scrim = document.getElementById('orionScrim');
   if (scrim) scrim.hidden = true;
+  lockPageScroll(false);
   const panel = document.getElementById('orionPanel');
   panel.hidden = true;
   /* Forget any manual drag/resize — next open always starts back at the
