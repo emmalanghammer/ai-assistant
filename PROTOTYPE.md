@@ -97,6 +97,23 @@ Everything else resolved to the *correct* Express icon rather than a generic one
 Both are marked as such in `assets/orion.css`. Everything on an actual Express
 surface resolves to a named Foundations style.
 
+## A deliberate departure from the skill
+
+**No `data-rmx-todo`.** The skill says an affordance you are not building
+should carry it, so a stakeholder clicking learns that rather than assuming it
+is broken. All 18 were removed, along with the report viewer's own four "not
+built" notices and the print dialog's settings notice.
+
+The reason: only confirmations toast now. A demo that answers every stray
+click with "not built in this prototype" spends its credibility telling people
+what is missing. The unbuilt controls — Mega Menu, Reports, Favorites, Command
+Launch, My Dashboard, the viewer's Download and More menus, the print
+settings — are simply inert.
+
+The trade is real and worth knowing: a reviewer clicking Command Launch now
+gets nothing at all and may report it as a bug. That is the call, and it is
+reversible — the attributes are one `git revert` away.
+
 ## Worth raising with Emma
 
 1. **`Header (app bar)` has no Orion variant and no slot.** The design puts the

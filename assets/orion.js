@@ -30,22 +30,22 @@ const ORION_PRINT_OVERLAY_HTML = `<div id="printOverlay" hidden>
 
       <div class="po-field">
         <div class="po-label">Destination</div>
-        <div class="po-select" onclick="poToast()"><svg class="rmx-icon"><use href="#description"></use></svg><span class="po-val">Save as PDF</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
+        <div class="po-select"><svg class="rmx-icon"><use href="#description"></use></svg><span class="po-val">Save as PDF</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
       </div>
       <div class="po-field">
         <div class="po-label">Pages</div>
-        <div class="po-select" onclick="poToast()"><span class="po-val">All</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
+        <div class="po-select"><span class="po-val">All</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
       </div>
       <div class="po-field">
         <div class="po-label">Layout</div>
-        <div class="po-select" onclick="poToast()"><span class="po-val">Portrait</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
+        <div class="po-select"><span class="po-val">Portrait</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div>
       </div>
 
       <div class="po-more" id="poMoreRow" onclick="poToggleMore()"><span>More settings</span><svg class="rmx-icon" id="poMoreChev"><use href="#keyboard-arrow-down"></use></svg></div>
       <div class="po-more-fields" id="poMoreFields" hidden>
-        <div class="po-field"><div class="po-label">Copies</div><div class="po-select" onclick="poToast()"><span class="po-val">1</span></div></div>
-        <div class="po-field"><div class="po-label">Margins</div><div class="po-select" onclick="poToast()"><span class="po-val">Default</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div></div>
-        <div class="po-field"><div class="po-label">Scale</div><div class="po-select" onclick="poToast()"><span class="po-val">100</span></div></div>
+        <div class="po-field"><div class="po-label">Copies</div><div class="po-select"><span class="po-val">1</span></div></div>
+        <div class="po-field"><div class="po-label">Margins</div><div class="po-select"><span class="po-val">Default</span><svg class="rmx-icon po-chev"><use href="#keyboard-arrow-down"></use></svg></div></div>
+        <div class="po-field"><div class="po-label">Scale</div><div class="po-select"><span class="po-val">100</span></div></div>
       </div>
 
       <div class="po-actions">
@@ -54,7 +54,6 @@ const ORION_PRINT_OVERLAY_HTML = `<div id="printOverlay" hidden>
       </div>
     </div>
   </div>
-  <div class="po-msg" id="poMsg" hidden></div>
 </div>`;
 
 const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
@@ -1376,9 +1375,9 @@ function output(fmt, id){
    A recreation of the OS print dialog rather than a call to window.print() —
    it opens over the app the same instant a real Print command would, no
    "building" delay, showing the same .rpt-page documents the report viewer
-   uses. Destination/Pages/Layout are decorative (poToast explains why),
-   Cancel just closes it, and Save drops a confirmation into the
-   conversation the way finishing a real print or export would. */
+   uses. Destination/Pages/Layout are decorative and silent, Cancel just
+   closes it, and Save drops a confirmation into the conversation the way
+   finishing a real print or export would. */
 function openPrintOverlay(id){
   const pages = rptPages(id);
   document.getElementById('poPages').innerHTML = pages.join('');
@@ -1421,14 +1420,6 @@ function poToggleMore(){
   setIconGlyph('poMoreChev', fields.hidden ? 'keyboard-arrow-down' : 'keyboard-arrow-up');
 }
 
-let poMsgTimer = null;
-function poToast(){
-  const el = document.getElementById('poMsg');
-  el.textContent = 'Print settings are not built in this prototype.';
-  el.hidden = false;
-  clearTimeout(poMsgTimer);
-  poMsgTimer = setTimeout(() => { el.hidden = true; }, 2600);
-}
 
 function poSave(){
   closePrintOverlay();
