@@ -176,17 +176,18 @@ a { color: var(--text-link); }
 
 .msg-row { display:flex; animation: eh-in .18s ease-out; }
 .msg-user { width:100%; background: var(--container-tertiary); border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:12px 14px; font-size:14px; line-height:20px; color:var(--text-secondary); }
-/* The Orion mark indents the whole answer by its own width plus the gap.
-   That is right for the opening line — it reads as Orion speaking — but wrong
-   for everything under it: a P&L, a register or a set of follow-ups should
-   use the full width of the panel rather than losing 34px to a column of
-   nothing. So the blocks below the intro pull back level with the mark. */
-.msg-bot { --msg-indent: 34px;   /* 24px mark + 10px gap */
-  display:flex; gap:10px; align-items:flex-start; width:100%; }
-.msg-bot .avatar-logo { flex:none; margin-top:2px; width:24px; }
+/* A finished answer carries no Orion mark. The mark is how Orion signals it
+   is working — it sits on the thinking indicator while the answer is being
+   produced — so repeating it beside every completed message said nothing and
+   cost 34px of width on every block. Without it the answer is full width
+   naturally, and the negative-margin correction that used to claw that width
+   back is gone with it.
+
+   The answer text is navy, the colour for content, rather than the grey used
+   for chrome and labels. */
+.msg-bot { display:flex; width:100%; }
 .msg-bot .content { flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; }
-.msg-bot .text { font-size:14px; line-height:20px; color:var(--text-primary); }
-.msg-bot .content > *:not(.text) { margin-left: calc(-1 * var(--msg-indent)); }
+.msg-bot .text { font-size:14px; line-height:20px; color:var(--text-secondary); }
 .rv { opacity:0; transform:translateY(4px); transition:opacity .22s ease, transform .22s ease; }
 .rv.rv-in { opacity:1; transform:none; }
 /* A real element, not a ::after on .text — the typewriter now runs across

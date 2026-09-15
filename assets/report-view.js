@@ -200,7 +200,7 @@ function renderReportChatMessages(){
   let html = RPT_CHAT.messages.map((m, i) => {
     if (m.role === 'user') return `<div class="msg-row" data-idx="${i}"><div class="msg-user">${esc(m.text)}</div></div>`;
     if (m.draftFull){
-      return `<div class="msg-row"><div class="msg-bot"><span class="avatar-logo">${orionMark(24)}</span><div class="content">
+      return `<div class="msg-row"><div class="msg-bot"><div class="content">
         <div class="rv-analysis"><p>Here is the full analysis with that added in — edit it, then update:</p></div>
         <div class="rv-draft" id="draft-${i}">
           <div class="rv-analysis" contenteditable="true">${m.draftBody}</div>
@@ -211,7 +211,7 @@ function renderReportChatMessages(){
         </div>
       </div></div></div>`;
     }
-    if (m.rich) return `<div class="msg-row"><div class="msg-bot"><span class="avatar-logo">${orionMark(24)}</span><div class="content"><div class="rv-analysis">${m.rich}</div></div></div></div>`;
+    if (m.rich) return `<div class="msg-row"><div class="msg-bot"><div class="content"><div class="rv-analysis">${m.rich}</div></div></div></div>`;
     return renderMessage(m, i, false);
   }).join('');
   if (RPT_CHAT.thinking){

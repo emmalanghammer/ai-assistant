@@ -948,6 +948,19 @@ function renderThinking(){
     <span class="thinking-dots"><span></span><span></span><span></span></span></div>`;
 }
 
+/* Actions that are really follow-up QUESTIONS — "suggest next steps", "show
+   me the full list" — belong at the end of the row, after the things you can
+   do with the result. Print a report is an output, so it goes above them.
+   Everything else keeps the order the answer declared, because a commit flow
+   (post the charges, then cancel) reads in a deliberate sequence. */
+const ORION_QUESTION_ACTIONS = ['nextsteps', 'list'];
+
+function orderActions(keys) {
+  const questions = keys.filter(k => ORION_QUESTION_ACTIONS.includes(k));
+  const rest = keys.filter(k => !ORION_QUESTION_ACTIONS.includes(k));
+  return rest.concat(questions);
+}
+
 function renderMessage(m, idx, animate){
   if (m.role === 'user') return `<div class="msg-row" data-idx="${idx}"><div class="msg-user">${esc(m.text)}</div></div>`;
   const p = m.src ? PROMPTS[m.src] : null;
@@ -997,7 +1010,7 @@ function renderMessage(m, idx, animate){
   if (m.reportLink) inner += wrapOne(`<a class="mlink" href="#" onclick="event.preventDefault(); openReport('${m.reportLink.id}')"><svg class="rmx-icon"><use href="#description"></use></svg><span class="lcol"><span class="t">${esc(m.reportLink.label)}</span><span class="h">${esc(m.reportLink.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
   if (m.link) inner += wrapOne(`<a class="mlink" href="#" onclick="onLinkClick(event)"><svg class="rmx-icon"><use href="#dashboard"></use></svg><span class="lcol"><span class="t">${esc(m.link.label)}</span><span class="h">${esc(m.link.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
   if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
-  if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${m.actions.map(k=>{
+  if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${orderActions(m.actions).map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
     const variant = k === 'print' ? 'text' : (ACTION_LABELS[k][1] ? 'primary' : 'secondary');
     return `<button class="mact-btn ${variant}" onclick="act('${k}','${m.src||''}')">${esc(ACTION_LABELS[k][0])}</button>`;
@@ -1006,7 +1019,7 @@ function renderMessage(m, idx, animate){
   /* and the follow-up questions last */
   if (m.followups && m.followups.length) inner += wrapOne(renderFollowups(m.followups));
 
-  return `<div class="msg-row" data-idx="${idx}"><div class="msg-bot"><span class="avatar-logo">${orionMark(24)}</span><div class="content">${inner}</div></div></div>`;
+  return `<div class="msg-row" data-idx="${idx}"><div class="msg-bot"><div class="content">${inner}</div></div></div>`;
 }
 
 function renderUnitList(){
