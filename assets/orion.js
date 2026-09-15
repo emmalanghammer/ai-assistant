@@ -1735,7 +1735,14 @@ function positionSheet(){
   top = Math.min(top, Math.max(headBoundary, chromeBoundary));
 
   sheet.style.bottom = bottomOffset + 'px';
-  sheet.style.maxHeight = Math.max(0, Math.round(trigRect.top - gap - top)) + 'px';
+  /* Never below the guaranteed minimum this function's comment promises —
+     header, category row and three prompts. The old floor was 0, so any
+     state where the measurements came out tight collapsed the sheet to a
+     sliver of padding with nothing in it, which is worse than overlapping
+     the conversation by a few pixels. If the trigger has not been laid out
+     yet its rect is all zeroes, which is exactly one of those states. */
+  const available = Math.round(trigRect.top - gap - top);
+  sheet.style.maxHeight = Math.max(Math.round(chromeHeight), available) + 'px';
 }
 window.addEventListener('resize', () => {
   if (!state.orionOpen || !state.sheetOpen) return;

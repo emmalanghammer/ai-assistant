@@ -634,7 +634,9 @@ a { color: var(--text-link); }
    corner rather than bottom-center. top:100px clears the app header
    (48px) + context bar (40px) — both position:sticky — plus a 12px gap,
    so the toast never sits on top of the header's own icons. */
-.rv-toast { position:fixed; top:100px; right:20px; z-index:200; max-width:420px; display:flex; align-items:center; gap:12px; padding:16px; border-radius:var(--radius-sm); background:var(--container-secondary-dark); color:#fff; box-shadow:var(--shadow-toast); }
+/* Centred across the page, not tucked in a corner — a confirmation is the
+   one thing in here that must not be missed. */
+.rv-toast { position:fixed; top:100px; left:50%; transform:translateX(-50%); z-index:200; max-width:420px; display:flex; align-items:center; gap:12px; padding:16px; border-radius:var(--radius-sm); background:var(--container-secondary-dark); color:#fff; box-shadow:var(--shadow-toast); }
 .rv-toast.success { background:var(--component-toast-success); }
 .rv-toast .rmx-icon { width:32px; height:32px; flex:none; }
 .rv-toast .msg { font:600 16px/1.3 'Roboto',sans-serif; }
