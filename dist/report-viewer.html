@@ -3111,13 +3111,13 @@ const DATA_PROMPTS = {
     tileName:'Portfolio Occupancy', tileRows:[ ['Portfolio','89.6% · 751 of 838','Below',ORANGE] ],
     summary:"89.6% occupied portfolio-wide, ranging from Birchwood Flats at 92.5% down to Hawthorne Ridge at 84.6%.",
     actions:['summarize','print'] },
-  q2: { reportName:'Work Order History · Over 7 Days', reportSource:'Services · Work Order Detail', cat:1, icon:'build', label:'Show me a list of maintenance requests that took more than 7 days to resolve',
-    kw:'maintenance requests list resolve resolved days work orders slow',
-    text:'14 work orders closed in the last 90 days took longer than 7 days. Average time to resolve on those was 12.4 days against a 3.1-day portfolio average.',
-    table:[ ['WO-4090 · Hawthorne 1108','HVAC · D. Ramirez rescheduled twice','16 d',RED], ['WO-4319 · Hawthorne 902','HVAC · waiting on D. Ramirez','15 d',RED], ['WO-4276 · Hawthorne 410','HVAC · part on backorder','13 d',RED], ['WO-4198 · Hawthorne 204','HVAC · D. Ramirez no-show','14 d',RED], ['WO-4142 · Hawthorne 512','HVAC · D. Ramirez rescheduled','10 d',ORANGE], ['WO-4265 · Hawthorne 305','HVAC · waiting on D. Ramirez','9 d',ORANGE], ['WO-4182 · Riverview 204B','Plumbing · opened Jun 2 · closed Jun 21','21 d',RED], ['WO-4213 · Union 214','Appliance · part on backorder','11 d',ORANGE], ['WO-4155 · Riverview 305','Electrical · permit wait','9 d',ORANGE], ['WO-4256 · Crestline 118','Roof · parts backorder','16 d',RED], ['WO-4301 · Harbor Flats 702','Plumbing · T. Alvarez no-show','13 d',RED], ['WO-4188 · Willowbrook 145','Appliance · part on backorder','10 d',ORANGE], ['WO-4247 · Ridgeline 420','General · scheduling delay','8 d',ORANGE], ['WO-4330 · Union 610','Electrical · permit wait','8 d',ORANGE] ],
+  q2: { reportName:'Issue History · Over 7 Days', reportSource:'Services · Issue Detail', cat:1, icon:'build', label:'Show me a list of maintenance requests that took more than 7 days to resolve',
+    kw:'maintenance requests list resolve resolved days issues slow',
+    text:'14 issues closed in the last 90 days took longer than 7 days. Average time to resolve on those was 12.4 days against a 3.1-day portfolio average.',
+    table:[ ['4090 · Hawthorne 1108','HVAC · D. Ramirez rescheduled twice','16 d',RED], ['4319 · Hawthorne 902','HVAC · waiting on D. Ramirez','15 d',RED], ['4276 · Hawthorne 410','HVAC · part on backorder','13 d',RED], ['4198 · Hawthorne 204','HVAC · D. Ramirez no-show','14 d',RED], ['4142 · Hawthorne 512','HVAC · D. Ramirez rescheduled','10 d',ORANGE], ['4265 · Hawthorne 305','HVAC · waiting on D. Ramirez','9 d',ORANGE], ['4182 · Riverview 204B','Plumbing · opened Jun 2 · closed Jun 21','21 d',RED], ['4213 · Union 214','Appliance · part on backorder','11 d',ORANGE], ['4155 · Riverview 305','Electrical · permit wait','9 d',ORANGE], ['4256 · Crestline 118','Roof · parts backorder','16 d',RED], ['4301 · Harbor Flats 702','Plumbing · T. Alvarez no-show','13 d',RED], ['4188 · Willowbrook 145','Appliance · part on backorder','10 d',ORANGE], ['4247 · Ridgeline 420','General · scheduling delay','8 d',ORANGE], ['4330 · Union 610','Electrical · permit wait','8 d',ORANGE] ],
     findings:['9 of the 14 sat in Assigned with no tech acceptance for more than 3 days.','Hawthorne Ridge accounts for 6 of the 14 — all HVAC, all assigned to the same tech, D. Ramirez.'],
     followups:['mt_vendor','mt_open','mt_cat'],
-    tileName:'Slow Work Orders', tileRows:[ ['Over 7 days','14 work orders · avg 12.4 days','Watch',RED] ],
+    tileName:'Slow Issues', tileRows:[ ['Over 7 days','14 issues · avg 12.4 days','Watch',RED] ],
     actions:['print'] },
   q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenant Vehicles', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
     kw:'camaro vehicle car red riverview plate parking',
@@ -3161,7 +3161,7 @@ const DATA_PROMPTS = {
 };
 
 const ACTION_PROMPTS = {
-  x1: { cat:2, icon:'ac_unit', label:'Add a $25 snow removal charge to all tenants at Riverview Apartments',
+  x1: { cat:2, icon:'ac_unit', label:'Add a charge to several tenants',
     kw:'add snow removal charge all tenants riverview apartments batch post charges fee',
     text:"I can stage this as a batch charge. Here is exactly what I will post — nothing is written until you post it.",
     plan:{ title:'Batch Charge · Snow Removal', rows:[
@@ -3175,11 +3175,11 @@ const ACTION_PROMPTS = {
     posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Riverview Apartments tenant ledgers, dated Aug 28, 2026.',
       stats:[ ['148','Charges posted'], ['$3,700.00','Batch total'], ['#20458','Batch reference number'] ] },
     tileName:'Snow Removal Charge Collection', tileRows:[ ['Riverview Apartments','148 charged · 0 paid','$3,700',ORANGE], ['Due Sep 1','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
-  x3: { cat:2, icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
+  x3: { icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
     kw:'add credit tenant accounts open maintenance requests over 7 days goodwill',
     text:'I can stage this as a batch credit. Here is exactly what I will post — nothing is written until you post it.',
     plan:{ title:'Batch Credit · Maintenance Delay Goodwill', rows:[
-        ['Criteria','Tenant has an open work order older than 7 days · one credit each'],
+        ['Criteria','Tenant has an open issue older than 7 days · one credit each'],
         ['Applies to','14 tenants · 6 properties'],
         ['Charge type','Goodwill Credit · GL 4120 Other Income (contra)'],
         ['Amount','-$25.00 each · one time, not recurring'],
@@ -3192,7 +3192,7 @@ const ACTION_PROMPTS = {
       stats:[ ['14','Credits posted'], ['$350.00','Batch total'], ['#20512','Batch reference number'] ] },
     tileName:'Maintenance Delay Credits', tileRows:[ ['This batch','14 tenants · $350.00 credited','Posted',GREEN] ],
     reportName:'Batch Credit · Maintenance Delay Goodwill', reportSource:'Transactions · Batch Credits' },
-  x4: { cat:2, icon:'local_parking', label:'Add a parking violation for red Camaro at Riverview Apartments',
+  x4: { icon:'local_parking', label:'Add a parking violation for red Camaro at Riverview Apartments',
     kw:'add parking violation red camaro riverview',
     text:"I found the vehicle. Marcus Reed's 2019 Chevrolet Camaro is the only exact red Camaro match at Riverview Apartments — here's the violation I'll log.",
     tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'} ],
@@ -3205,15 +3205,15 @@ const ACTION_PROMPTS = {
     actions:['log_violation','cancel'],
     posted:{ text:'Logged. A parking violation was added to Marcus Reed’s tenant record, dated Aug 28, 2026.',
       stats:[ ['1','Violation logged'], ['P-118','Space parked in'], ['#PV-3042','Violation reference number'] ] } },
-  x5: { cat:2, icon:'assignment_late', label:'Help me prioritize the maintenance requests submitted via the resident portal this week',
+  x5: { icon:'assignment_late', label:'Help me prioritize the maintenance requests submitted via the resident portal this week',
     kw:'prioritize maintenance requests resident portal this week triage',
     text:'Six new requests came in through the resident portal this week. I ranked them by urgency — I can set these priority levels in Rent Manager if you approve.',
-    table:[ ['WO-4402 · Hawthorne 902','No heat reported · HVAC','Urgent',RED], ['WO-4405 · Riverview 118','Water leak under sink · Plumbing','Urgent',RED], ['WO-4410 · Union 214','Garbage disposal not working · Appliance','High',ORANGE], ['WO-4412 · Willowbrook 145','Smoke detector chirping · General','High',ORANGE], ['WO-4415 · Crestline 220','Light fixture flickering · Electrical','Medium',GRAY], ['WO-4418 · Ridgeline 420','Squeaky door hinge · General','Low',GRAY] ],
+    table:[ ['4402 · Hawthorne 902','No heat reported · HVAC','Urgent',RED], ['4405 · Riverview 118','Water leak under sink · Plumbing','Urgent',RED], ['4410 · Union 214','Garbage disposal not working · Appliance','High',ORANGE], ['4412 · Willowbrook 145','Smoke detector chirping · General','High',ORANGE], ['4415 · Crestline 220','Light fixture flickering · Electrical','Medium',GRAY], ['4418 · Ridgeline 420','Squeaky door hinge · General','Low',GRAY] ],
     findings:['The no-heat and water-leak requests are emergency-priority regardless of submission order.','The other four are routine and can be scheduled around your crew’s current workload.'],
     actions:['apply_priorities','cancel'],
-    posted:{ text:'Applied. Priority levels were set on all 6 work orders — the 2 urgent requests now show at the top of the technician queue.',
+    posted:{ text:'Applied. Priority levels were set on all 6 issues — the 2 urgent requests now show at the top of the technician queue.',
       stats:[ ['6','Priorities updated'], ['2','Marked urgent'], ['Aug 28, 2026','Applied date'] ] } },
-  x6: { cat:2, icon:'drafts', label:'Draft follow-up emails to all my leads that haven’t responded in over 7 days',
+  x6: { icon:'drafts', label:'Draft follow-up emails to all my leads that haven’t responded in over 7 days',
     kw:'draft follow up emails leads no response 7 days prospects',
     text:'Six leads have gone quiet for more than 7 days after real engagement. I drafted a short, personalized check-in for each — nothing sends until you approve.',
     table:[ ['Devon Marsh','22 days silent · last touch: guest card','Draft ready',GRAY], ['Dana Whitfield','18 days silent · last touch: toured Riverview 212','Draft ready',GRAY], ['Simone Baptiste','17 days silent · last touch: application','Draft ready',GRAY], ['Felicia Ward','16 days silent · last touch: toured','Draft ready',GRAY], ['Aaron Blake','15 days silent · last touch: toured','Draft ready',GRAY], ['Miguel Torres','14 days silent · last touch: application','Draft ready',GRAY] ],
@@ -3224,26 +3224,26 @@ const ACTION_PROMPTS = {
 };
 
 const BILLING_PROMPTS = {
-  x2: { cat:2, icon:'request_quote', label:'Find all unbilled maintenance requests to property owners and create the bills',
-    kw:'find all unbilled maintenance requests property owners create bills billable work orders rebill charge back',
-    text:'I found 23 completed work orders across 6 owners with billable cost and no owner charge posted against them. Here is the batch I would create — nothing posts until you say so.',
+  x2: { icon:'request_quote', label:'Find all unbilled maintenance requests to property owners and create the bills',
+    kw:'find all unbilled maintenance requests property owners create bills billable issues rebill charge back',
+    text:'I found 23 completed issues across 6 owners with billable cost and no owner charge posted against them. Here is the batch I would create — nothing posts until you say so.',
     plan:{ title:'Owner Billing Batch · Unbilled Maintenance', rows:[
-        ['Source','Completed work orders, Jun 1 – Aug 28, 2026'], ['Found unbilled','23 work orders · 6 owners · 9 properties'],
+        ['Source','Completed issues, Jun 1 – Aug 28, 2026'], ['Found unbilled','23 issues · 6 owners · 9 properties'],
         ['Billable cost','$18,940.00 labor, parts and vendor invoices'], ['Management markup','10% per management agreement · $1,894.00'],
         ['Batch total','$20,834.00 across 6 owner bills'], ['Charge type','Maintenance Reimbursement · GL 5210'],
-        ['Bill date','Aug 28, 2026 · net 15'], ['Held back','4 work orders · missing vendor invoice or cost'] ],
-      warn:'Two work orders at Hawthorne Ridge exceed the $2,500 owner approval threshold in the management agreement and have no approval on file. They are excluded from the batch until approval is logged.' },
-    table:[ ['Delgado Holdings','7 work orders · Riverview','$6,320',GRAY], ['Ridgeline Partners LP','5 work orders · Ridgeline','$4,720',GRAY], ['Harbor Equity Group','4 work orders · Harbor Flats','$3,650',GRAY], ['Union Street Trust','3 work orders · Union Lofts','$2,780',GRAY], ['Crestline Ventures','2 work orders · Crestline','$1,790',GRAY], ['Meridian Holdings','2 work orders · Willowbrook','$1,574',GRAY] ],
-    findings:['The oldest unbilled order is 84 days old — WO-4090, HVAC at Hawthorne 1108, $2,180.','9 of the 23 have a vendor invoice attached, so those bills carry documentation automatically.','4 orders are held back because cost is still $0 — vendor invoice not entered yet.'],
+        ['Bill date','Aug 28, 2026 · net 15'], ['Held back','4 issues · missing vendor invoice or cost'] ],
+      warn:'Two issues at Hawthorne Ridge exceed the $2,500 owner approval threshold in the management agreement and have no approval on file. They are excluded from the batch until approval is logged.' },
+    table:[ ['Delgado Holdings','7 issues · Riverview','$6,320',GRAY], ['Ridgeline Partners LP','5 issues · Ridgeline','$4,720',GRAY], ['Harbor Equity Group','4 issues · Harbor Flats','$3,650',GRAY], ['Union Street Trust','3 issues · Union Lofts','$2,780',GRAY], ['Crestline Ventures','2 issues · Crestline','$1,790',GRAY], ['Meridian Holdings','2 issues · Willowbrook','$1,574',GRAY] ],
+    findings:['The oldest unbilled order is 84 days old — 4090, HVAC at Hawthorne 1108, $2,180.','9 of the 23 have a vendor invoice attached, so those bills carry documentation automatically.','4 orders are held back because cost is still $0 — vendor invoice not entered yet.'],
     actions:['postbills','held','cancel'],
-    posted:{ text:'Created. 6 owner bills totaling $20,834.00, dated Aug 28, 2026, each itemized by work order with the vendor invoice attached where one exists.',
-      stats:[ ['6','Owner bills created'], ['$20,834.00','Billed · incl. $1,894 markup'], ['19','Work orders marked billed'] ],
+    posted:{ text:'Created. 6 owner bills totaling $20,834.00, dated Aug 28, 2026, each itemized by issue with the vendor invoice attached where one exists.',
+      stats:[ ['6','Owner bills created'], ['$20,834.00','Billed · incl. $1,894 markup'], ['19','Issues marked billed'] ],
       table:[ ['Delgado Holdings','Bill 10442 · 6 orders · net 15','$6,320',GREEN], ['Ridgeline Partners LP','Bill 10443 · 4 orders · net 15','$4,720',GREEN], ['Harbor Equity Group','Bill 10444 · 3 orders · net 15','$3,650',GREEN], ['Union Street Trust','Bill 10445 · 2 orders · net 15','$2,780',GREEN], ['Crestline Ventures','Bill 10446 · 2 orders · net 15','$1,790',GREEN], ['Meridian Holdings','Bill 10447 · 2 orders · net 15','$1,574',GREEN] ],
       note:'Bills sit in Owner Statements as unsent. Review and send them from Owners > Pay Owners.' } },
 };
 
 const INSIGHT_PROMPTS = {
-  d1: { reportName:'Delinquency Detail', reportSource:'Receivables · Delinquency', cat:2, icon:'task_alt', label:'Where should I focus on delinquency this month?',
+  d1: { reportName:'Delinquency Detail', reportSource:'Receivables · Delinquency', icon:'task_alt', label:'Where should I focus on delinquency this month?',
     kw:'delinquency focus this month behind pace collections',
     text:'You are behind where you were at this point last month. On day 18 of the period you had collected 93.40%; today you are at 91.18%, which is $23,410 more outstanding than the same day last month.',
     stats:[ ['$249,502','Delinquent balance (+$23,410 vs. day 18 last month)'], ['91.18%','Collected · down 2.22 pts from 93.40%'], ['Behind','Pace vs. same day last month'] ],
@@ -3256,7 +3256,7 @@ const INSIGHT_PROMPTS = {
     tileRows:[ ['Hawthorne Ridge','$64,870 · was $38,140','Behind',RED], ['Riverview Apartments','$32,072 · was $31,640','Flat',GRAY], ['Crestline Business Park','$26,012 · was $29,880','Ahead',GREEN] ],
     tileFooter:'Day 18 of period · same-day comparison · refreshes daily',
     table:[ ['Portfolio','91.18% collected · was 93.40%','-2.22 pts',RED], ['Hawthorne Ridge','8.94% uncollected · was 5.31%','-3.63 pts',RED], ['Riverview Apartments','7.37% uncollected · was 7.28%','-0.09 pts',GRAY], ['Crestline Business Park','19.56% uncollected · was 22.10%','+2.54 pts',GREEN] ] },
-  d2: { reportName:'Upcoming Vacancy & Prospect Coverage', reportSource:'Rental Info · Lease Expiration', cat:1, icon:'insights', label:'Show me upcoming vacant units and any prospects that have shown interest or may be a good fit.',
+  d2: { reportName:'Upcoming Vacancy & Prospect Coverage', reportSource:'Rental Info · Lease Expiration', icon:'insights', label:'Show me upcoming vacant units and any prospects that have shown interest or may be a good fit.',
     kw:'upcoming vacant units prospects interest good fit coverage',
     text:'Here is what I found across your 10 selected properties for the next 30 days.',
     bullets:['14 units are vacating, and 9 applications are pending across 5 of them.','4 units have logged prospect interest but no application yet.','5 units have no interest logged at all, and Unit 420 at Ridgeline is the closest of those at Sep 24.','23 prospects are interested across all vacating units, and 6 more match Unit 420’s preferences without having asked about it.','Harbor Flats has the thinnest coverage of any property, at 44% of its vacating units.'],
@@ -3267,12 +3267,12 @@ const INSIGHT_PROMPTS = {
     tileHead:['Unit','Vacant · applications','Interest'], tileNote:'14 vacating · 5 covered · 4 interest only · 5 with no interest logged',
     tileRows:[ ['420 · Ridgeline','Sep 24 · no applications','None',RED], ['1108 · Harbor Flats','Sep 19 · 1 pending','3',ORANGE], ['305 · Ridgeline','Sep 12 · 2 pending','4',GREEN] ],
     tileFooter:'14 units · 23 interested prospects' },
-  d3: { reportName:'Resident Sentiment Watchlist', reportSource:'Rental Info · Tenant History', cat:1, icon:'insights', label:'Flag escalated residents before they vacate',
+  d3: { reportName:'Resident Sentiment Watchlist', reportSource:'Rental Info · Tenant History', icon:'insights', label:'Flag escalated residents before they vacate',
     kw:'escalated residents sentiment flag vacate churn',
     text:'I read maintenance history, portal messages, survey responses and smart voicemail transcripts for the last 30 days.',
     stats:[ ['7','Residents with negative sentiment'], ['3','Renew within 60 days'], ['19','Escalated signals logged'] ],
     findings:['Maria Delgado (204B) is the sharpest drop: 3 ticket re-opens, 2 portal complaints and a 4/10 survey.','Two more negative-sentiment residents renew inside 120 days, and both cite noise rather than price.','Sentiment for this group has declined six months running while resolved-ticket volume fell.'],
-    note:'Based on history and notes, work orders, portal messages, surveys and voicemail transcripts.',
+    note:'Based on history and notes, issues, portal messages, surveys and voicemail transcripts.',
     actions:['nextsteps','list','print'],
     nextSteps:[ ['Walk 204B with a technician','Same issue re-opened three times. Renewal decision is due Oct 31.'], ['Group the noise complaints','Four residents in the same building reported noise in the same window.'], ['Close the 9-day-old portal messages','Two residents are waiting on a reply, which is the strongest churn signal in the set.'] ],
     tileName:'Resident Sentiment Watchlist', tileHead:['Resident','Unit · renewal','Sentiment'],
@@ -3280,7 +3280,7 @@ const INSIGHT_PROMPTS = {
     tileRows:[ ['Maria Delgado','204B · renews Oct 31','-38',RED], ['Terrance Boyd','1108 · renews Dec 31','-19',ORANGE], ['Anh Nguyen','512 · renews Feb 28','-12',ORANGE] ],
     tileFooter:'7 residents tracked · refreshes daily',
     table:[ ['Maria Delgado','3 re-opens · survey 4/10','-38',RED], ['Terrance Boyd','Voicemail: noise · 1 escalation','-19',ORANGE], ['Anh Nguyen','2 portal messages unresolved','-12',ORANGE] ] },
-  d4: { reportName:'Lead Conversion Scoring', reportSource:'Rental Info · Prospect Waiting List', cat:1, icon:'insights', label:'Score my leads by likelihood to convert',
+  d4: { reportName:'Lead Conversion Scoring', reportSource:'Rental Info · Prospect Waiting List', icon:'insights', label:'Score my leads by likelihood to convert',
     kw:'score leads likelihood convert conversion',
     text:'I scored 34 active leads on stage reached, days in stage, note volume, visits and reply speed.',
     stats:[ ['34','Active leads scored'], ['8','Scoring 81 to 100'], ['66','Average score'] ],
@@ -3293,7 +3293,7 @@ const INSIGHT_PROMPTS = {
     tileRows:[ ['Priya Raman','Application · 4 days','91',GREEN], ['Jordan Wells','Property Tour · 6 days','84',GREEN], ['Chris Okafor','Guest Card · 2 days','72',GRAY] ],
     tileFooter:'34 leads scored · top 10 shown',
     table:[ ['Priya Raman','Application · 2 replies this week','91',GREEN], ['Dana Whitfield','Screening · 11 days stalled','41',ORANGE], ['Nia Carter','Guest Card · no visits','28',RED] ] },
-  d5: { cat:2, icon:'insights', label:'Pre-tour briefing 30 minutes before showings',
+  d5: { icon:'insights', label:'Pre-tour briefing 30 minutes before showings',
     kw:'pre tour briefing showings today',
     text:'You have two showings today. I cross-referenced each prospect’s stated preferences against current availability.',
     stats:[ ['2','Showings today'], ['5','Units ranked'], ['96','Best fit score'] ],
@@ -3305,7 +3305,7 @@ const INSIGHT_PROMPTS = {
     tileNote:'Emails you the ranked shortlist 30 minutes before each showing',
     tileRows:[ ['2:30 PM · Jordan Wells','Unit 305 · $1,795','96',GREEN], ['4:15 PM · Chris Okafor','Unit 610 · $1,320','90',GREEN], ['Fallback','Unit 420 · over budget','63',ORANGE] ],
     tileFooter:'Today’s showings · ranked by fit' },
-  n1: { reportName:'Prospect Follow-Up Aging', reportSource:'Rental Info · Prospect Activity', cat:2, icon:'task_alt', label:'Who should I follow up with today?',
+  n1: { reportName:'Prospect Follow-Up Aging', reportSource:'Rental Info · Prospect Activity', icon:'task_alt', label:'Who should I follow up with today?',
     kw:'follow up today prospects contact',
     text:'21 active prospects have had no communication or status change in 7 or more days. Here is how I would order them.',
     stats:[ ['21','Awaiting contact'], ['3','Past 30 days'], ['9','Went quiet after strong interest'] ],
@@ -3321,6 +3321,10 @@ const INSIGHT_PROMPTS = {
 };
 
 
+/* Only prompts with a `cat` appear in the Prompt Suggestions sheet. The ones
+   without one still answer if typed, and the seeded history still links to
+   them — they are just not suggested. That is how the sheet was trimmed back
+   to the three lists Emma specified without throwing away working answers. */
 const PROMPTS = Object.assign({}, HELP_PROMPTS, DATA_PROMPTS, INSIGHT_PROMPTS, ACTION_PROMPTS, BILLING_PROMPTS);
 
 const UNITS = [
@@ -3363,11 +3367,11 @@ const FOLLOWUPS = {
   occ_econ: { q:'What is the economic occupancy?', text:'Physical occupancy is 89.6%; economic occupancy is 87.0%. The 2.6-point gap is concessions and unpaid rent, not empty units.',
     bullets:['Concessions in place on 18 leases — $14,200 of monthly rent forgiven.','Delinquency over 30 days on 22 leases — $31,480 billed but uncollected.'] },
   mt_vendor: { q:'Which techs are slowest?', text:'Two techs carry most of the delay. Average days from assignment to first on-site visit:',
-    table:[ ['D. Ramirez','6 work orders · avg 9.2 days to first visit','Slow',RED], ['T. Alvarez','4 work orders · avg 5.8 days','Watch',ORANGE], ['Rest of team','31 work orders · avg 0.9 days','On time',GREEN] ], followups:['mt_open'] },
-  mt_open: { q:'Are any of these still open?', text:'All 14 are closed. Separately, 6 open work orders are already past 7 days — those are the ones worth attention now.',
+    table:[ ['D. Ramirez','6 issues · avg 9.2 days to first visit','Slow',RED], ['T. Alvarez','4 issues · avg 5.8 days','Watch',ORANGE], ['Rest of team','31 issues · avg 0.9 days','On time',GREEN] ], followups:['mt_open'] },
+  mt_open: { q:'Are any of these still open?', text:'All 14 are closed. Separately, 6 open issues are already past 7 days — those are the ones worth attention now.',
     findings:['4 of the 6 are assigned to D. Ramirez and have no accepted date.','2 are waiting on tenant access after two failed entry attempts.'], followups:['mt_vendor'] },
   mt_cat: { q:'Which categories run longest?', text:'By average days to resolve over the last 90 days:',
-    table:[ ['HVAC','22 work orders · avg 8.4 days','8.4 d',RED], ['Appliance','17 work orders · avg 5.1 days','5.1 d',ORANGE], ['Plumbing','34 work orders · avg 2.6 days','2.6 d',GREEN], ['General','58 work orders · avg 1.8 days','1.8 d',GREEN] ] },
+    table:[ ['HVAC','22 issues · avg 8.4 days','8.4 d',RED], ['Appliance','17 issues · avg 5.1 days','5.1 d',ORANGE], ['Plumbing','34 issues · avg 2.6 days','2.6 d',GREEN], ['General','58 issues · avg 1.8 days','1.8 d',GREEN] ] },
   veh_parking: { q:'Which parking space is assigned to that unit?', text:'Unit 512 has one assigned space, P-212 in the covered garage, on the lease as a $75 monthly recurring charge.',
     bullets:['Second vehicle on file for the unit — 2016 Honda Civic, gray — has no assigned space.','Riverview has 7 unassigned covered spaces available this month.'] },
   veh_missing: { q:'How many tenants have no vehicle on file?', text:'At Riverview Apartments, 41 of 148 occupied units have no vehicle record. 19 of those have a parking charge on the lease, which is usually a data-entry gap rather than a tenant without a car.', followups:['veh_parking'] },
@@ -3376,7 +3380,7 @@ const FOLLOWUPS = {
   unit_rents: { q:'How do those rents compare to the property average?', text:'All three are priced above their property average, which is consistent with the waterfront premium on file.',
     table:[ ['Riverview 204B','$1,890 · 2 bed average $1,742','+8.5%',GREEN], ['Riverview 212','$1,610 · 1 bed average $1,505','+7.0%',GREEN], ['Harbor Flats 208','$1,975 · 2 bed average $1,860','+6.2%',GREEN] ] },
   pl_rm: { q:'Why is Repairs & Maintenance up?', text:'Repairs & Maintenance is up $38,660 against last August. Three items account for $34,100 of it.',
-    bullets:['Hawthorne Ridge roof repairs — $18,400 across two work orders, no comparable spend last year.','Riverview HVAC compressor replacements — $9,900 on three units.','Turn-related drywall and paint at Union Street Lofts — $5,800, tied to 9 turns this month against 4 last August.'],
+    bullets:['Hawthorne Ridge roof repairs — $18,400 across two issues, no comparable spend last year.','Riverview HVAC compressor replacements — $9,900 on three units.','Turn-related drywall and paint at Union Street Lofts — $5,800, tied to 9 turns this month against 4 last August.'],
     note:'The roof work is capital-eligible. Moving it out of R&M would put the category at +3.7% year over year.', followups:['pl_noi','pl_byprop'] },
   pl_noi: { q:'Which property drove the NOI change?', text:'NOI is up $29,570. Riverview carried it; Hawthorne Ridge is the only property down year over year.',
     table:[ ['Riverview Apartments','NOI $341,200 · was $318,600','+7.1%',GREEN], ['Union Street Lofts','NOI $198,400 · was $191,050','+3.8%',GREEN], ['Crestline Business Park','NOI $151,900 · was $149,800','+1.4%',GRAY], ['Hawthorne Ridge','NOI $115,500 · was $117,980','-2.1%',RED] ], followups:['pl_rm','pl_byprop'] },
@@ -4014,8 +4018,8 @@ function act(key, id){
   }
   if (key === 'held'){
     push([{ role:'user', text:'What is holding back the other 4?' },
-      { role:'bot', src:id, text:'Four work orders have no cost recorded, so a bill would post at $0. Two more are over the owner approval threshold.',
-        table:[ ['WO-4318 · Hawthorne 1108','HVAC · Summit HVAC · no invoice','$0',RED], ['WO-4327 · Riverview 512','Plumbing · in-house · no labor logged','$0',RED], ['WO-4290 · Hawthorne 902','Roof · over $2,500, no approval','$3,140',ORANGE], ['WO-4291 · Hawthorne 410','Roof · over $2,500, no approval','$2,780',ORANGE] ],
+      { role:'bot', src:id, text:'Four issues have no cost recorded, so a bill would post at $0. Two more are over the owner approval threshold.',
+        table:[ ['4318 · Hawthorne 1108','HVAC · Summit HVAC · no invoice','$0',RED], ['4327 · Riverview 512','Plumbing · in-house · no labor logged','$0',RED], ['4290 · Hawthorne 902','Roof · over $2,500, no approval','$3,140',ORANGE], ['4291 · Hawthorne 410','Roof · over $2,500, no approval','$2,780',ORANGE] ],
         note:'Enter the vendor invoices and log owner approval, then ask me again and I will restage those four.', actions:['postbills','cancel'] }]);
     return;
   }
