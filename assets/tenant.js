@@ -30,7 +30,6 @@
   /* The page title is the register this record belongs to, not the record —
      Context Bar, node 10861:12222, carries one Title Text item. The record's
      own name is the Scoreboard's job. */
-  document.title = r.name + ' — Rent Manager Express';
   document.getElementById('tdName').textContent = r.name;
 
   /* Scoreboard Header, node 11560:8512. Identity row at 40px gaps: name,
