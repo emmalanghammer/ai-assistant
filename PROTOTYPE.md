@@ -72,6 +72,12 @@ library at all, and are standing in:
 | `trending_up/down/flat` | `arrow_upward` / `arrow_downward` / `remove` | No trend glyphs in the library. |
 | `insights`, `touch_app`, `list_alt`, `table_view`, `picture_as_pdf`, `fact_check` | `reports`, `info`, `list`, `grid-view`, `description`, `list` | Generic Material names with no RMX equivalent. |
 
+One icon comes from a different library. `edit_square` — the assistant panel's
+"new chat" glyph — is harvested from the **Orion Express Help design file**
+(`3Ih40kVMyQyRUERvXAFIkQ`, node 2983:17248), because RMX Iconography ships
+`edit` and `edit-filled` but no `edit_square`. Real geometry, just not from the
+icon library, which is worth knowing if the icon set is ever re-harvested.
+
 Everything else resolved to the *correct* Express icon rather than a generic one
 — a snow-removal charge is `recurring-charges`, a parking violation is
 `violations`, "create the bills" is `bills`.

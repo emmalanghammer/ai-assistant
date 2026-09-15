@@ -1037,10 +1037,13 @@ a { color: var(--text-link); }
 .orion-head .row { display:flex; align-items:center; justify-content:space-between; height:20px; }
 .orion-head .left { display:flex; align-items:center; gap:8px; }
 .orion-head .left .name { font-size:14px; line-height:20px; font-weight:400; color:var(--text-secondary); }
-.orion-head .icons { display:flex; align-items:center; gap:8px; }
-.orion-head .icons .rmx-icon { width:20px; height:20px; color:var(--icon-tertiary); cursor:pointer; }
+/* Header icon cluster — Figma "Icons", node 2983:17248. Three 20px glyphs at
+   8px gaps, navy (#13314c), with a 1px border-primary separator between each,
+   the full 20px height of the icons beside it. */
+.orion-head .icons { display:flex; align-items:center; gap:var(--spacing-xs); }
+.orion-head .icons .rmx-icon { width:20px; height:20px; color:var(--text-secondary); cursor:pointer; }
 .orion-head .icons .rmx-icon:hover { color: var(--text-link); }
-.orion-head .vdiv { width:1px; height:16px; background:var(--border-primary); }
+.orion-head .vdiv { width:1px; height:20px; background:var(--border-primary); }
 .orion-head hr { border:none; border-top:1px solid var(--border-primary); margin:10px -16px 0; }
 
 /* Orion Assistant History — full panel view (Figma node 2431:12173) */
@@ -1075,9 +1078,18 @@ a { color: var(--text-link); }
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
 .home-ask-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; }
-.home-ask { display:flex; align-items:center; gap:8px; width:100%; background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-sm); padding:8px; }
-.home-ask input { flex:1; border:none; outline:none; background:transparent; font:400 14px 'Roboto',sans-serif; color:var(--text-secondary); min-width:0; }
-.home-ask input::placeholder { color:var(--text-disabled); font-style:italic; }
+/* Orion_Input Fields — Figma 2983:17176. Horizontal auto-layout, 8px padding,
+   8px gap, radius 4, white on a border-primary hairline. The field grows and
+   the text wraps; align-items:flex-end is the counterAxisAlignItems:MAX in the
+   component, and it is what keeps the send arrow on the last line rather than
+   floating in the middle of a tall box. */
+.home-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs); width:100%;
+  background:var(--container-primary); border:1px solid var(--border-primary);
+  border-radius: var(--radius-sm); padding:var(--spacing-xs); }
+.home-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
+  font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
+  resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
+.home-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
 .home-disclaimer { font: italic 400 12px 'Roboto',sans-serif; color: var(--text-primary); text-align:center; max-width:360px; margin:0 auto; }
 .browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
@@ -1281,10 +1293,19 @@ a { color: var(--text-link); }
 .prompt-item .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
 .orion-composer { flex:none; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
-.orion-ask { display:flex; align-items:center; gap:10px; border:1px solid var(--border-primary); border-radius:6px; padding:11px 14px; background:#fff; box-shadow:0 1px 2px rgba(76,76,76,.08); }
-.orion-ask input { flex:1; min-width:0; border:none; outline:none; background:transparent; font:400 14.5px 'Roboto',sans-serif; color:var(--text-secondary); }
-.orion-ask input::placeholder { color:var(--text-disabled); }
-.orion-ask .rmx-icon.send { width:24px; height:24px; color:var(--text-link); cursor:pointer; }
+/* The composer at the foot of a conversation is the same Orion_Input Fields
+   component, so it grows the same way. Snapped to the component's own values
+   while here: it was 14.5px type (no such style) in a 6px radius (no such
+   token) on 11/14 padding. */
+.orion-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs);
+  border:1px solid var(--border-primary); border-radius:var(--radius-sm);
+  padding:var(--spacing-xs); background:var(--container-primary);
+  box-shadow:0 1px 2px rgba(76,76,76,.08); }
+.orion-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
+  font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
+  resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
+.orion-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
+.orion-ask .rmx-icon.send { width:20px; height:20px; color:var(--text-link); cursor:pointer; flex:none; }
 .browse-btn { height:32px; padding:0 12px; border-radius:var(--radius-sm); font:400 14px/20px 'Roboto',sans-serif; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); }
 .browse-btn.active { background:var(--bg-hover); border-color:var(--border-secondary); color:var(--text-link); }
 .orion-disclaimer { text-align:center; font-size:12.5px; font-style:italic; color:var(--text-primary); }
@@ -1911,6 +1932,12 @@ a { color: var(--text-link); }
 <symbol id="priorities" viewBox="0 0 20 20" fill="currentColor"><path d="M8.13 16C8.13 15.99 8.13 15.99 8.13 15.99C8.13 15.73 8.18 15.5 8.27 15.28C8.37 15.07 8.5 14.88 8.66 14.72C9 14.39 9.46 14.19 9.96 14.19C9.97 14.19 9.98 14.19 9.99 14.19C9.99 14.19 10 14.19 10 14.19C10.26 14.19 10.5 14.25 10.72 14.34C10.94 14.43 11.14 14.56 11.3 14.72C11.63 15.04 11.84 15.48 11.84 15.98C11.84 15.98 11.84 15.99 11.84 15.99C11.84 16 11.84 16 11.84 16C11.84 16.26 11.79 16.5 11.69 16.72C11.6 16.93 11.47 17.12 11.3 17.28C11.13 17.44 10.94 17.57 10.72 17.66C10.5 17.75 10.25 17.8 9.99 17.8C9.99 17.8 9.98 17.8 9.98 17.8C9.98 17.8 9.97 17.8 9.97 17.8C9.71 17.8 9.46 17.75 9.23 17.66C9.02 17.57 8.82 17.44 8.66 17.28C8.5 17.12 8.36 16.93 8.27 16.72C8.18 16.5 8.13 16.26 8.13 16C8.13 16 8.13 16 8.13 16ZM11.54 2.28V8.32C11.54 8.32 11.54 8.32 11.54 8.33C11.54 9 11.5 9.67 11.42 10.32C11.35 10.91 11.24 11.53 11.11 12.19H8.9C8.78 11.53 8.67 10.88 8.59 10.24C8.52 9.67 8.48 9 8.48 8.33C8.48 8.32 8.48 8.32 8.48 8.32V2.28L11.54 2.28Z"/></symbol>
 <symbol id="compose-email" viewBox="0 0 20 20" fill="currentColor"><path d="M20.03 7.56C20.01 7.05 19.6 6.65 19.09 6.65C19.08 6.65 19.07 6.65 19.06 6.65H0.98C0.97 6.65 0.97 6.65 0.96 6.65C0.64 6.65 0.37 6.8 0.2 7.03L0.2 7.03C0.09 7.18 0.02 7.37 0.02 7.58C0.02 7.65 0.03 7.72 0.05 7.79L0.04 7.78V19.06C0.04 19.58 0.46 20 0.98 20H19.06C19.58 20 20 19.58 20 19.06V7.81C20.02 7.74 20.03 7.66 20.03 7.57C20.03 7.57 20.03 7.56 20.03 7.56ZM16.25 8.54L9.97 13.29L3.77 8.54H16.25ZM1.93 18.12V9.51L8.97 14.9C9.24 15.11 9.59 15.23 9.97 15.23C10.35 15.23 10.7 15.11 10.98 14.9L10.97 14.9L18.13 9.49V18.13L1.93 18.12ZM4.98 5.59L11.89 5.57V5.59L16.99 3.22L14.78 2.2L11.93 0.91L11.91 3.29V0.9L4.91 0.94L2.98 0.87L2.94 5.59L4.98 5.59ZM12.5 1.79L14.78 2.83V3.61L12.47 4.69L12.5 1.79Z"/></symbol>
 <symbol id="bills" viewBox="0 0 20 20" fill="currentColor"><path d="M12.81 11.78C12.49 11.55 12.12 11.35 11.73 11.2L11.69 11.19C11.34 11.06 10.97 10.93 10.6 10.81L10.86 7C11.05 7.04 11.23 7.09 11.39 7.16L11.37 7.15C11.59 7.25 11.78 7.34 11.95 7.44L11.93 7.43L12.35 7.67C12.46 7.75 12.59 7.8 12.73 7.81H12.73C12.97 7.8 13.17 7.66 13.28 7.47L13.28 7.47L13.72 6.78L13.62 6.68C13.27 6.35 12.88 6.06 12.45 5.82L12.42 5.81C12 5.58 11.51 5.42 10.99 5.35L10.97 5.35L11.06 3.53L14.74 4.41L10.8 0.02L6.4 3.96L9.75 3.52L9.67 5.28C9.13 5.31 8.62 5.44 8.15 5.64L8.18 5.63C7.72 5.82 7.32 6.09 6.98 6.42C6.66 6.73 6.41 7.1 6.24 7.52L6.23 7.54C6.07 7.92 5.97 8.36 5.97 8.83C5.97 8.86 5.97 8.89 5.97 8.93C5.97 9.42 6.08 9.89 6.28 10.31L6.27 10.29C6.46 10.67 6.73 10.99 7.05 11.25L7.05 11.25C7.36 11.5 7.71 11.71 8.1 11.87L8.12 11.88C8.47 12.01 8.83 12.14 9.18 12.25L8.89 16.47C8.6 16.43 8.35 16.35 8.11 16.24L8.12 16.25C7.86 16.13 7.63 15.99 7.42 15.85L7.43 15.86C7.24 15.72 7.07 15.6 6.94 15.49C6.81 15.37 6.64 15.3 6.46 15.3C6.34 15.3 6.23 15.32 6.14 15.37L6.14 15.37C6.05 15.42 5.97 15.5 5.91 15.58L5.91 15.59L5.39 16.41L5.49 16.51C5.91 16.95 6.42 17.32 6.97 17.59L7 17.6C7.52 17.86 8.12 18.05 8.76 18.12L8.79 18.13L8.66 20H9.41C9.41 20 9.42 20 9.42 20C9.58 20 9.73 19.93 9.83 19.82C9.93 19.72 10 19.58 10.01 19.43V19.43L10.11 18.13C10.67 18.09 11.19 17.95 11.67 17.74L11.64 17.75C12.13 17.53 12.54 17.23 12.89 16.87C13.23 16.53 13.5 16.11 13.67 15.65L13.68 15.62C13.85 15.18 13.95 14.67 13.95 14.14C13.95 14.13 13.95 14.12 13.95 14.11V14.11C13.95 14.08 13.95 14.05 13.95 14.02C13.95 13.55 13.84 13.1 13.63 12.71L13.64 12.72C13.43 12.35 13.15 12.04 12.82 11.79L12.81 11.79L12.81 11.78ZM9.33 10.42C9.12 10.33 8.95 10.25 8.78 10.16L8.81 10.17C8.6 10.06 8.41 9.94 8.25 9.79L8.25 9.79C8.1 9.66 7.98 9.5 7.89 9.32L7.89 9.31C7.81 9.14 7.76 8.93 7.76 8.71C7.76 8.7 7.76 8.7 7.76 8.69C7.76 8.68 7.76 8.68 7.76 8.67C7.76 8.24 7.94 7.84 8.23 7.56C8.4 7.4 8.61 7.27 8.84 7.18L8.85 7.17C9.06 7.08 9.3 7.02 9.55 6.98L9.56 6.98L9.33 10.42ZM12.02 15.18C11.93 15.42 11.79 15.63 11.62 15.8C11.43 16 11.2 16.15 10.95 16.27L10.94 16.27C10.73 16.37 10.48 16.44 10.23 16.48L10.21 16.48L10.47 12.65C10.67 12.72 10.86 12.79 11.04 12.87C11.27 12.97 11.46 13.09 11.64 13.23L11.64 13.23C11.8 13.36 11.93 13.52 12.02 13.7L12.03 13.71C12.12 13.89 12.17 14.1 12.17 14.32C12.17 14.34 12.17 14.35 12.17 14.36V14.36C12.17 14.37 12.17 14.38 12.17 14.4C12.17 14.68 12.11 14.95 12.02 15.19L12.02 15.18Z"/></symbol>
+
+<!-- edit_square — the Orion panel's "new chat" glyph. Harvested from the
+     Orion Express Help design file (3Ih40kVMyQyRUERvXAFIkQ, node 2983:17248),
+     NOT from RMX Iconography, which has edit and edit-filled but no
+     edit_square. Real geometry, different library — noted in PROTOTYPE.md. -->
+<symbol id="edit-square" viewBox="0 0 20 20" fill="currentColor"><path d="M4.17 17.5C3.71 17.5 3.32 17.34 2.99 17.01C2.66 16.68 2.5 16.29 2.5 15.83V4.17C2.5 3.71 2.66 3.32 2.99 2.99C3.32 2.66 3.71 2.5 4.17 2.5H11.6L9.94 4.17H4.17V15.83H15.83V10.04L17.5 8.37V15.83C17.5 16.29 17.34 16.68 17.01 17.01C16.68 17.34 16.29 17.5 15.83 17.5H4.17ZM7.5 12.5V8.96L15.15 1.31C15.31 1.15 15.5 1.02 15.71 0.94C15.92 0.85 16.13 0.81 16.33 0.81C16.56 0.81 16.77 0.85 16.97 0.94C17.17 1.02 17.35 1.15 17.52 1.31L18.69 2.5C18.84 2.67 18.96 2.85 19.04 3.05C19.13 3.25 19.17 3.46 19.17 3.67C19.17 3.87 19.13 4.08 19.05 4.28C18.98 4.48 18.85 4.67 18.69 4.83L11.04 12.5H7.5ZM9.17 10.83H10.33L15.17 6L14.58 5.42L13.98 4.83L9.17 9.65V10.83Z"/></symbol>
 </svg>
 <!-- RMX_ICONS_LOCAL:END -->
 
@@ -2822,7 +2849,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       <div class="row">
         <div class="left"><svg class="rmx-icon avatar-logo"><use href="#orion"></use></svg><span class="name" id="orionHeadTitle">Orion Assistant</span></div>
         <div class="icons">
-          <svg class="rmx-icon" title="New chat" onclick="newChat()"><use href="#edit"></use></svg>
+          <svg class="rmx-icon" title="New chat" onclick="newChat()"><use href="#edit-square"></use></svg>
           <div class="vdiv" id="historyDivider"></div>
           <svg class="rmx-icon" id="historyIconBtn" title="History" onclick="toggleHistory()"><use href="#history"></use></svg>
           <div class="vdiv"></div>
@@ -2847,7 +2874,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         <div class="home-card">
           <div class="home-ask-wrap">
             <div class="home-ask">
-              <input type="text" id="homeInput" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" onkeydown="if(event.key==='Enter')submitHome()">
+              <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
               <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
             </div>
             <div class="home-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
@@ -2867,7 +2894,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     <div class="orion-composer" id="orionComposer" hidden>
       <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#list"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
-        <input type="text" id="draftInput" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" onkeydown="if(event.key==='Enter')submitDraft()">
+        <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
         <svg class="rmx-icon send" onclick="submitDraft()"><use href="#send"></use></svg>
       </div>
       <div class="orion-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
@@ -2879,6 +2906,43 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     </div>
   </div>
 </div>`;
+
+
+/* ---------- the ask field ----------
+   Orion_Input Fields (Figma 2983:17176) is a horizontal auto-layout box whose
+   children align to the BOTTOM of the cross axis — which is what keeps the
+   send arrow on the last line as the text wraps. In CSS that is
+   align-items: flex-end; here we only have to grow the field itself.
+
+   A <textarea> has no intrinsic "fit content" height, so it is reset to one
+   row and then set to its own scrollHeight. Capped, after which it scrolls,
+   because the panel is only so tall. */
+const ASK_MAX_H = 132;   /* ~6 lines before it starts scrolling */
+
+function growAsk(el) {
+  if (!el) return;
+  el.style.height = 'auto';
+  const h = Math.min(el.scrollHeight, ASK_MAX_H);
+  el.style.height = h + 'px';
+  el.style.overflowY = el.scrollHeight > ASK_MAX_H ? 'auto' : 'hidden';
+}
+
+/* Enter sends, Shift+Enter starts a new line — the convention for every chat
+   input, and the reason this is a textarea rather than an input. */
+function askKey(e, submit) {
+  if (e.key !== 'Enter' || e.shiftKey) return;
+  e.preventDefault();
+  submit();
+}
+
+/* Reset to a single row after sending, or the empty field keeps the height of
+   whatever was just sent. */
+function resetAsk(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.overflowY = 'hidden';
+}
 
 function mountOrionPanel() {
   if (document.getElementById('orionPanel')) return;
@@ -3550,6 +3614,7 @@ function submitHome(){
   const q = (el.value||'').trim();
   if (!q) return;
   el.value = '';
+  resetAsk('homeInput');
   routeQuestion(q);
 }
 
@@ -3576,6 +3641,7 @@ function demoComposerAutoFill(elId){
   let i = 0;
   const typeNext = () => {
     if (!el.isConnected || !el.offsetParent) return;
+    growAsk(el);
     i++;
     el.value = text.slice(0, i);
     if (i < text.length) setTimeout(typeNext, 18 + Math.random() * 34);
@@ -3793,6 +3859,7 @@ function submitDraft(){
   const q = (el.value||'').trim();
   if (!q) return;
   el.value = '';
+  resetAsk('draftInput');
   routeQuestion(q);
 }
 

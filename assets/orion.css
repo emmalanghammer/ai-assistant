@@ -115,10 +115,13 @@ a { color: var(--text-link); }
 .orion-head .row { display:flex; align-items:center; justify-content:space-between; height:20px; }
 .orion-head .left { display:flex; align-items:center; gap:8px; }
 .orion-head .left .name { font-size:14px; line-height:20px; font-weight:400; color:var(--text-secondary); }
-.orion-head .icons { display:flex; align-items:center; gap:8px; }
-.orion-head .icons .rmx-icon { width:20px; height:20px; color:var(--icon-tertiary); cursor:pointer; }
+/* Header icon cluster — Figma "Icons", node 2983:17248. Three 20px glyphs at
+   8px gaps, navy (#13314c), with a 1px border-primary separator between each,
+   the full 20px height of the icons beside it. */
+.orion-head .icons { display:flex; align-items:center; gap:var(--spacing-xs); }
+.orion-head .icons .rmx-icon { width:20px; height:20px; color:var(--text-secondary); cursor:pointer; }
 .orion-head .icons .rmx-icon:hover { color: var(--text-link); }
-.orion-head .vdiv { width:1px; height:16px; background:var(--border-primary); }
+.orion-head .vdiv { width:1px; height:20px; background:var(--border-primary); }
 .orion-head hr { border:none; border-top:1px solid var(--border-primary); margin:10px -16px 0; }
 
 /* Orion Assistant History — full panel view (Figma node 2431:12173) */
@@ -153,9 +156,18 @@ a { color: var(--text-link); }
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
 .home-ask-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; }
-.home-ask { display:flex; align-items:center; gap:8px; width:100%; background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-sm); padding:8px; }
-.home-ask input { flex:1; border:none; outline:none; background:transparent; font:400 14px 'Roboto',sans-serif; color:var(--text-secondary); min-width:0; }
-.home-ask input::placeholder { color:var(--text-disabled); font-style:italic; }
+/* Orion_Input Fields — Figma 2983:17176. Horizontal auto-layout, 8px padding,
+   8px gap, radius 4, white on a border-primary hairline. The field grows and
+   the text wraps; align-items:flex-end is the counterAxisAlignItems:MAX in the
+   component, and it is what keeps the send arrow on the last line rather than
+   floating in the middle of a tall box. */
+.home-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs); width:100%;
+  background:var(--container-primary); border:1px solid var(--border-primary);
+  border-radius: var(--radius-sm); padding:var(--spacing-xs); }
+.home-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
+  font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
+  resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
+.home-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
 .home-disclaimer { font: italic 400 12px 'Roboto',sans-serif; color: var(--text-primary); text-align:center; max-width:360px; margin:0 auto; }
 .browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
@@ -359,10 +371,19 @@ a { color: var(--text-link); }
 .prompt-item .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
 .orion-composer { flex:none; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
-.orion-ask { display:flex; align-items:center; gap:10px; border:1px solid var(--border-primary); border-radius:6px; padding:11px 14px; background:#fff; box-shadow:0 1px 2px rgba(76,76,76,.08); }
-.orion-ask input { flex:1; min-width:0; border:none; outline:none; background:transparent; font:400 14.5px 'Roboto',sans-serif; color:var(--text-secondary); }
-.orion-ask input::placeholder { color:var(--text-disabled); }
-.orion-ask .rmx-icon.send { width:24px; height:24px; color:var(--text-link); cursor:pointer; }
+/* The composer at the foot of a conversation is the same Orion_Input Fields
+   component, so it grows the same way. Snapped to the component's own values
+   while here: it was 14.5px type (no such style) in a 6px radius (no such
+   token) on 11/14 padding. */
+.orion-ask { display:flex; align-items:flex-end; gap:var(--spacing-xs);
+  border:1px solid var(--border-primary); border-radius:var(--radius-sm);
+  padding:var(--spacing-xs); background:var(--container-primary);
+  box-shadow:0 1px 2px rgba(76,76,76,.08); }
+.orion-ask textarea { flex:1; min-width:0; border:none; outline:none; background:transparent;
+  font:400 14px/normal 'Roboto',sans-serif; color:var(--text-secondary);
+  resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
+.orion-ask textarea::placeholder { color:var(--text-disabled); font-style:italic; }
+.orion-ask .rmx-icon.send { width:20px; height:20px; color:var(--text-link); cursor:pointer; flex:none; }
 .browse-btn { height:32px; padding:0 12px; border-radius:var(--radius-sm); font:400 14px/20px 'Roboto',sans-serif; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); }
 .browse-btn.active { background:var(--bg-hover); border-color:var(--border-secondary); color:var(--text-link); }
 .orion-disclaimer { text-align:center; font-size:12.5px; font-style:italic; color:var(--text-primary); }

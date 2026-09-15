@@ -67,7 +67,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       <div class="row">
         <div class="left"><svg class="rmx-icon avatar-logo"><use href="#orion"></use></svg><span class="name" id="orionHeadTitle">Orion Assistant</span></div>
         <div class="icons">
-          <svg class="rmx-icon" title="New chat" onclick="newChat()"><use href="#edit"></use></svg>
+          <svg class="rmx-icon" title="New chat" onclick="newChat()"><use href="#edit-square"></use></svg>
           <div class="vdiv" id="historyDivider"></div>
           <svg class="rmx-icon" id="historyIconBtn" title="History" onclick="toggleHistory()"><use href="#history"></use></svg>
           <div class="vdiv"></div>
@@ -92,7 +92,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         <div class="home-card">
           <div class="home-ask-wrap">
             <div class="home-ask">
-              <input type="text" id="homeInput" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" onkeydown="if(event.key==='Enter')submitHome()">
+              <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
               <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
             </div>
             <div class="home-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
@@ -112,7 +112,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     <div class="orion-composer" id="orionComposer" hidden>
       <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#list"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
-        <input type="text" id="draftInput" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" onkeydown="if(event.key==='Enter')submitDraft()">
+        <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
         <svg class="rmx-icon send" onclick="submitDraft()"><use href="#send"></use></svg>
       </div>
       <div class="orion-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
@@ -124,6 +124,43 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     </div>
   </div>
 </div>`;
+
+
+/* ---------- the ask field ----------
+   Orion_Input Fields (Figma 2983:17176) is a horizontal auto-layout box whose
+   children align to the BOTTOM of the cross axis — which is what keeps the
+   send arrow on the last line as the text wraps. In CSS that is
+   align-items: flex-end; here we only have to grow the field itself.
+
+   A <textarea> has no intrinsic "fit content" height, so it is reset to one
+   row and then set to its own scrollHeight. Capped, after which it scrolls,
+   because the panel is only so tall. */
+const ASK_MAX_H = 132;   /* ~6 lines before it starts scrolling */
+
+function growAsk(el) {
+  if (!el) return;
+  el.style.height = 'auto';
+  const h = Math.min(el.scrollHeight, ASK_MAX_H);
+  el.style.height = h + 'px';
+  el.style.overflowY = el.scrollHeight > ASK_MAX_H ? 'auto' : 'hidden';
+}
+
+/* Enter sends, Shift+Enter starts a new line — the convention for every chat
+   input, and the reason this is a textarea rather than an input. */
+function askKey(e, submit) {
+  if (e.key !== 'Enter' || e.shiftKey) return;
+  e.preventDefault();
+  submit();
+}
+
+/* Reset to a single row after sending, or the empty field keeps the height of
+   whatever was just sent. */
+function resetAsk(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.height = 'auto';
+  el.style.overflowY = 'hidden';
+}
 
 function mountOrionPanel() {
   if (document.getElementById('orionPanel')) return;
@@ -795,6 +832,7 @@ function submitHome(){
   const q = (el.value||'').trim();
   if (!q) return;
   el.value = '';
+  resetAsk('homeInput');
   routeQuestion(q);
 }
 
@@ -821,6 +859,7 @@ function demoComposerAutoFill(elId){
   let i = 0;
   const typeNext = () => {
     if (!el.isConnected || !el.offsetParent) return;
+    growAsk(el);
     i++;
     el.value = text.slice(0, i);
     if (i < text.length) setTimeout(typeNext, 18 + Math.random() * 34);
@@ -1038,6 +1077,7 @@ function submitDraft(){
   const q = (el.value||'').trim();
   if (!q) return;
   el.value = '';
+  resetAsk('draftInput');
   routeQuestion(q);
 }
 

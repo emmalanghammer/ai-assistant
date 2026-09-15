@@ -20,9 +20,17 @@ const block = sprite.replace('<svg xmlns="http://www.w3.org/2000/svg" style="dis
 const START = '<!-- RMX_ICONS_LOCAL:START - injected from assets/icons-local.svg by tools/sprite.mjs -->';
 const END   = '<!-- RMX_ICONS_LOCAL:END -->';
 
+/* The workspace lives at the repo root (index.html) and the other screens in
+   screens/, so both places are scanned — missing the root one silently left
+   the newest icons out of the main screen. */
+const targets = [
+  ...readdirSync(root).filter(f => f.endsWith('.html')).map(f => join(root, f)),
+  ...readdirSync(join(root, 'screens')).filter(f => f.endsWith('.html')).map(f => join(root, 'screens', f)),
+];
+
 let n = 0;
-for (const f of readdirSync(join(root, 'screens')).filter(f => f.endsWith('.html'))) {
-  const p = join(root, 'screens', f);
+for (const p of targets) {
+  const f = p.replace(root + '/', '');
   const src = readFileSync(p, 'utf8');
   const a = src.indexOf(START), b = src.indexOf(END);
   if (a === -1 || b === -1) { console.log(`  skipped ${f} — no RMX_ICONS_LOCAL markers`); continue; }
