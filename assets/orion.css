@@ -97,8 +97,16 @@ a { color: var(--text-link); }
    Orion Assistant panel
    ============================================================ */
 .orion-panel { position: fixed; top: 78px; right: 16px; width: 622px; height: auto; max-height: calc(100vh - 100px);
-  border: 1px solid var(--border-secondary); border-radius: var(--radius-md);
-  background-image: linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(0,141,213,.06) 100%), linear-gradient(90deg, #fff, #fff);
+  /* Orion_2 gradient stroke, blue to green — the AI signature. The fill is
+     painted into the padding box and the gradient into the border box, which
+     is the only way to give a border a gradient. */
+  border: 1px solid transparent; border-radius: var(--radius-md);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(0,141,213,.06) 100%),
+    linear-gradient(var(--container-primary), var(--container-primary)),
+    var(--orion-border-gradient);
+  background-origin: padding-box, padding-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
   box-shadow: 0 0 12.6px rgba(0,141,213,.2);
   display: flex; z-index: 50; animation: eh-in .18s ease-out; overflow:visible;
   min-width: 380px; min-height: 320px; }
@@ -552,8 +560,13 @@ a { color: var(--text-link); }
 
 .rv-orion-chat { position:absolute; right:20px; bottom:20px; z-index:5;
   width:380px; height:520px; max-height:calc(100% - 40px);
-  border:1px solid var(--border-secondary); border-radius:var(--radius-md);
-  background-image: linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(0,141,213,.06) 100%), linear-gradient(90deg, #fff, #fff);
+  border:1px solid transparent; border-radius:var(--radius-md);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(0,141,213,.06) 100%),
+    linear-gradient(var(--container-primary), var(--container-primary)),
+    var(--orion-border-gradient);
+  background-origin: padding-box, padding-box, border-box;
+  background-clip: padding-box, padding-box, border-box;
   box-shadow: 0 0 12.6px rgba(0,141,213,.2);
   display:flex; flex-direction:column; overflow:hidden; animation: eh-in .18s ease-out; }
 .rv-orion-chat[hidden] { display:none; }
@@ -958,3 +971,11 @@ a { color: var(--text-link); }
 
 /* The print dialog opens over the assistant, so it needs to clear the scrim. */
 #printOverlay { z-index: 300; }
+
+/* Focus — Input Field, DESIGN.md §7.1: the border goes brand blue. On the ask
+   fields the border is on the wrapper, not the textarea, so :focus-within is
+   what carries it. */
+.home-ask:focus-within,
+.orion-ask:focus-within { border-color: var(--border-secondary); }
+.home-ask textarea:focus,
+.orion-ask textarea:focus { outline: none; }
