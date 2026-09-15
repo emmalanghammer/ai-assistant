@@ -1063,8 +1063,9 @@ function matchPrompt(q){
    site below. One knob rather than fifteen numbers, so the pace can be tuned
    for a room without hunting through the file — and because the relative
    rhythm matters: a summary should still land faster than a posted batch.
-   1 is the original pace; higher is slower and easier to follow live. */
-const ORION_PACE = 1.6;
+   1 is the original pace; higher is slower and easier to follow live.
+   At 3 the standard beat is ~2.7s, a summary ~1.8s, a posted batch ~3.6s. */
+const ORION_PACE = 3;
 
 function thinkThen(text, fn, delay){
   state.thinking = text; render();
