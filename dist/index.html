@@ -3039,6 +3039,14 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
    because the panel is only so tall. */
 const ASK_MAX_H = 132;   /* ~6 lines before it starts scrolling */
 
+/* Width the panel opens at. It normally lines up with the app bar's icon
+   cluster, but that comes out around 380 — narrow enough that the footer's
+   "Need more help? View all documentation at Express Help" wraps to two
+   lines. 528 is the smallest 4px-grid width that keeps it on one line:
+   355 of text + 12 gap + 120 button + 36 padding + 2 border. Dragging the
+   panel narrower than this is still allowed; this is only the starting size. */
+const ORION_OPEN_MIN_W = 528;
+
 function growAsk(el) {
   if (!el) return;
   el.style.height = 'auto';
@@ -4800,7 +4808,7 @@ function positionOrionPanel(){
   const top = Math.round(sRect.bottom + 16);
   const width = panel.dataset.userResizedW
     ? Math.round(panel.getBoundingClientRect().width)
-    : Math.max(380, Math.min(900, Math.round(eRect.right - iRect.left)));
+    : Math.max(ORION_OPEN_MIN_W, Math.min(900, Math.round(eRect.right - iRect.left)));
   if (!panel.dataset.userResizedW){
     panel.style.width = width + 'px';
   }
