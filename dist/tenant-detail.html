@@ -3559,13 +3559,55 @@ function render(){
    typeOutContent reveals every block's text in reading order. Doesn't
    touch scroll — the caller (render) has already anchored the view to the
    top of the question this is answering. */
+/* How long an answer takes to build itself out, once the thinking pause is
+   over. Separate from ORION_PACE because they are different problems: the
+   pause is anticipation, this is comprehension. Higher is slower. */
+const ORION_REVEAL = 3;
+
+/* How long the opening paragraph takes to type, whatever its length — capped
+   rather than per-character so a long answer still finishes in about a
+   second and a half instead of crawling. Named because revealMessage waits
+   for it: the paragraph should be readable before the data starts landing
+   under it, not race it. */
+const TYPE_MS = 1500;
+
 function revealMessage(idx){
   const row = document.querySelector(`.msg-row[data-idx="${idx}"]`);
   if (!row) return;
   const content = row.querySelector('.content');
   if (!content) return;
-  content.querySelectorAll('.rv').forEach(el => { el.hidden = false; el.classList.add('rv-in'); });
-  typeOutContent(content);
+
+  const blocks = [...content.querySelectorAll('.rv')];
+  const lead = content.querySelector(':scope > .text');
+  const leadHasText = !!(lead && lead.textContent.trim());
+
+  /* The opening paragraph types. Everything after it fades in, one piece at
+     a time, in reading order — a stat, then the next stat, then the table.
+     Only prose types: running a register through a character-by-character
+     reveal reads as a gimmick, and it keeps a single cursor on screen. */
+  if (leadHasText) typeOutContent(lead);
+
+  if (!blocks.length) return;
+
+  /* Spread the build-out over a target window rather than a fixed delay per
+     block, so a two-part answer is not glacial and a twenty-row register
+     does not take a minute. Clamped at both ends. */
+  const step = Math.min(600, Math.max(140,
+    Math.round((900 * ORION_REVEAL) / blocks.length)));
+
+  let i = 0, typedRich = leadHasText;
+  const next = () => {
+    if (!content.isConnected) return;
+    const el = blocks[i++];
+    if (!el) return;
+    el.hidden = false;
+    el.classList.add('rv-in');
+    /* An answer that is all rich HTML has no opening paragraph, so the rich
+       block is what types instead. */
+    if (!typedRich && el.querySelector('.mrich')) { typedRich = true; typeOutContent(el); }
+    if (i < blocks.length) setTimeout(next, step);
+  };
+  setTimeout(next, leadHasText ? TYPE_MS + 200 : 0);
 }
 
 /* Walks every text node under `content` in reading order and reveals each
@@ -3598,7 +3640,7 @@ function typeOutContent(content){
     if (cur && cur.node.parentNode) cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
   };
 
-  const TICKS = 110;
+  const TICKS = Math.round(TYPE_MS / 16);
   const charsPerTick = Math.max(1, Math.ceil(totalChars / TICKS));
   let ni = 0, ci = 0;
   placeCursor();
@@ -3850,9 +3892,9 @@ function matchPrompt(q){
    site below. One knob rather than fifteen numbers, so the pace can be tuned
    for a room without hunting through the file — and because the relative
    rhythm matters: a summary should still land faster than a posted batch.
-   1 is the original pace; higher is slower and easier to follow live.
-   At 3 the standard beat is ~2.7s, a summary ~1.8s, a posted batch ~3.6s. */
-const ORION_PACE = 3;
+   1 is the original pace; higher is slower. At 1.6 the standard beat is
+   ~1.5s. How fast the ANSWER then builds is ORION_REVEAL, separately. */
+const ORION_PACE = 1.6;
 
 function thinkThen(text, fn, delay){
   state.thinking = text; render();
