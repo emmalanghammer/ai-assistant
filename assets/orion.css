@@ -159,10 +159,10 @@ a { color: var(--text-link); }
 .orion-body { flex:1; min-height:0; overflow:auto; padding:20px 20px 16px; display:flex; flex-direction:column; gap:24px; }
 .orion-greet { text-align:center; display:flex; flex-direction:column; gap:8px; }
 .orion-greet .hi { font: 600 24px/32px 'Roboto',sans-serif; color: var(--text-secondary); margin:0; }
-.orion-greet .sub { font-size:14px; line-height:20px; color: var(--text-primary); max-width:460px; margin:0 auto; }
 
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
+.home-prompt { font: 400 18px/24px 'Roboto',sans-serif; color: var(--text-secondary); text-align:center; margin:0; }
 .home-ask-wrap { display:flex; flex-direction:column; gap:8px; align-items:center; }
 /* Orion_Input Fields, Style=Square — RMX Components 7086:2817. 36px at rest,
    radius 4, white on a 1px border-primary hairline, 8px gap, placeholder 14
@@ -952,9 +952,10 @@ a { color: var(--text-link); }
 
 /* ==== Dim behind the assistant ====
    The panel sits over the app and the app keeps showing through, which makes
-   a long answer hard to read against a busy workspace. Navy at 28% — the
-   value the Writing Assistant overlay uses in the v3 canvas — rather than a
-   generic black, so it reads as the same family of surface.
+   a long answer hard to read against a busy workspace. Navy rather than a
+   generic black, so it reads as the same family of surface. The v3 Writing
+   Assistant overlay dims to 28%; this goes to 45% so the panel is clearly
+   the only live surface while someone is following a demo.
 
    It sits under the panel (z-index 49 against the panel's 50) and above the
    app bar, and clicking it closes the assistant, which is what a dimmed
@@ -963,7 +964,7 @@ a { color: var(--text-link); }
   position: fixed;
   inset: 0;
   z-index: 49;
-  background: rgba(19, 49, 76, .28);
+  background: rgba(19, 49, 76, .45);
   animation: orion-scrim-in .18s ease-out;
 }
 .orion-scrim[hidden] { display: none; }

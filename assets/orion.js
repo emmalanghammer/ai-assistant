@@ -87,8 +87,8 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     <div class="orion-body" id="orionBody">
       <div class="orion-greet" id="orionGreet">
         <p class="hi">Hi Charlie!</p>
-        <p class="sub">Ask me anything about Rent Manager. I can explain how something works, analyze what's happening in your data, or go take care of it for you.</p>
         <div class="home-card">
+          <p class="home-prompt">How can I help?</p>
           <div class="home-ask-wrap">
             <div class="home-ask">
               <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
