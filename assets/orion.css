@@ -888,3 +888,25 @@ a { color: var(--text-link); }
   .mrecord .rrow, .mtenants .rrow { grid-template-columns: 1fr; gap: var(--spacing-xxs); }
   .mrecord .rrow > *, .mtenants .rrow > * { justify-self: start; }
 }
+
+/* ==== Dim behind the assistant ====
+   The panel sits over the app and the app keeps showing through, which makes
+   a long answer hard to read against a busy workspace. Navy at 28% — the
+   value the Writing Assistant overlay uses in the v3 canvas — rather than a
+   generic black, so it reads as the same family of surface.
+
+   It sits under the panel (z-index 49 against the panel's 50) and above the
+   app bar, and clicking it closes the assistant, which is what a dimmed
+   backdrop implies. The panel stays draggable and resizable on top of it. */
+.orion-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  background: rgba(19, 49, 76, .28);
+  animation: orion-scrim-in .18s ease-out;
+}
+.orion-scrim[hidden] { display: none; }
+@keyframes orion-scrim-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* The print dialog opens over the assistant, so it needs to clear the scrim. */
+#printOverlay { z-index: 300; }

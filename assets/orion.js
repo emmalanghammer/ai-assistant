@@ -165,7 +165,8 @@ function resetAsk(id) {
 function mountOrionPanel() {
   if (document.getElementById('orionPanel')) return;
   const host = document.createElement('div');
-  host.innerHTML = ORION_PANEL_HTML + ORION_PRINT_OVERLAY_HTML;
+  host.innerHTML = '<div class="orion-scrim" id="orionScrim" hidden onclick="closeOrion()"></div>'
+                 + ORION_PANEL_HTML + ORION_PRINT_OVERLAY_HTML;
   while (host.firstChild) document.body.appendChild(host.firstChild);
 }
 mountOrionPanel();
@@ -1058,10 +1059,17 @@ function matchPrompt(q){
   return best;
 }
 
+/* How long Orion "thinks" before answering, as a multiplier on every call
+   site below. One knob rather than fifteen numbers, so the pace can be tuned
+   for a room without hunting through the file — and because the relative
+   rhythm matters: a summary should still land faster than a posted batch.
+   1 is the original pace; higher is slower and easier to follow live. */
+const ORION_PACE = 1.6;
+
 function thinkThen(text, fn, delay){
   state.thinking = text; render();
   clearTimeout(pendingTimer);
-  pendingTimer = setTimeout(()=>{ state.thinking = null; fn(); }, delay || 900);
+  pendingTimer = setTimeout(()=>{ state.thinking = null; fn(); }, (delay || 900) * ORION_PACE);
 }
 
 function ask(id){
@@ -1269,7 +1277,7 @@ function output(fmt, id){
       text: 'Built. ' + m.name + ' came out at ' + pageTxt + '. Opening it in the report viewer.',
       reportLink:{ id: id, label:'Open ' + m.name, hint: pageTxt },
       note:'Report parameters are saved, so you can re-run this from My Reports without asking me again.' }]);
-    setTimeout(() => openReport(id), 900);
+    setTimeout(() => openReport(id), 900 * ORION_PACE);
   }, 1200);
 }
 
@@ -1733,6 +1741,8 @@ function newChat(){
 function toggleOrion(){ state.orionOpen ? closeOrion() : openOrion(); }
 function openOrion(){
   state.orionOpen = true;
+  const scrim = document.getElementById('orionScrim');
+  if (scrim) scrim.hidden = false;
   document.getElementById('orionPanel').hidden = false;
   document.getElementById('orionEntry').classList.add('open');
   document.getElementById('orionEntry').classList.remove('pulsing');
@@ -1864,6 +1874,8 @@ function startResize(e, axes){
 function closeOrion(){
   archiveCurrentConversation();
   state.orionOpen = false;
+  const scrim = document.getElementById('orionScrim');
+  if (scrim) scrim.hidden = true;
   const panel = document.getElementById('orionPanel');
   panel.hidden = true;
   /* Forget any manual drag/resize — next open always starts back at the

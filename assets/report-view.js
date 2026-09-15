@@ -153,7 +153,7 @@ function openReportChat(){
     RPT_CHAT.thinking = null;
     RPT_CHAT.messages.push({ role:'bot', rich: buildAnalysisHtml(id) });
     renderReportChatMessages();
-  }, 700);
+  }, 700 * ORION_PACE);
 }
 
 function closeReportChat(){
@@ -186,7 +186,7 @@ function submitReportChat(){
     RPT_CHAT.messages.push(id ? reportChatMsg(id)
       : { role:'bot', text:'I could not find a confident answer for that yet — try asking about a specific number or property from this report.' });
     renderReportChatMessages();
-  }, 900);
+  }, 900 * ORION_PACE);
 }
 
 /* Renders every message, then splices the action row into each bot
@@ -484,8 +484,8 @@ function pnlAutoFollowUp(){
         RPT_CHAT.thinking = null;
         RPT_CHAT.messages.push({ role:'bot', rich: PNL_FOLLOWUP_HTML });
         renderReportChatMessages();
-      }, 900);
-    }, 400);
+      }, 900 * ORION_PACE);
+    }, 400 * ORION_PACE);
   };
   typeNext();
 }
