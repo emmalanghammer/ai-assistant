@@ -3771,7 +3771,13 @@ function render(){
 
   const inlineMode = isHome && state.sheetOpen;
   sheet.classList.toggle('orion-sheet-inline', inlineMode);
-  body.style.flex = inlineMode ? '0 0 auto' : '';
+  /* The body keeps its own flex:1/min-height:0/overflow:auto in every mode.
+     It used to be pinned to 'flex: 0 0 auto' while the sheet was open on
+     the home screen, back when the sheet was a floating sibling that sized
+     itself against the body. The sheet now sits inside the card, inside the
+     body — so pinning the height only stopped the body scrolling and clipped
+     the bottom of the sheet against the panel. */
+  body.style.flex = '';
 
   /* Orion Assistant Overlay 2:1069 / 17:94 — on the opening screen the sheet
      does not float below the card, it takes the Browse link's own place
