@@ -94,7 +94,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
+        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap"></div>
     </div>

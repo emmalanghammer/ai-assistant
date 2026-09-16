@@ -1103,8 +1103,21 @@ a { color: var(--text-link); }
   resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
 .home-ask textarea::placeholder { color:var(--text-primary); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
-.browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
-.browse-link:hover .lbl { text-decoration:underline; }
+/* Orion Express Help 2993:17318 — a bordered button, not a text link: 221x36,
+   white on a 1px border-primary hairline, radius 8, an 8px gap, and a 20px blue
+   lightbulb beside a 14 Regular blue label.
+
+   7px padding, not 8, for the same reason the ask field uses it: Figma draws
+   the 1px stroke INSIDE the 36 and measures its 8px padding from the frame
+   edge, so the stroke overlaps the padding. CSS puts the border outside the
+   padding box, where 8 + 1 comes to 38. 7 + 1 reproduces both the 8px visual
+   inset and the 36px total. */
+.browse-link { align-self:center; display:inline-flex; align-items:center;
+  gap:var(--spacing-xs); padding:7px; cursor:pointer;
+  background:var(--container-primary); border:1px solid var(--border-primary);
+  border-radius:var(--radius-md); color:var(--text-link);
+  font:400 14px/20px 'Roboto',sans-serif; }
+.browse-link:hover { border-color:var(--border-secondary); }
 /* 32px between one turn and the next — far enough apart that a question and
    its answer read as one exchange rather than four loose blocks.
    .msg-bot .content keeps its own 10px between a single answer's parts. */
@@ -2961,7 +2974,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
+        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap"></div>
     </div>
