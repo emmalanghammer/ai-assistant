@@ -428,7 +428,7 @@ a { color: var(--text-link); }
 .prompt-item .pl { flex:1; font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .prompt-item .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
-.orion-composer { flex:none; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
+.orion-composer { flex:none; position:relative; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
 /* The composer at the foot of a conversation is the same Orion_Input Fields
    component, so it grows the same way. Snapped to the component's own values
    while here: it was 14.5px type (no such style) in a 6px radius (no such
@@ -981,6 +981,33 @@ a { color: var(--text-link); }
   .mrecord .rrow, .mtenants .rrow { grid-template-columns: 1fr; gap: var(--spacing-xxs); }
   .mrecord .rrow > *, .mtenants .rrow > * { justify-self: start; }
 }
+
+/* Jump to the latest — a 32px disc floating over the foot of the conversation,
+   centred, clear of the composer. White on the same border-primary hairline as
+   every other surface, with a lift rather than a border shadow because it is
+   genuinely floating over content. radius-round; the chevron is the library's
+   own keyboard-arrow-down at 20. */
+.jump-latest {
+  /* Anchored to the composer, so it rides 8px above the divider over the
+     Prompt Suggestions row wherever that line ends up — rather than to the
+     panel, where it sat over the footer. bottom:100% puts it on the line;
+     the margin lifts it clear. */
+  position:absolute; left:50%; transform:translateX(-50%);
+  /* bottom:100% resolves against the composer's PADDING box, which starts
+     below its 1px top border — so the raw 8px lands 7px above the line.
+     The extra pixel clears the border itself. */
+  bottom:calc(100% + 1px); margin-bottom:var(--spacing-xs); z-index:9;
+  width:32px; height:32px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--container-primary);
+  border:1px solid var(--border-primary);
+  border-radius:var(--radius-round);
+  color:var(--text-secondary); cursor:pointer;
+  box-shadow: 0 2px 4px rgba(76,76,76,.10), 0 6px 14px rgba(76,76,76,.12);
+  animation: eh-in .16s ease-out;
+}
+.jump-latest:hover { border-color:var(--border-secondary); color:var(--text-link); }
+.jump-latest[hidden] { display:none; }
 
 /* ==== Dim behind the assistant ====
    The panel sits over the app and the app keeps showing through, which makes

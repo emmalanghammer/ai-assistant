@@ -84,7 +84,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       <div id="historyAllSection"></div>
     </div>
 
-    <div class="orion-body" id="orionBody">
+    <div class="orion-body" id="orionBody" onscroll="updateJumpToLatest()">
       <div class="orion-greet" id="orionGreet">
         <p class="hi">Hi Charlie!</p>
         <div class="home-card">
@@ -105,6 +105,10 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     </div>
 
     <div class="orion-composer" id="orionComposer" hidden>
+      <button class="jump-latest" id="jumpLatest" hidden onclick="jumpToLatest()"
+              title="Jump to the latest" aria-label="Jump to the latest">
+        <svg class="rmx-icon"><use href="#keyboard-arrow-down"></use></svg>
+      </button>
       <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#lightbulb"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
         <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
@@ -746,6 +750,37 @@ function scrollAnchorIntoView(body, idx, jump, mode){
   }
 }
 
+/* A way back down when you have scrolled up to re-read something. Shows only
+   when there is somewhere to go: at least a screenful out of view below, and
+   a conversation on screen to scroll through. Hidden the moment you are back
+   within a line or two of the end, so it never sits over the newest answer.
+
+   Kept in step by the body's own scroll event, so it reacts to a wheel, a
+   drag and the panel's own easing alike. */
+const JUMP_LATEST_THRESHOLD = 120;
+function updateJumpToLatest(){
+  const body = document.getElementById('orionBody');
+  const btn = document.getElementById('jumpLatest');
+  if (!body || !btn) return;
+  const spacer = body.querySelector('.scroll-spacer');
+  /* Measure to the real end of the conversation, not the spacer's — the room
+     held open for an answer still arriving is not content to jump to. */
+  const contentH = contentBottomOffset(body, spacer);
+  const below = contentH - (body.scrollTop + body.clientHeight);
+  const hasConversation = !!body.querySelector('.msg-row');
+  btn.hidden = !(hasConversation && below > JUMP_LATEST_THRESHOLD);
+}
+
+function jumpToLatest(){
+  const body = document.getElementById('orionBody');
+  if (!body) return;
+  const spacer = body.querySelector('.scroll-spacer');
+  const contentH = contentBottomOffset(body, spacer);
+  smoothScrollTo(body, contentH - body.clientHeight);
+  /* The easing runs past this call, so re-check once it has landed. */
+  setTimeout(updateJumpToLatest, 600);
+}
+
 /* How tall the conversation actually is, ignoring the spacer.
 
    Not `scrollHeight - spacerHeight`: scrollHeight never reports less than
@@ -874,6 +909,7 @@ function settleSpacer(body, anchorRow){
       /* Dropping the spacer cuts any smooth scroll still in flight short and
          re-clamps the range, so land the final position explicitly. */
       body.scrollTop = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+      updateJumpToLatest();
     };
 
     if (Math.abs(target - body.scrollTop) < 2){ finish(); return; }
@@ -952,6 +988,7 @@ function render(){
   const anchorIdx = countChanged ? updateAnchor(state.messages, lastRenderedMsgCount) : lastAnchorIdx;
   scrollAnchorIntoView(body, anchorIdx, countChanged, lastAnchorMode);
   lastRenderedMsgCount = state.messages.length;
+  updateJumpToLatest();
 
   const sheet = document.getElementById('orionSheet');
   sheet.hidden = !state.sheetOpen;
