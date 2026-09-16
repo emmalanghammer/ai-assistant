@@ -1080,12 +1080,16 @@ function renderMessage(m, idx, animate){
   const p = m.src ? PROMPTS[m.src] : null;
   const rv = animate ? ' rv' : '', hid = animate ? ' hidden' : '';
   const wrapOne = html => animate ? `<div class="rv" hidden>${html}</div>` : html;
-  let inner = `<div class="text">${esc(m.text)}</div>`;
+  /* Only when there is prose. A rich answer carries none, and an empty
+     .text still counted as a block: it measured 0 tall but .content's 20px
+     gap applied after it all the same, so the space between the question
+     and the answer came to 52 rather than 32. */
+  const lead = (m.text == null ? '' : String(m.text)).trim();
+  let inner = lead ? `<div class="text">${esc(m.text)}</div>` : '';
 
   /* A fully-formatted answer (its own headings, numbered steps with
      sub-options, a closing note) that text/steps/bullets/note can't shape
-     — revealed as one unit alongside the (empty, for these) .text typing
-     pass rather than typed itself. */
+     — revealed as one unit. There is no .text to type alongside it. */
   if (m.rich) inner += wrapOne(`<div class="mrich">${m.rich}</div>`);
   if (m.steps) inner += `<div class="mstep-list">${m.steps.map((s,i)=>`<div class="mstep${rv}"${hid}><span class="n">${i+1}</span><span class="t">${esc(s)}</span></div>`).join('')}</div>`;
 
