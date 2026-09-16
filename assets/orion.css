@@ -213,7 +213,7 @@ a { color: var(--text-link); }
    The answer text is navy, the colour for content, rather than the grey used
    for chrome and labels. */
 .msg-bot { display:flex; width:100%; }
-.msg-bot .content { flex:1; min-width:0; display:flex; flex-direction:column; gap:10px; }
+.msg-bot .content { flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--spacing-lg); }
 .msg-bot .text { font-size:14px; line-height:20px; color:var(--text-secondary); }
 .rv { opacity:0; transform:translateY(4px); transition:opacity .22s ease, transform .22s ease; }
 .rv.rv-in { opacity:1; transform:none; }
