@@ -727,7 +727,83 @@ function scrollAnchorIntoView(body, idx, jump, mode){
     const bodyRect2 = body.getBoundingClientRect();
     const rowRect2 = row.getBoundingClientRect();
     body.scrollTop += (rowRect2.top - bodyRect2.top);
+    settleSpacer(body);
   }
+}
+
+/* The spacer is the room the answer types into, so it has to be sized for
+   an answer that has not arrived yet — at the moment a reply is pushed its
+   prose is still empty (typeOutContent blanks every text node before it
+   types them back in) and its blocks are still fading in one at a time.
+   The only safe assumption is a full panel, which is why it starts at
+   roughly clientHeight.
+
+   An answer that ends up SHORTER than the panel therefore finishes with
+   the difference left over as blank space below it — the room it turned
+   out not to need. That is the empty half-panel you see under a two-
+   paragraph reply. Nothing can prevent it while the reply is still
+   growing, because the question cannot sit at the top of the panel unless
+   there is a panel's worth of scrollable room beneath it. It can only be
+   given back afterwards.
+
+   So: once the reply stops growing and stops typing, scroll down by
+   whatever the answer did not use and drop the spacer. The conversation
+   settles to the bottom of the panel the way a chat normally sits. The
+   scroll is animated and the spacer is only removed once it lands, so the
+   content glides rather than jumping. A long answer never reaches here
+   with anything to give back — its spacer is already 0. */
+const settleTimers = new WeakMap();
+function settleSpacer(body){
+  /* Both handles matter. The interval is the watcher; the timeout is the
+     scheduled hand-back that fires 500ms after it decides to settle. A new
+     question arriving in that gap would otherwise be pinned to the top and
+     then immediately dragged back to the bottom by the previous answer's
+     leftover timeout. */
+  const prev = settleTimers.get(body);
+  if (prev){ clearInterval(prev.poll); clearTimeout(prev.drop); }
+
+  let lastContentH = -1, stableFor = 0, polls = 0;
+  const timer = setInterval(() => {
+    /* Look the spacer up every poll rather than holding a reference to it:
+       render() rebuilds the whole message list, and the spacer with it, on
+       every pass — a captured element goes stale the moment the thinking
+       indicator appears or disappears, which silently killed this watcher
+       before it ever got to settle anything. */
+    const spacer = body.querySelector('.scroll-spacer');
+    if (!spacer || ++polls > 60){ clearInterval(timer); return; }
+
+    const spacerH = spacer.offsetHeight;
+    const contentH = body.scrollHeight - spacerH;
+    /* Still typing, or still fading blocks in one at a time. */
+    if (body.querySelector('.mtype-cursor') || contentH !== lastContentH){
+      lastContentH = contentH;
+      stableFor = 0;
+      return;
+    }
+    /* Blocks fade in up to 600ms apart (revealMessage's `step` is clamped
+       there), so anything shorter than that reads a perfectly ordinary gap
+       between two blocks as "the answer has finished" and hands the room
+       back while the rest is still coming. Five polls is a full second. */
+    if (++stableFor < 5) return;
+    clearInterval(timer);
+
+    if (spacerH < 24) return;
+    const target = Math.max(0, contentH - body.clientHeight);
+    if (target >= body.scrollTop){ spacer.style.height = '0px'; return; }
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    body.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' });
+    handles.drop = setTimeout(() => {
+      const sp = body.querySelector('.scroll-spacer');
+      if (sp) sp.style.height = '0px';
+      /* Dropping the spacer cuts any smooth scroll still in flight short,
+         which would leave the last line or two of the answer below the
+         fold. Land it on the real bottom explicitly. */
+      body.scrollTop = Math.max(0, body.scrollHeight - body.clientHeight);
+    }, reduced ? 0 : 500);
+  }, 200);
+  const handles = { poll: timer, drop: null };
+  settleTimers.set(body, handles);
 }
 
 /* Which message the main chat should keep pinned to the top. A new user

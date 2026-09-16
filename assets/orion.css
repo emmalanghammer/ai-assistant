@@ -215,16 +215,16 @@ a { color: var(--text-link); }
 
 .mstep { display:flex; gap:10px; align-items:flex-start; }
 .mstep .n { width:20px; height:20px; flex:none; border-radius:999px; background:var(--bg-hover); color:var(--text-link); font-size:12px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; margin-top:1px; }
-.mstep .t { flex:1; font-size:13.5px; line-height:20px; color:var(--text-primary); }
+.mstep .t { flex:1; font-size:13.5px; line-height:20px; color:var(--text-secondary); }
 .mstep-list, .mbullet-list, .mfind-list { display:flex; flex-direction:column; gap:7px; }
-.mbullet { display:flex; gap:10px; } .mbullet .dot { width:5px; height:5px; flex:none; border-radius:999px; background:var(--background-primary-button); margin-top:8px; } .mbullet .t { flex:1; font-size:14px; line-height:20px; color:var(--text-primary); }
-.mfind { display:flex; gap:9px; } .mfind .rmx-icon { width:17px; height:17px; color:var(--text-success); margin-top:2px; } .mfind .t { flex:1; font-size:13.5px; line-height:20px; color:var(--text-primary); }
+.mbullet { display:flex; gap:10px; } .mbullet .dot { width:5px; height:5px; flex:none; border-radius:999px; background:var(--background-primary-button); margin-top:8px; } .mbullet .t { flex:1; font-size:14px; line-height:20px; color:var(--text-secondary); }
+.mfind { display:flex; gap:9px; } .mfind .rmx-icon { width:17px; height:17px; color:var(--text-success); margin-top:2px; } .mfind .t { flex:1; font-size:13.5px; line-height:20px; color:var(--text-secondary); }
 
 /* A fully-formatted answer (multiple sections, numbered steps with their
    own sub-options, a closing note) — the fixed text/steps/bullets/note
    fields can't shape that, so an Express Help answer needing it renders
    through this instead, matching .msg-bot .text's own size/color. */
-.mrich { font-size:14px; line-height:20px; color:var(--text-primary); }
+.mrich { font-size:14px; line-height:20px; color:var(--text-secondary); }
 .mrich p { margin:0 0 12px; }
 .mrich p:last-child { margin-bottom:0; }
 .mrich h4 { font:500 13.5px/20px 'Roboto',sans-serif; color:var(--text-secondary); margin:0 0 6px; }
@@ -234,7 +234,7 @@ a { color: var(--text-link); }
 .mrich li:last-child { margin-bottom:0; }
 .mrich li ul { margin:6px 0 0; padding-left:18px; }
 .mrich li ul li:last-child { margin-bottom:0; }
-.mrich strong { color:var(--text-secondary); }
+.mrich strong { color:var(--text-secondary); font-weight:600; }
 
 .mstats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 .mstat { background:#fff; border:1px solid var(--border-primary); border-left:4px solid var(--border-secondary); border-radius:var(--radius-sm); padding:9px 11px; }
@@ -330,7 +330,7 @@ a { color: var(--text-link); }
 
 .mnote { display:flex; align-items:flex-start; gap:9px; padding:9px 11px; border:1px solid var(--border-primary); border-radius:var(--radius-sm); background:var(--container-tertiary); }
 .mnote .rmx-icon { width:17px; height:17px; color:var(--text-primary); margin-top:1px; }
-.mnote .t { font-size:12.5px; line-height:18px; color:var(--text-primary); }
+.mnote .t { font-size:12.5px; line-height:18px; color:var(--text-secondary); }
 .mnote .t a { display:block; margin-top:4px; }
 
 .mactions { display:flex; flex-wrap:wrap; gap:6px; }
