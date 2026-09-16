@@ -726,7 +726,7 @@ function scrollAnchorIntoView(body, idx, jump, mode){
     const bodyRect2 = body.getBoundingClientRect();
     const rowRect2 = row.getBoundingClientRect();
     body.scrollTop += (rowRect2.top - bodyRect2.top);
-    settleSpacer(body);
+    settleSpacer(body, row);
   }
 }
 
@@ -752,12 +752,12 @@ function scrollAnchorIntoView(body, idx, jump, mode){
    content glides rather than jumping. A long answer never reaches here
    with anything to give back — its spacer is already 0. */
 const settleTimers = new WeakMap();
-function settleSpacer(body){
+function settleSpacer(body, anchorRow){
   /* Both handles matter. The interval is the watcher; the timeout is the
-     scheduled hand-back that fires 500ms after it decides to settle. A new
-     question arriving in that gap would otherwise be pinned to the top and
-     then immediately dragged back to the bottom by the previous answer's
-     leftover timeout. */
+     scheduled hand-back that fires after it decides to settle. A new
+     question arriving in that gap would otherwise be positioned and then
+     immediately dragged elsewhere by the previous answer's leftover
+     timeout. */
   const prev = settleTimers.get(body);
   if (prev){ clearInterval(prev.poll); clearTimeout(prev.drop); }
 
@@ -765,45 +765,58 @@ function settleSpacer(body){
   const timer = setInterval(() => {
     /* Look the spacer up every poll rather than holding a reference to it:
        render() rebuilds the whole message list, and the spacer with it, on
-       every pass — a captured element goes stale the moment the thinking
-       indicator appears or disappears, which silently killed this watcher
-       before it ever got to settle anything. */
+       every pass. */
     const spacer = body.querySelector('.scroll-spacer');
-    if (!spacer || ++polls > 60){ clearInterval(timer); return; }
+    if (!spacer || !anchorRow.isConnected || ++polls > 60){ clearInterval(timer); return; }
 
     const spacerH = spacer.offsetHeight;
     const contentH = body.scrollHeight - spacerH;
-    /* Still typing, or still fading blocks in one at a time. */
+    /* Still typing, or still fading blocks in one at a time. Blocks arrive
+       up to 600ms apart, so a shorter window than a second reads an
+       ordinary gap between two of them as the end of the answer. */
     if (body.querySelector('.mtype-cursor') || contentH !== lastContentH){
       lastContentH = contentH;
       stableFor = 0;
       return;
     }
-    /* Blocks fade in up to 600ms apart (revealMessage's `step` is clamped
-       there), so anything shorter than that reads a perfectly ordinary gap
-       between two blocks as "the answer has finished" and hands the room
-       back while the rest is still coming. Five polls is a full second. */
     if (++stableFor < 5) return;
     clearInterval(timer);
 
-    if (spacerH < 24) return;
-    const target = Math.max(0, contentH - body.clientHeight);
-    if (target >= body.scrollTop){ spacer.style.height = '0px'; return; }
+    /* The answer has stopped growing, so its real height is finally known —
+       which is the first moment the view can be placed correctly. The
+       spacer was sized before any of the answer existed, and the pin was
+       applied against that same collapsed content, so neither reflects
+       what is actually on screen now.
 
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    body.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' });
-    handles.drop = setTimeout(() => {
+       Two positions matter. `anchorScroll` puts the answer's first line at
+       the top of the panel, which is where it belongs while it is being
+       read. `maxScroll` is the furthest the content can go once the
+       spacer's unused room is handed back. Take whichever is smaller: a
+       long answer reaches its own top and leads the panel; a short one
+       stops at the bottom instead, because pinning it any higher would
+       only open blank space underneath it. */
+    const bodyTop = body.getBoundingClientRect().top;
+    const anchorScroll = body.scrollTop + (anchorRow.getBoundingClientRect().top - bodyTop);
+    const maxScroll = Math.max(0, contentH - body.clientHeight);
+    const target = Math.max(0, Math.round(Math.min(anchorScroll, maxScroll)));
+
+    const finish = () => {
       const sp = body.querySelector('.scroll-spacer');
       if (sp) sp.style.height = '0px';
-      /* Dropping the spacer cuts any smooth scroll still in flight short,
-         which would leave the last line or two of the answer below the
-         fold. Land it on the real bottom explicitly. */
-      body.scrollTop = Math.max(0, body.scrollHeight - body.clientHeight);
-    }, reduced ? 0 : 500);
+      /* Dropping the spacer cuts any smooth scroll still in flight short and
+         re-clamps the range, so land the final position explicitly. */
+      body.scrollTop = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+    };
+
+    if (Math.abs(target - body.scrollTop) < 2){ finish(); return; }
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    body.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' });
+    handles.drop = setTimeout(finish, reduced ? 0 : 500);
   }, 200);
   const handles = { poll: timer, drop: null };
   settleTimers.set(body, handles);
 }
+
 
 /* Which message the main chat should keep pinned to the top. A new user
    question always takes over as the anchor — that covers every ask/
@@ -826,16 +839,26 @@ function pushStandalone(msgs){
   push(msgs);
 }
 function updateAnchor(messages, fromIdx){
-  let newUserIdx = -1;
+  let newUserIdx = -1, newBotIdx = -1;
   for (let i = fromIdx; i < messages.length; i++){
-    if (messages[i].role === 'user') newUserIdx = i;
+    if (messages[i].role === 'user') newUserIdx = i; else newBotIdx = i;
   }
-  if (newUserIdx !== -1){
-    lastAnchorIdx = newUserIdx;
-    lastAnchorMode = 'top';
-  } else if (forceNewAnchor){
+  /* A bot-only card pushed through pushStandalone — a print confirmation, a
+     tile added — is not a reply to anything and should not take over the top
+     of the panel; it just needs bringing into view. */
+  if (forceNewAnchor && newUserIdx === -1){
     lastAnchorIdx = fromIdx;
     lastAnchorMode = 'reveal';
+  } else if (newBotIdx !== -1){
+    /* The reply leads once it arrives: its first line goes to the top of the
+       panel and it builds downwards from there. */
+    lastAnchorIdx = newBotIdx;
+    lastAnchorMode = 'top';
+  } else if (newUserIdx !== -1){
+    /* Until then the question holds the top, so the thinking indicator
+       appears under it rather than off the bottom. */
+    lastAnchorIdx = newUserIdx;
+    lastAnchorMode = 'top';
   }
   forceNewAnchor = false;
   return lastAnchorIdx;
@@ -1944,6 +1967,9 @@ function resumeHistory(id){
   state.thinking = null;
   state.messages = [ { role:'user', text: item.title, _shown:true }, reply ];
   toggleHistory();
+  /* An existing chat opens at its end — you are picking up where you left
+     off, not re-reading it from the top. */
+  scrollToLatest();
 }
 
 function newChat(){
