@@ -183,6 +183,10 @@ a { color: var(--text-link); }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
 .browse-link { align-self:center; background:none; border:none; color:var(--text-link); font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:2px; }
 .browse-link:hover .lbl { text-decoration:underline; }
+/* 32px between one turn and the next — far enough apart that a question and
+   its answer read as one exchange rather than four loose blocks.
+   .msg-bot .content keeps its own 10px between a single answer's parts. */
+#messagesWrap { display:flex; flex-direction:column; gap:var(--spacing-2xl); }
 #messagesWrap:empty { display:none !important; }
 
 .msg-row { display:flex; animation: eh-in .18s ease-out; }
@@ -574,11 +578,8 @@ a { color: var(--text-link); }
 .rv-orion-chat[hidden] { display:none; }
 .rv-orion-chat .orion-body { padding:16px; display:flex; flex-direction:column; }
 .rv-orion-chat .orion-composer { padding:10px 16px 12px; }
-/* Same message list rhythm as the main assistant's #messagesWrap — 12px
-   (DESIGN.md's "sm" token; the system's spacing scale is 4/8/12/16/20…,
-   never 14) between messages, plus .msg-bot .content's own 10px between
-   a message's parts (text → action row). */
-#rvChatMessages { display:flex; flex-direction:column; gap:12px; }
+/* Same message list rhythm as the main assistant's #messagesWrap. */
+#rvChatMessages { display:flex; flex-direction:column; gap:var(--spacing-2xl); }
 .rv-analysis { font-size:13.5px; line-height:1.55; color:var(--text-secondary); }
 .rv-analysis p { margin:0 0 12px; }
 .rv-analysis p:last-child { margin-bottom:0; }

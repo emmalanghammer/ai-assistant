@@ -96,7 +96,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         </div>
         <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
-      <div id="messagesWrap" style="display:flex; flex-direction:column; gap:12px;"></div>
+      <div id="messagesWrap"></div>
     </div>
 
     <div class="orion-sheet" id="orionSheet" hidden>
