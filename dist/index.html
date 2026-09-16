@@ -3664,15 +3664,66 @@ function scrollAnchorIntoView(body, idx, jump, mode){
      — if that's shorter than the panel itself, scrolling the anchor to
      the top is physically impossible without the spacer padding out the
      difference. */
-  const tailHeight = (body.scrollHeight - currentSpacerHeight) - rowContentTop;
+  const tailHeight = contentBottomOffset(body, spacer) - rowContentTop;
   const needed = Math.max(0, body.clientHeight - tailHeight);
-  if (spacer) spacer.style.height = needed + 'px';
+
+  /* Between one message and the next the spacer may only GROW. This is what
+     keeps a reply still while it builds. Every render recomputes `needed`
+     against whatever of the answer has appeared so far, so it shrinks as the
+     answer fills in — and each shrink narrows the scroll range under a view
+     that is already scrolled near the end of it, so the browser clamps
+     scrollTop and the whole conversation lurches upward. That was the
+     juddering during a reply: not the reply moving, the floor moving.
+
+     Holding the high-water mark until the answer is finished means nothing
+     moves at all — the reply simply grows into room that is already there.
+     settleSpacer hands the leftover back in one smooth motion at the end. */
+  if (spacer){
+    spacer.style.height = (jump ? needed : Math.max(currentSpacerHeight, needed)) + 'px';
+  }
+
   if (jump){
     const bodyRect2 = body.getBoundingClientRect();
     const rowRect2 = row.getBoundingClientRect();
-    body.scrollTop += (rowRect2.top - bodyRect2.top);
+    const target = Math.round(body.scrollTop + (rowRect2.top - bodyRect2.top));
+    smoothScrollTo(body, target);
     settleSpacer(body, row);
   }
+}
+
+/* How tall the conversation actually is, ignoring the spacer.
+
+   Not `scrollHeight - spacerHeight`: scrollHeight never reports less than
+   clientHeight, so while an answer is still shorter than the panel it reads
+   as a full panel of content and overstates the real height. Everything
+   downstream then under-sizes the spacer, the body never becomes scrollable
+   enough to lift the reply to the top, and the pin silently clamps to zero —
+   which is exactly why the reply used to come to rest partway down. Measure
+   to the top of the spacer instead, which is where the content genuinely
+   ends. */
+function contentBottomOffset(body, spacer){
+  if (!spacer) return body.scrollHeight;
+  const pad = parseFloat(getComputedStyle(body).paddingBottom) || 0;
+  return body.scrollTop + (spacer.getBoundingClientRect().top - body.getBoundingClientRect().top) + pad;
+}
+
+/* One way of moving the panel, so every scroll in a conversation reads the
+   same. Jumps straight there when the distance is trivial (a jump that short
+   is not perceived as motion, and animating it only delays what follows) or
+   when the reader has asked for reduced motion.
+
+   Marks the panel as scrolling under its own power for the duration. A
+   smooth scroll emits the same scroll events a finger does, and without
+   this the settle's "has the reader taken over?" check reads the panel's own
+   animation as the reader grabbing it, and abandons the reply half-placed. */
+let programmaticScrollUntil = 0;
+function orionScrollIsProgrammatic(){ return Date.now() < programmaticScrollUntil; }
+function smoothScrollTo(body, target){
+  const clamped = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  programmaticScrollUntil = Date.now() + 900;
+  if (reduced || Math.abs(clamped - body.scrollTop) < 8){ body.scrollTop = clamped; return; }
+  body.scrollTo({ top: clamped, behavior: 'smooth' });
 }
 
 /* The spacer is the room the answer types into, so it has to be sized for
@@ -3707,15 +3758,31 @@ function settleSpacer(body, anchorRow){
   if (prev){ clearInterval(prev.poll); clearTimeout(prev.drop); }
 
   let lastContentH = -1, stableFor = 0, polls = 0;
+  /* If the reader scrolls while the answer is still arriving, they are
+     reading rather than following, and the panel stops managing the view —
+     no final reposition, no hand-back. Whatever they scrolled to is where it
+     stays. Only a scroll the panel did not perform itself counts, so
+     `expected` is refreshed after every move it makes. */
+  let expected = Math.round(body.scrollTop);
+  let userScrolled = false;
+  const onScroll = () => {
+    if (orionScrollIsProgrammatic()){ expected = Math.round(body.scrollTop); return; }
+    if (Math.abs(Math.round(body.scrollTop) - expected) > 24) userScrolled = true;
+  };
+  body.addEventListener('scroll', onScroll, { passive: true });
+  const stop = () => { clearInterval(timer); body.removeEventListener('scroll', onScroll); };
+
   const timer = setInterval(() => {
+    if (userScrolled){ stop(); return; }
+    expected = Math.round(body.scrollTop);
     /* Look the spacer up every poll rather than holding a reference to it:
        render() rebuilds the whole message list, and the spacer with it, on
        every pass. */
     const spacer = body.querySelector('.scroll-spacer');
-    if (!spacer || !anchorRow.isConnected || ++polls > 60){ clearInterval(timer); return; }
+    if (!spacer || !anchorRow.isConnected || ++polls > 60){ stop(); return; }
 
     const spacerH = spacer.offsetHeight;
-    const contentH = body.scrollHeight - spacerH;
+    const contentH = contentBottomOffset(body, spacer);
     /* Still typing, or still fading blocks in one at a time. Blocks arrive
        up to 600ms apart, so a shorter window than a second reads an
        ordinary gap between two of them as the end of the answer. */
@@ -3725,7 +3792,7 @@ function settleSpacer(body, anchorRow){
       return;
     }
     if (++stableFor < 5) return;
-    clearInterval(timer);
+    stop();
 
     /* The answer has stopped growing, so its real height is finally known —
        which is the first moment the view can be placed correctly. The
@@ -3747,6 +3814,7 @@ function settleSpacer(body, anchorRow){
 
     const finish = () => {
       const sp = body.querySelector('.scroll-spacer');
+      programmaticScrollUntil = Date.now() + 300;
       if (sp) sp.style.height = '0px';
       /* Dropping the spacer cuts any smooth scroll still in flight short and
          re-clamps the range, so land the final position explicitly. */
@@ -3754,9 +3822,8 @@ function settleSpacer(body, anchorRow){
     };
 
     if (Math.abs(target - body.scrollTop) < 2){ finish(); return; }
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    body.scrollTo({ top: target, behavior: reduced ? 'auto' : 'smooth' });
-    handles.drop = setTimeout(finish, reduced ? 0 : 500);
+    smoothScrollTo(body, target);
+    handles.drop = setTimeout(finish, 500);
   }, 200);
   const handles = { poll: timer, drop: null };
   settleTimers.set(body, handles);
