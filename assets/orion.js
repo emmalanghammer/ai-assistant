@@ -93,8 +93,8 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
+          <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap"></div>
     </div>
@@ -871,6 +871,25 @@ function render(){
   const inlineMode = isHome && state.sheetOpen;
   sheet.classList.toggle('orion-sheet-inline', inlineMode);
   body.style.flex = inlineMode ? '0 0 auto' : '';
+
+  /* Orion Assistant Overlay 2:1069 / 17:94 — on the opening screen the sheet
+     does not float below the card, it takes the Browse link's own place
+     inside it. So move the element rather than restyling two copies, and
+     put it back under .orion-inner the moment the sheet closes or a
+     conversation starts (where it floats over the message list instead). */
+  const card = document.querySelector('.home-card');
+  const link = document.querySelector('.browse-link');
+  if (inlineMode){
+    if (sheet.parentElement !== card) card.appendChild(sheet);
+    sheet.classList.add('orion-sheet-in-card');
+    if (link) link.hidden = true;
+  } else {
+    const inner = document.querySelector('.orion-inner');
+    if (card && sheet.parentElement === card && inner)
+      inner.insertBefore(sheet, document.getElementById('orionComposer'));
+    sheet.classList.remove('orion-sheet-in-card');
+    if (link) link.hidden = false;
+  }
 
   if (state.sheetOpen){
     renderSheet();

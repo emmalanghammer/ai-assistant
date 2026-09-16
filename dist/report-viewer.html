@@ -1107,21 +1107,16 @@ a { color: var(--text-link); }
   resize:none; overflow-y:hidden; display:block; padding:0; margin:0; }
 .home-ask textarea::placeholder { color:var(--text-primary); font-style:italic; }
 .home-ask .rmx-icon.send { color:var(--text-link); cursor:pointer; flex:none; }
-/* Orion Express Help 2993:17318 — a bordered button, not a text link: 221x36,
-   white on a 1px border-primary hairline, radius 8, an 8px gap, and a 20px blue
-   lightbulb beside a 14 Regular blue label.
-
-   7px padding, not 8, for the same reason the ask field uses it: Figma draws
-   the 1px stroke INSIDE the 36 and measures its 8px padding from the frame
-   edge, so the stroke overlaps the padding. CSS puts the border outside the
-   padding box, where 8 + 1 comes to 38. 7 + 1 reproduces both the 8px visual
-   inset and the 36px total. */
+/* Orion Assistant Overlay 2:1069 — inside the ask card, under the field: a
+   plain blue text link with a 20px lightbulb and a 4px gap. No border, no
+   fill, no padding; 201x20 in the design. (It was briefly a bordered 221x36
+   button from Express Help 2993:17318 — the overlay supersedes that.) */
 .browse-link { align-self:center; display:inline-flex; align-items:center;
-  gap:var(--spacing-xs); padding:7px; cursor:pointer;
-  background:var(--container-primary); border:1px solid var(--border-primary);
-  border-radius:var(--radius-md); color:var(--text-link);
+  gap:var(--spacing-xxs); padding:0; cursor:pointer;
+  background:none; border:none; color:var(--text-link);
   font:400 14px/20px 'Roboto',sans-serif; }
-.browse-link:hover { border-color:var(--border-secondary); }
+.browse-link[hidden] { display:none; }
+.browse-link:hover .lbl { color:var(--text-link); }
 /* 32px between one turn and the next — far enough apart that a question and
    its answer read as one exchange rather than four loose blocks.
    .msg-bot .content keeps its own 10px between a single answer's parts. */
@@ -1330,6 +1325,18 @@ a { color: var(--text-link); }
    with the panel itself, instead of popping out as a floating overlay. */
 .orion-sheet-inline { position:static; left:auto; right:auto; z-index:auto; flex:1; min-height:0;
   margin:0 20px 16px; box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
+/* Orion Assistant Overlay 17:94 — opened from the card, the sheet replaces the
+   Browse link in place: full width of the card, 16 padding, 12 gap, radius 8,
+   on the same border-primary hairline. No shadow here — it is a panel within a
+   panel, not a thing floating over one. */
+.orion-sheet.orion-sheet-in-card {
+  position:static; left:auto; right:auto; z-index:auto;
+  width:100%; margin:0; flex:none; min-height:0;
+  padding:var(--spacing-md); gap:var(--spacing-sm);
+  box-shadow:none;
+  /* .orion-greet centres its whole column, and the sheet now sits inside it. */
+  text-align:left;
+}
 .orion-sheet .sh { display:flex; align-items:center; justify-content:space-between; }
 .orion-sheet .sh .t { font:600 16px/24px 'Roboto',sans-serif; color:var(--text-secondary); }
 .orion-sheet .sh .rmx-icon { color:var(--text-primary); cursor:pointer; }
@@ -2992,8 +2999,8 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
+          <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap"></div>
     </div>
@@ -3770,6 +3777,25 @@ function render(){
   const inlineMode = isHome && state.sheetOpen;
   sheet.classList.toggle('orion-sheet-inline', inlineMode);
   body.style.flex = inlineMode ? '0 0 auto' : '';
+
+  /* Orion Assistant Overlay 2:1069 / 17:94 — on the opening screen the sheet
+     does not float below the card, it takes the Browse link's own place
+     inside it. So move the element rather than restyling two copies, and
+     put it back under .orion-inner the moment the sheet closes or a
+     conversation starts (where it floats over the message list instead). */
+  const card = document.querySelector('.home-card');
+  const link = document.querySelector('.browse-link');
+  if (inlineMode){
+    if (sheet.parentElement !== card) card.appendChild(sheet);
+    sheet.classList.add('orion-sheet-in-card');
+    if (link) link.hidden = true;
+  } else {
+    const inner = document.querySelector('.orion-inner');
+    if (card && sheet.parentElement === card && inner)
+      inner.insertBefore(sheet, document.getElementById('orionComposer'));
+    sheet.classList.remove('orion-sheet-in-card');
+    if (link) link.hidden = false;
+  }
 
   if (state.sheetOpen){
     renderSheet();
