@@ -1088,7 +1088,6 @@ a { color: var(--text-link); }
 
 .home-card { background:#fff; border:1px solid var(--border-primary); border-radius: var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:16px;
   box-shadow: 0px -1px 10px rgba(76,76,76,.02), 0px 4px 7.5px rgba(76,76,76,.08), 2px 2px 6px rgba(76,76,76,.08); }
-.home-prompt { font: 400 18px/24px 'Roboto',sans-serif; color: var(--text-secondary); text-align:left; margin:0; }
 /* Orion_Input Fields, Style=Square — RMX Components 7086:2817. 36px at rest,
    radius 4, white on a 1px border-primary hairline, 8px gap, placeholder 14
    italic #666666, 20px send icon in brand blue. The Separator in the
@@ -3034,9 +3033,8 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       <div class="orion-greet" id="orionGreet">
         <p class="hi">Hi Charlie!</p>
         <div class="home-card">
-          <p class="home-prompt">How can I help?</p>
           <div class="home-ask">
-            <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
+            <textarea id="homeInput" rows="1" placeholder="How can I help?" onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
           <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>

@@ -88,9 +88,8 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       <div class="orion-greet" id="orionGreet">
         <p class="hi">Hi Charlie!</p>
         <div class="home-card">
-          <p class="home-prompt">How can I help?</p>
           <div class="home-ask">
-            <textarea id="homeInput" rows="1" placeholder="Ask a question..." onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
+            <textarea id="homeInput" rows="1" placeholder="How can I help?" onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
           <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
