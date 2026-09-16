@@ -1112,7 +1112,11 @@ function renderMessage(m, idx, animate){
   if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
   if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${orderActions(m.actions).map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
-    const variant = k === 'print' ? 'text' : (ACTION_LABELS[k][1] ? 'primary' : 'secondary');
+    /* Every action offered after a response is the Secondary button —
+       one treatment, so the row reads as a set of choices rather than a
+       ranked one. ACTION_LABELS' second field still marks which actions
+       commit something; it no longer changes how they look. */
+    const variant = 'secondary';
     return `<button class="mact-btn ${variant}" onclick="act('${k}','${m.src||''}')">${esc(ACTION_LABELS[k][0])}</button>`;
   }).join('')}</div>`);
 

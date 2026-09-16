@@ -1275,11 +1275,17 @@ a { color: var(--text-link); }
 .mnote .t { font-size:12.5px; line-height:18px; color:var(--text-secondary); }
 .mnote .t a { display:block; margin-top:4px; }
 
-.mactions { display:flex; flex-wrap:wrap; gap:6px; }
-.mact-btn { height:32px; padding:0 14px; border-radius:var(--radius-sm); font-family:'Roboto',sans-serif; font-size:13.5px; cursor:pointer; }
+.mactions { display:flex; flex-wrap:wrap; gap:var(--spacing-xs); }
+/* DESIGN.md 7.1 — 36px tall, radius 4, 14px label, ~16px side padding. */
+.mact-btn { height:36px; padding:0 16px; border-radius:var(--radius-sm);
+  font:400 14px/20px 'Roboto',sans-serif; cursor:pointer; }
 .mact-btn.primary { background:var(--background-primary-button); border:1px solid var(--border-secondary); color:#fff; } .mact-btn.primary:hover { background:var(--rmx-blue-hover); }
-.mact-btn.secondary { background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); } .mact-btn.secondary:hover { border-color:var(--border-secondary); color:var(--text-link); }
-.mact-btn.text { background:transparent; border:none; padding:0 8px; color:var(--text-link); } .mact-btn.text:hover { background:rgba(0,0,0,.05); }
+/* Secondary, to the letter: white on a 1px brand-blue border, brand-blue
+   label, hovering to #EBF1F5. It had a border-primary hairline and gray text,
+   which is not a state the Button component has. */
+.mact-btn.secondary { background:var(--container-primary); border:1px solid var(--border-secondary); color:var(--text-link); }
+.mact-btn.secondary:hover { background:var(--bg-hover); }
+.mact-btn.secondary:disabled { border-color:var(--border-disabled); color:var(--text-disabled); }
 .mact-btn:disabled { opacity:.5; cursor:default; }
 /* Orion_Summarize Button — State=Default (RMX Components, Orion Assets) */
 .mact-btn.orion-summarize { background:#fff; border:1px solid var(--border-secondary); color:var(--text-secondary); display:inline-flex; align-items:center; gap:8px; }
@@ -4018,7 +4024,11 @@ function renderMessage(m, idx, animate){
   if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
   if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${orderActions(m.actions).map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
-    const variant = k === 'print' ? 'text' : (ACTION_LABELS[k][1] ? 'primary' : 'secondary');
+    /* Every action offered after a response is the Secondary button —
+       one treatment, so the row reads as a set of choices rather than a
+       ranked one. ACTION_LABELS' second field still marks which actions
+       commit something; it no longer changes how they look. */
+    const variant = 'secondary';
     return `<button class="mact-btn ${variant}" onclick="act('${k}','${m.src||''}')">${esc(ACTION_LABELS[k][0])}</button>`;
   }).join('')}</div>`);
 
