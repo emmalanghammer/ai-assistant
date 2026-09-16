@@ -94,7 +94,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#list"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
+        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap" style="display:flex; flex-direction:column; gap:12px;"></div>
     </div>
@@ -106,7 +106,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     </div>
 
     <div class="orion-composer" id="orionComposer" hidden>
-      <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#list"></use></svg>Prompt Suggestions</button></div>
+      <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#lightbulb"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
         <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
         <svg class="rmx-icon send" onclick="submitDraft()"><use href="#send"></use></svg>

@@ -2028,6 +2028,7 @@ a { color: var(--text-link); }
      NOT from RMX Iconography, which has edit and edit-filled but no
      edit_square. Real geometry, different library — noted in PROTOTYPE.md. -->
 <symbol id="edit-square" viewBox="0 0 20 20" fill="currentColor"><path d="M4.17 17.5C3.71 17.5 3.32 17.34 2.99 17.01C2.66 16.68 2.5 16.29 2.5 15.83V4.17C2.5 3.71 2.66 3.32 2.99 2.99C3.32 2.66 3.71 2.5 4.17 2.5H11.6L9.94 4.17H4.17V15.83H15.83V10.04L17.5 8.37V15.83C17.5 16.29 17.34 16.68 17.01 17.01C16.68 17.34 16.29 17.5 15.83 17.5H4.17ZM7.5 12.5V8.96L15.15 1.31C15.31 1.15 15.5 1.02 15.71 0.94C15.92 0.85 16.13 0.81 16.33 0.81C16.56 0.81 16.77 0.85 16.97 0.94C17.17 1.02 17.35 1.15 17.52 1.31L18.69 2.5C18.84 2.67 18.96 2.85 19.04 3.05C19.13 3.25 19.17 3.46 19.17 3.67C19.17 3.87 19.13 4.08 19.05 4.28C18.98 4.48 18.85 4.67 18.69 4.83L11.04 12.5H7.5ZM9.17 10.83H10.33L15.17 6L14.58 5.42L13.98 4.83L9.17 9.65V10.83Z"/></symbol>
+<symbol id="lightbulb" viewBox="0 0 20 20" fill="currentColor"><path d="M8.82 17.84C8.5 17.52 8.33 17.12 8.33 16.67H11.67C11.67 17.12 11.5 17.52 11.18 17.84C10.85 18.17 10.46 18.33 10 18.33C9.54 18.33 9.15 18.17 8.82 17.84ZM6.67 15.83V14.17H13.33V15.83H6.67ZM6.88 13.33C5.92 12.76 5.16 12 4.59 11.04C4.03 10.08 3.75 9.04 3.75 7.92C3.75 6.18 4.36 4.7 5.57 3.49C6.79 2.27 8.26 1.67 10 1.67C11.74 1.67 13.21 2.27 14.43 3.49C15.64 4.7 16.25 6.18 16.25 7.92C16.25 9.04 15.97 10.08 15.41 11.04C14.84 12 14.08 12.76 13.12 13.33H6.88ZM7.38 11.67H12.62C13.25 11.22 13.73 10.67 14.07 10.02C14.41 9.37 14.58 8.67 14.58 7.92C14.58 6.64 14.14 5.56 13.25 4.67C12.36 3.78 11.28 3.33 10 3.33C8.72 3.33 7.64 3.78 6.75 4.67C5.86 5.56 5.42 6.64 5.42 7.92C5.42 8.67 5.59 9.37 5.93 10.02C6.27 10.67 6.75 11.22 7.38 11.67Z"/></symbol>
 </svg>
 <!-- RMX_ICONS_LOCAL:END -->
 
@@ -2966,7 +2967,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
         </div>
-        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#list"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
+        <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon rmx-icon--16" ><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
       </div>
       <div id="messagesWrap" style="display:flex; flex-direction:column; gap:12px;"></div>
     </div>
@@ -2978,7 +2979,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
     </div>
 
     <div class="orion-composer" id="orionComposer" hidden>
-      <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#list"></use></svg>Prompt Suggestions</button></div>
+      <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#lightbulb"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
         <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
         <svg class="rmx-icon send" onclick="submitDraft()"><use href="#send"></use></svg>
