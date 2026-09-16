@@ -61,6 +61,14 @@ separate files and the conversation is kept in `sessionStorage`.
 
 ## Deviations, and why
 
+**The workspace hero grey is not a token.** RMX Pages 4969:70308 sets both hero
+lines to `#575353`. No Foundations variable carries that value — the text fills
+in the design are literals — and the nearest token, `--text-primary`, is
+`#666666`. The prototype matches the page design rather than the token, because
+the page design is what this screen is copying. Worth resolving one way or the
+other in Foundations.
+
+
 **Icon substitutions.** Every icon is real geometry harvested from RMX
 Iconography — 61 core glyphs plus 31 Express product icons in
 `assets/icons-local.svg`. Nothing is drawn. Three concepts have no glyph in the

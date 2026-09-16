@@ -1672,8 +1672,12 @@ a { color: var(--text-link); }
 .workspace-tabs button .rmx-icon { width:24px; height:24px;; color:var(--text-secondary); }
 .workspace-tabs button.active { color:var(--text-link); }
 .workspace-tabs button.active .rmx-icon { color:var(--text-link);  }
-.workspace-hero .line1 { font: 500 32px/40px 'Roboto',sans-serif; color: var(--text-primary); margin:0; }
-.workspace-hero .line2 { font: 400 20px/28px 'Roboto',sans-serif; color: var(--text-primary); margin:14px 0 0; }
+/* RMX Pages 4969:70308 — the hero is Web/Heading/L/Regular over
+   Web/Heading/M/Regular, both centred, both #575353. That grey is a literal in
+   the page design, not a Foundations token (the nearest is --text-primary
+   #666666); see PROTOTYPE.md. */
+.workspace-hero .line1 { font: 400 24px/32px 'Roboto',sans-serif; color: #575353; margin:0; }
+.workspace-hero .line2 { font: 400 20px/28px 'Roboto',sans-serif; color: #575353; margin:14px 0 0; }
 .workspace-columns { display: flex; gap: 16px; padding: 0 24px 40px; align-items: stretch; }
 /* Each column wraps its Tile, so the column identity and the responsive tab
    state sit on .ws-col and the tagged Tile keeps only rmx-* classes. */
