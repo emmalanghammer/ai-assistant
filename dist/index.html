@@ -4918,6 +4918,21 @@ function openOrion(){
   document.getElementById('orionEntry').classList.remove('pulsing');
   document.getElementById('orionTooltip').hidden = true;
   positionOrionPanel();
+  scrollToLatest();
+}
+
+/* Open onto the newest response, not the oldest. Nothing scrolls the body on
+   open — the anchor logic only moves it when a message is actually added — so
+   a conversation restored from sessionStorage came back sitting at the very
+   top of its own history, with the answer the user last read a screen or two
+   below the fold. Runs on the frame after layout so the restored messages
+   have been measured. */
+function scrollToLatest(){
+  const body = document.getElementById('orionBody');
+  if (!body) return;
+  requestAnimationFrame(() => {
+    body.scrollTop = Math.max(0, body.scrollHeight - body.clientHeight);
+  });
 }
 
 /* Anchored 16px under Command Launch, right edge lined up under the Orion icon.
