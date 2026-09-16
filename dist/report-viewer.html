@@ -3928,19 +3928,28 @@ function submitHome(){
   routeQuestion(q);
 }
 
-/* Demoes the composer with a scripted walk through four real prompts —
+/* Demoes the composer with a scripted walk through the prompt suggestions —
    clicking the empty box types in the next one in sequence (typed, not
    dropped in, matching the same cadence used elsewhere for this kind of
    demo fill) and stops there; nothing is submitted, so the presenter
-   decides when to send it. The sequence spans BOTH composers the demo
-   passes through: homeInput (the fresh "Hi Charlie!" screen) for the first
-   ask, then draftInput (the composer at the bottom of an ongoing
-   conversation) for every follow-up after that one's been sent — so
-   clicking into whichever box is on screen keeps advancing the same
-   four-question walk. homeAutoFillIndex is intentionally never reset by
-   newChat(), so returning to a fresh home screen mid-sequence still picks
-   up where it left off rather than restarting at the first prompt. */
-const HOME_AUTOFILL_SEQUENCE = ['q2', 'q3', 'q4', 'q5'];
+   decides when to send it.
+
+   The order is the sheet's own: every prompt in every category, read
+   category by category exactly as Browse Prompt Suggestions lists them, so
+   it opens on "How do I raise rents?" and the walk never drifts from what
+   the sheet shows. Derived from PROMPTS rather than hand-listed, so adding
+   a prompt to the sheet adds it to the walk.
+
+   The sequence spans BOTH composers the demo passes through: homeInput (the
+   fresh "Hi Charlie!" screen) for the first ask, then draftInput (the
+   composer at the bottom of an ongoing conversation) for every follow-up
+   after that one's been sent — so clicking into whichever box is on screen
+   keeps advancing the same walk. homeAutoFillIndex is intentionally never
+   reset by newChat(), so starting a new chat mid-sequence picks up where it
+   left off rather than restarting at the first prompt. */
+const HOME_AUTOFILL_SEQUENCE = CATS
+  .map((_, cat) => Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === cat))
+  .flat();
 let homeAutoFillIndex = 0;
 function demoComposerAutoFill(elId){
   if (homeAutoFillIndex >= HOME_AUTOFILL_SEQUENCE.length) return;
