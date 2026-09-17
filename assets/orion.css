@@ -432,17 +432,23 @@ a { color: var(--text-link); }
    its own: it is lifted out of the column and hung above the footer, so the
    answer keeps running underneath it and the panel reads as one surface.
 
-   No top border and no background at all — either would just be the same
-   white band in a different place. .orion-body carries matching bottom
-   padding (set from the composer's real height in syncComposerInset) so at
-   rest an answer ends above the controls rather than behind them; a
-   conversation scrolled to the middle does pass behind the field. */
+   No top border — the hairline is what cut the panel in two. .orion-body
+   carries matching bottom padding (set from the composer's real height in
+   syncComposerInset) so the last line of an answer can still be scrolled
+   clear of the controls. */
 /* `bottom` is written by syncComposerInset from the footer's real height.
    It cannot be a percentage: absolute positioning resolves against the
    nearest positioned ancestor, which is the panel — bottom:100% put the
    composer above the panel entirely, where overflow:hidden ate it. */
 .orion-composer { position:absolute; left:0; right:0; bottom:0; z-index:7;
-  border-top:none; background:none;
+  border-top:none;
+  /* Filled, but with the panel's own surface rather than white. .orion-panel
+     lays a 6% brand-blue wash over white and the composer sits at the bottom
+     of it, so repainting that exact pair leaves no seam — the controls have
+     something solid to sit on and the bar still reads as part of the panel
+     instead of a white band across it. --container-tertiary is two points
+     off and shows as a faint edge against its neighbour. */
+  background:linear-gradient(rgba(0,141,213,.06) 0 100%), var(--container-primary);
   padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
 /* The composer at the foot of a conversation is the same Orion_Input Fields
    component, so it grows the same way. Snapped to the component's own values
