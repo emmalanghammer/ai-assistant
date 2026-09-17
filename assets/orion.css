@@ -428,7 +428,22 @@ a { color: var(--text-link); }
 .prompt-item .pl { flex:1; font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .prompt-item .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
-.orion-composer { flex:none; position:relative; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
+/* The composer floats over the conversation rather than sitting in a band of
+   its own: it is lifted out of the column and hung above the footer, so the
+   answer keeps running underneath it and the panel reads as one surface.
+
+   No top border and no background at all — either would just be the same
+   white band in a different place. .orion-body carries matching bottom
+   padding (set from the composer's real height in syncComposerInset) so at
+   rest an answer ends above the controls rather than behind them; a
+   conversation scrolled to the middle does pass behind the field. */
+/* `bottom` is written by syncComposerInset from the footer's real height.
+   It cannot be a percentage: absolute positioning resolves against the
+   nearest positioned ancestor, which is the panel — bottom:100% put the
+   composer above the panel entirely, where overflow:hidden ate it. */
+.orion-composer { position:absolute; left:0; right:0; bottom:0; z-index:7;
+  border-top:none; background:none;
+  padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
 /* The composer at the foot of a conversation is the same Orion_Input Fields
    component, so it grows the same way. Snapped to the component's own values
    while here: it was 14.5px type (no such style) in a 6px radius (no such
@@ -445,7 +460,7 @@ a { color: var(--text-link); }
 .browse-btn { height:32px; padding:0 12px; border-radius:var(--radius-sm); font:400 14px/20px 'Roboto',sans-serif; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); }
 .browse-btn.active { background:var(--bg-hover); border-color:var(--border-secondary); color:var(--text-link); }
 .orion-disclaimer { text-align:center; font-size:12.5px; font-style:italic; color:var(--text-primary); }
-.orion-footer { flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 18px; border-top:1px solid var(--border-primary); background:var(--container-tertiary); }
+.orion-footer { flex:none; position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 18px; border-top:1px solid var(--border-primary); background:var(--container-tertiary); }
 .orion-footer span { font:400 14px/20px 'Roboto',sans-serif; color:var(--text-primary); }
 
 @media (max-width: 1024px) {

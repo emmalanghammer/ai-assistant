@@ -150,6 +150,8 @@ function growAsk(el) {
   const h = Math.min(el.scrollHeight, ASK_MAX_H);
   el.style.height = h + 'px';
   el.style.overflowY = el.scrollHeight > ASK_MAX_H ? 'auto' : 'hidden';
+  /* The composer just changed height, and it is what the body pads for. */
+  syncComposerInset();
 }
 
 /* Enter sends, Shift+Enter starts a new line — the convention for every chat
@@ -837,6 +839,24 @@ function smoothScrollTo(body, target){
    scroll is animated and the spacer is only removed once it lands, so the
    content glides rather than jumping. A long answer never reaches here
    with anything to give back — its spacer is already 0. */
+/* The composer overlays the conversation, so the body has to reserve its
+   height as padding — otherwise the last line of an answer can never be
+   scrolled out from under it. Measured rather than guessed, because the
+   composer grows with the field and with the Prompt Suggestions row. */
+function syncComposerInset(){
+  const body = document.getElementById('orionBody');
+  const composer = document.getElementById('orionComposer');
+  const footer = document.getElementById('orionFooter');
+  if (!body || !composer) return;
+  /* Sit the composer directly on top of the footer. */
+  if (footer) composer.style.bottom = Math.round(footer.getBoundingClientRect().height) + 'px';
+  const inset = composer.hidden ? 16 : Math.round(composer.getBoundingClientRect().height) + 8;
+  if (body.dataset.inset !== String(inset)){
+    body.dataset.inset = String(inset);
+    body.style.paddingBottom = inset + 'px';
+  }
+}
+
 /* Collapse the room held open for an answer. Never leave it standing: a
    spacer outlives the reason it existed, and what is left is a panel of
    blank scroll under the last message. */
@@ -1003,6 +1023,7 @@ function render(){
   const anchorIdx = countChanged ? updateAnchor(state.messages, lastRenderedMsgCount) : lastAnchorIdx;
   scrollAnchorIntoView(body, anchorIdx, countChanged, lastAnchorMode);
   lastRenderedMsgCount = state.messages.length;
+  syncComposerInset();
   updateJumpToLatest();
 
   const sheet = document.getElementById('orionSheet');

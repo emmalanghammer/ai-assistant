@@ -1354,7 +1354,22 @@ a { color: var(--text-link); }
 .prompt-item .pl { flex:1; font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .prompt-item .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
-.orion-composer { flex:none; position:relative; border-top:1px solid var(--border-primary); background:#fff; padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
+/* The composer floats over the conversation rather than sitting in a band of
+   its own: it is lifted out of the column and hung above the footer, so the
+   answer keeps running underneath it and the panel reads as one surface.
+
+   No top border and no background at all — either would just be the same
+   white band in a different place. .orion-body carries matching bottom
+   padding (set from the composer's real height in syncComposerInset) so at
+   rest an answer ends above the controls rather than behind them; a
+   conversation scrolled to the middle does pass behind the field. */
+/* `bottom` is written by syncComposerInset from the footer's real height.
+   It cannot be a percentage: absolute positioning resolves against the
+   nearest positioned ancestor, which is the panel — bottom:100% put the
+   composer above the panel entirely, where overflow:hidden ate it. */
+.orion-composer { position:absolute; left:0; right:0; bottom:0; z-index:7;
+  border-top:none; background:none;
+  padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
 /* The composer at the foot of a conversation is the same Orion_Input Fields
    component, so it grows the same way. Snapped to the component's own values
    while here: it was 14.5px type (no such style) in a 6px radius (no such
@@ -1371,7 +1386,7 @@ a { color: var(--text-link); }
 .browse-btn { height:32px; padding:0 12px; border-radius:var(--radius-sm); font:400 14px/20px 'Roboto',sans-serif; display:inline-flex; align-items:center; gap:6px; cursor:pointer; background:#fff; border:1px solid var(--border-primary); color:var(--text-primary); }
 .browse-btn.active { background:var(--bg-hover); border-color:var(--border-secondary); color:var(--text-link); }
 .orion-disclaimer { text-align:center; font-size:12.5px; font-style:italic; color:var(--text-primary); }
-.orion-footer { flex:none; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 18px; border-top:1px solid var(--border-primary); background:var(--container-tertiary); }
+.orion-footer { flex:none; position:relative; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 18px; border-top:1px solid var(--border-primary); background:var(--container-tertiary); }
 .orion-footer span { font:400 14px/20px 'Roboto',sans-serif; color:var(--text-primary); }
 
 @media (max-width: 1024px) {
@@ -3077,6 +3092,8 @@ function growAsk(el) {
   const h = Math.min(el.scrollHeight, ASK_MAX_H);
   el.style.height = h + 'px';
   el.style.overflowY = el.scrollHeight > ASK_MAX_H ? 'auto' : 'hidden';
+  /* The composer just changed height, and it is what the body pads for. */
+  syncComposerInset();
 }
 
 /* Enter sends, Shift+Enter starts a new line — the convention for every chat
@@ -3764,6 +3781,24 @@ function smoothScrollTo(body, target){
    scroll is animated and the spacer is only removed once it lands, so the
    content glides rather than jumping. A long answer never reaches here
    with anything to give back — its spacer is already 0. */
+/* The composer overlays the conversation, so the body has to reserve its
+   height as padding — otherwise the last line of an answer can never be
+   scrolled out from under it. Measured rather than guessed, because the
+   composer grows with the field and with the Prompt Suggestions row. */
+function syncComposerInset(){
+  const body = document.getElementById('orionBody');
+  const composer = document.getElementById('orionComposer');
+  const footer = document.getElementById('orionFooter');
+  if (!body || !composer) return;
+  /* Sit the composer directly on top of the footer. */
+  if (footer) composer.style.bottom = Math.round(footer.getBoundingClientRect().height) + 'px';
+  const inset = composer.hidden ? 16 : Math.round(composer.getBoundingClientRect().height) + 8;
+  if (body.dataset.inset !== String(inset)){
+    body.dataset.inset = String(inset);
+    body.style.paddingBottom = inset + 'px';
+  }
+}
+
 /* Collapse the room held open for an answer. Never leave it standing: a
    spacer outlives the reason it existed, and what is left is a panel of
    blank scroll under the last message. */
@@ -3930,6 +3965,7 @@ function render(){
   const anchorIdx = countChanged ? updateAnchor(state.messages, lastRenderedMsgCount) : lastAnchorIdx;
   scrollAnchorIntoView(body, anchorIdx, countChanged, lastAnchorMode);
   lastRenderedMsgCount = state.messages.length;
+  syncComposerInset();
   updateJumpToLatest();
 
   const sheet = document.getElementById('orionSheet');
