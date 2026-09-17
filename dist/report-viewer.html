@@ -3775,6 +3775,15 @@ function smoothScrollTo(body, target){
    scroll is animated and the spacer is only removed once it lands, so the
    content glides rather than jumping. A long answer never reaches here
    with anything to give back — its spacer is already 0. */
+/* Collapse the room held open for an answer. Never leave it standing: a
+   spacer outlives the reason it existed, and what is left is a panel of
+   blank scroll under the last message. */
+function releaseSpacer(body){
+  const sp = body.querySelector('.scroll-spacer');
+  if (sp) sp.style.height = '0px';
+  updateJumpToLatest();
+}
+
 const settleTimers = new WeakMap();
 function settleSpacer(body, anchorRow){
   /* Both handles matter. The interval is the watcher; the timeout is the
@@ -3786,11 +3795,14 @@ function settleSpacer(body, anchorRow){
   if (prev){ clearInterval(prev.poll); clearTimeout(prev.drop); }
 
   let lastContentH = -1, stableFor = 0, polls = 0;
-  /* If the reader scrolls while the answer is still arriving, they are
-     reading rather than following, and the panel stops managing the view —
-     no final reposition, no hand-back. Whatever they scrolled to is where it
-     stays. Only a scroll the panel did not perform itself counts, so
-     `expected` is refreshed after every move it makes. */
+  /* If the reader scrolls while the answer is still arriving, the panel
+     stops MOVING the view — whatever they scrolled to is where it stays.
+     It does not stop tidying up: the room held open for the answer is still
+     handed back once the answer stops growing, because abandoning that too
+     stranded a panel's worth of emptiness under the conversation that the
+     reader then had to scroll through. Only a scroll the panel did not
+     perform itself counts, so `expected` is refreshed after every move it
+     makes. */
   let expected = Math.round(body.scrollTop);
   let userScrolled = false;
   const onScroll = () => {
@@ -3801,13 +3813,13 @@ function settleSpacer(body, anchorRow){
   const stop = () => { clearInterval(timer); body.removeEventListener('scroll', onScroll); };
 
   const timer = setInterval(() => {
-    if (userScrolled){ stop(); return; }
-    expected = Math.round(body.scrollTop);
+    if (!userScrolled) expected = Math.round(body.scrollTop);
     /* Look the spacer up every poll rather than holding a reference to it:
        render() rebuilds the whole message list, and the spacer with it, on
        every pass. */
     const spacer = body.querySelector('.scroll-spacer');
-    if (!spacer || !anchorRow.isConnected || ++polls > 60){ stop(); return; }
+    if (!spacer || !anchorRow.isConnected){ stop(); return; }
+    if (++polls > 60){ releaseSpacer(body); stop(); return; }
 
     const spacerH = spacer.offsetHeight;
     const contentH = contentBottomOffset(body, spacer);
@@ -3840,10 +3852,13 @@ function settleSpacer(body, anchorRow){
     const maxScroll = Math.max(0, contentH - body.clientHeight);
     const target = Math.max(0, Math.round(Math.min(anchorScroll, maxScroll)));
 
+    /* Reader took over: give the room back where they are, and leave the
+       view exactly as they left it. */
+    if (userScrolled){ releaseSpacer(body); return; }
+
     const finish = () => {
-      const sp = body.querySelector('.scroll-spacer');
       programmaticScrollUntil = Date.now() + 300;
-      if (sp) sp.style.height = '0px';
+      releaseSpacer(body);
       /* Dropping the spacer cuts any smooth scroll still in flight short and
          re-clamps the range, so land the final position explicitly. */
       body.scrollTop = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
