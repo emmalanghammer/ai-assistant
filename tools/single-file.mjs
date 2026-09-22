@@ -81,8 +81,17 @@ const perScreen = SCREENS.map(s => {
 
 const router = `
 /* ============================================================
-   Single-file router. Screens are sections in one document; the hash says
-   which one is showing and carries what ?r=/?t= used to.
+   Single-file router. Screens are sections in one document, and which one
+   is showing is held in a variable — deliberately not in the URL.
+
+   This used to write location.hash ('#/home', '#/report?r=q2'). One file
+   dropped on a host is often somewhere a crawler can reach, and a hash
+   route is a URL: it gets followed, indexed and shared, and every one of
+   them resolves to the same document. Nothing here needs to be
+   addressable, so the address bar is left alone entirely.
+
+   The cost is the browser back button no longer steps between screens.
+   For a demo handed round as a file that is the right trade.
    ============================================================ */
 let __sfParams = new URLSearchParams();
 function sfParam(name){ return __sfParams.get(name); }
@@ -96,13 +105,12 @@ function sfShow(screen, params){
   window.scrollTo(0, 0);
 }
 
-function sfGo(screen, params, hashTarget){
+function sfGo(screen, params, scrollTo){
   if (typeof saveConversation === 'function') saveConversation();
-  location.hash = '/' + screen + (params ? '?' + params : '');
   sfShow(screen, params);
   if (typeof restoreConversation === 'function') restoreConversation();
-  if (hashTarget){
-    const el = document.getElementById(hashTarget);
+  if (scrollTo){
+    const el = document.getElementById(scrollTo);
     if (el) el.scrollIntoView();
   }
 }
@@ -113,15 +121,7 @@ openReport     = id  => sfGo('report', 'r=' + encodeURIComponent(id));
 showDashboard  = ()  => sfGo('home');
 onLinkClick    = e   => { e.preventDefault(); sfGo('home', '', 'orionTilesCol'); };
 
-function sfFromHash(){
-  const m = /^#\\/([a-z]+)(?:\\?(.*))?$/.exec(location.hash || '');
-  return m ? { screen: m[1], params: m[2] || '' } : { screen: 'home', params: '' };
-}
-window.addEventListener('hashchange', () => { const r = sfFromHash(); sfShow(r.screen, r.params); });
-
-/* Boot. The screens' own scripts already ran; this just reveals the right
-   one and gives the two data-driven screens their parameters. */
-(function(){ const r = sfFromHash(); sfShow(r.screen, r.params); })();
+sfShow('home', '');
 `;
 
 const html = `<!doctype html>
