@@ -471,7 +471,7 @@ function pnlAutoFollowUp(){
     i++;
     el.value = PNL_FOLLOWUP_Q.slice(0, i);
     if (i < PNL_FOLLOWUP_Q.length){
-      setTimeout(typeNext, 18 + Math.random() * 34);
+      setTimeout(typeNext, 34 + Math.random() * 46);
       return;
     }
     setTimeout(() => {
