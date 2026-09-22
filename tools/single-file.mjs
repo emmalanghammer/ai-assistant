@@ -121,6 +121,23 @@ openReport     = id  => sfGo('report', 'r=' + encodeURIComponent(id));
 showDashboard  = ()  => sfGo('home');
 onLinkClick    = e   => { e.preventDefault(); sfGo('home', '', 'orionTilesCol'); };
 
+/* Nothing may reach the address bar — not the router, and not a link.
+   The prototype's dead links are <a href="#"> (48 of them) and the logo is
+   an <a> the build points at "#/home". A browser appends both to the URL on
+   click, which is the same crawlable, indexable, shareable artefact the
+   router used to leave behind. One delegated listener swallows every
+   in-document anchor and routes the logo itself.
+
+   Capture phase, so it runs before any onclick on the anchor. */
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[href]');
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  if (href !== '#' && !href.startsWith('#/')) return;
+  e.preventDefault();
+  if (href === '#/home') sfGo('home');
+}, true);
+
 sfShow('home', '');
 `;
 

@@ -3867,14 +3867,15 @@ function settleSpacer(body, anchorRow){
        every pass. */
     const spacer = body.querySelector('.scroll-spacer');
     if (!spacer || !anchorRow.isConnected){ stop(); return; }
-    if (++polls > 60){ releaseSpacer(body); stop(); return; }
+    if (++polls > 100){ releaseSpacer(body); stop(); return; }
 
     const spacerH = spacer.offsetHeight;
     const contentH = contentBottomOffset(body, spacer);
-    /* Still typing, or still fading blocks in one at a time. Blocks arrive
-       up to 600ms apart, so a shorter window than a second reads an
-       ordinary gap between two of them as the end of the answer. */
-    if (body.querySelector('.mtype-cursor') || contentH !== lastContentH){
+    /* An answer still arriving carries data-revealing until its last block
+       is placed and its last character typed. Height alone is not enough:
+       the pause between the opening paragraph and the first block is
+       seconds of perfect stillness in the middle of the answer. */
+    if (body.querySelector('[data-revealing]') || contentH !== lastContentH){
       lastContentH = contentH;
       stableFor = 0;
       return;
@@ -4042,20 +4043,32 @@ function render(){
 /* How long an answer takes to build itself out, once the thinking pause is
    over. Separate from ORION_PACE because they are different problems: the
    pause is anticipation, this is comprehension. Higher is slower. */
-const ORION_REVEAL = 3;
+const ORION_REVEAL = 4.5;
 
 /* How long the opening paragraph takes to type, whatever its length — capped
-   rather than per-character so a long answer still finishes in about a
-   second and a half instead of crawling. Named because revealMessage waits
+   rather than per-character so a long answer still finishes in a couple of
+   seconds instead of crawling. Named because revealMessage waits
    for it: the paragraph should be readable before the data starts landing
    under it, not race it. */
-const TYPE_MS = 1500;
+const TYPE_MS = 2600;
 
 function revealMessage(idx){
   const row = document.querySelector(`.msg-row[data-idx="${idx}"]`);
   if (!row) return;
   const content = row.querySelector('.content');
   if (!content) return;
+
+  /* An answer is "still arriving" until the last block has been placed and
+     the last character typed — which is not the same as "has not changed
+     height for a moment". The pause between the opening paragraph finishing
+     and the first block appearing is TYPE_MS + 200 of complete stillness,
+     and settleSpacer used to read that as the end of the answer and place
+     the view against half of it. The flag below is the honest signal; the
+     settle waits for it to clear. */
+  row.dataset.revealing = '1';
+  let pending = 1;                      /* the reveal schedule itself */
+  const done = () => { if (--pending <= 0) delete row.dataset.revealing; };
+  const alsoWaitFor = () => { pending++; };
 
   const blocks = [...content.querySelectorAll('.rv')];
   const lead = content.querySelector(':scope > .text');
@@ -4065,9 +4078,9 @@ function revealMessage(idx){
      a time, in reading order — a stat, then the next stat, then the table.
      Only prose types: running a register through a character-by-character
      reveal reads as a gimmick, and it keeps a single cursor on screen. */
-  if (leadHasText) typeOutContent(lead);
+  if (leadHasText){ alsoWaitFor(); typeOutContent(lead, done); }
 
-  if (!blocks.length) return;
+  if (!blocks.length){ done(); return; }
 
   /* Spread the build-out over a target window rather than a fixed delay per
      block, so a two-part answer is not glacial and a twenty-row register
@@ -4077,15 +4090,15 @@ function revealMessage(idx){
 
   let i = 0, typedRich = leadHasText;
   const next = () => {
-    if (!content.isConnected) return;
+    if (!content.isConnected){ done(); return; }
     const el = blocks[i++];
-    if (!el) return;
+    if (!el){ done(); return; }
     el.hidden = false;
     el.classList.add('rv-in');
     /* An answer that is all rich HTML has no opening paragraph, so the rich
        block is what types instead. */
-    if (!typedRich && el.querySelector('.mrich')) { typedRich = true; typeOutContent(el); }
-    if (i < blocks.length) setTimeout(next, step);
+    if (!typedRich && el.querySelector('.mrich')){ typedRich = true; alsoWaitFor(); typeOutContent(el, done); }
+    if (i < blocks.length) setTimeout(next, step); else done();
   };
   setTimeout(next, leadHasText ? TYPE_MS + 200 : 0);
 }
@@ -4100,7 +4113,7 @@ function revealMessage(idx){
    the full ligature string is back. Total typing time is capped rather
    than scaling per character, so a long rich answer still finishes in a
    couple of seconds instead of crawling. */
-function typeOutContent(content){
+function typeOutContent(content, onDone){
   const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
   const nodes = [];
   let n;
@@ -4111,7 +4124,7 @@ function typeOutContent(content){
     n.nodeValue = '';
   }
   const totalChars = nodes.reduce((s, x) => s + x.full.length, 0);
-  if (!totalChars) return;
+  if (!totalChars){ if (onDone) onDone(); return; }
 
   const cursor = document.createElement('span');
   cursor.className = 'mtype-cursor';
@@ -4124,15 +4137,16 @@ function typeOutContent(content){
   const charsPerTick = Math.max(1, Math.ceil(totalChars / TICKS));
   let ni = 0, ci = 0;
   placeCursor();
+  const finish = () => { clearInterval(timer); cursor.remove(); if (onDone) onDone(); };
   const timer = setInterval(() => {
-    if (!content.isConnected){ clearInterval(timer); cursor.remove(); return; }
-    if (ni >= nodes.length){ clearInterval(timer); cursor.remove(); return; }
+    if (!content.isConnected){ finish(); return; }
+    if (ni >= nodes.length){ finish(); return; }
     const cur = nodes[ni];
     ci = Math.min(cur.full.length, ci + charsPerTick);
     cur.node.nodeValue = cur.full.slice(0, ci);
     if (ci >= cur.full.length){
       ni++; ci = 0;
-      if (ni < nodes.length) placeCursor(); else { clearInterval(timer); cursor.remove(); }
+      if (ni < nodes.length) placeCursor(); else finish();
     }
   }, 16);
 }
@@ -4181,7 +4195,7 @@ function demoComposerAutoFill(elId){
     growAsk(el);
     i++;
     el.value = text.slice(0, i);
-    if (i < text.length) setTimeout(typeNext, 18 + Math.random() * 34);
+    if (i < text.length) setTimeout(typeNext, 34 + Math.random() * 46);
   };
   typeNext();
 }
