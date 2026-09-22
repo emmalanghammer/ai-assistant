@@ -3019,7 +3019,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
   <div class="orion-inner">
     <div class="orion-head" onmousedown="startMove(event)">
       <div class="row">
-        <div class="left"><svg class="rmx-icon avatar-logo"><use href="#orion"></use></svg><span class="name" id="orionHeadTitle">Orion Assistant</span></div>
+        <div class="left"><svg class="rmx-icon avatar-logo" ondblclick="skipToCategory(1)" title="Orion Assistant"><use href="#orion"></use></svg><span class="name" id="orionHeadTitle">Orion Assistant</span></div>
         <div class="icons">
           <svg class="rmx-icon" title="New chat" onclick="newChat()"><use href="#edit-square"></use></svg>
           <div class="vdiv" id="historyDivider"></div>
@@ -3188,101 +3188,63 @@ const HELP_PROMPTS = {
   h1: { cat:0, icon:'trending_up', label:'How do I raise rents?',
     kw:'raise rent increase rents renewal increases market rent recurring charges batch',
     rich:`
-      <p>To raise rents in Rent Manager, you can use the <strong>Set Renewal Rent Increase</strong> feature to adjust rent charges for tenants whose leases are expiring. Here's how:</p>
+      <p>Use <strong>Set Renewal Rent Increase</strong> to adjust rent for tenants whose leases are expiring.</p>
       <ol>
-        <li><strong>Navigate to the Renewal Increases page:</strong> Go to Rental Info → Leasing → Renewal Increases.</li>
-        <li><strong>Set your filters:</strong> Select the properties you want to work with, then specify the lease expiration date range (from six months in the past to eleven months in the future) to identify which tenants need rent increases.</li>
-        <li><strong>Click Set Rent Increases:</strong> This opens a dialog where you can configure how to increase the rent.</li>
-        <li><strong>Choose your increase method:</strong> Select one of these options:
-          <ul>
-            <li><strong>Increase By:</strong> Raise rent by a specific dollar amount or percentage.</li>
-            <li><strong>New Amount:</strong> Set a flat dollar amount for the new rent.</li>
-            <li><strong>Use Market Rent:</strong> Match the current market rent value for the unit.</li>
-            <li><strong>Calculation:</strong> Use a scripted formula to calculate the new rent (requires scripting knowledge).</li>
-            <li><strong>No Increase:</strong> Keep rent the same.</li>
-          </ul>
-        </li>
-        <li><strong>Select the rent charge type:</strong> Choose which recurring charge to increase from the dropdown.</li>
-        <li><strong>Apply optional rounding:</strong> If desired, round the new rent amount down, up, or to the nearest interval (in dollars or cents).</li>
-        <li><strong>Add a comment:</strong> Optionally enter a note explaining the increase.</li>
-        <li><strong>Review and save:</strong> The system displays the affected tenants and their new rent amounts. Confirm and save your changes.</li>
+        <li><strong>Open the page:</strong> Rental Info → Leasing → Renewal Increases.</li>
+        <li><strong>Filter:</strong> Pick your properties and a lease expiration date range to find who needs an increase.</li>
+        <li><strong>Click Set Rent Increases:</strong> Choose how to raise it — by amount or percentage, to a new flat amount, to market rent, by a scripted calculation, or not at all.</li>
+        <li><strong>Pick the charge:</strong> Choose which recurring charge to increase, and round the result if you want.</li>
+        <li><strong>Review and save:</strong> Check the affected tenants and their new amounts, then save.</li>
       </ol>
-      <p><strong>Note:</strong> You need the "Set Renewal Rent Increases" privilege to perform this task. If you don't see this option, contact your administrator.</p>
-      <p>You can also modify market rent values directly using the Modify Market Rent tool if you want to update the baseline market rent for units before setting renewal increases.</p>` },
+      <p><strong>Note:</strong> Needs the "Set Renewal Rent Increases" privilege.</p>` },
   h2: { cat:0, icon:'assignment_turned_in', label:'How do I send renewal offers?',
     kw:'renewal offers renew lease expiration create term rent increase renewal board resend blue moon twa',
     rich:`
-      <p>To send renewal offers in Rent Manager, you have two main workflows depending on your system configuration:</p>
-      <h4>Creating New Renewal Offers</h4>
+      <p>Two workflows, depending on whether the offer has gone out yet.</p>
+      <h4>Creating offers</h4>
       <ol>
-        <li><strong>Go to the Create Renewal Offers page:</strong> Navigate to Rental Info → Leasing → Create Renewal Offers.</li>
-        <li><strong>Select tenants:</strong> Filter tenants by property, lease expiration date range, lease term, unit type, or user-defined fields. Select the tenants you want to offer renewals to.</li>
-        <li><strong>Choose lease term options:</strong> Select whether tenants can renew at their current term, choose a new term, or select from multiple term options.</li>
-        <li><strong>Modify charges (optional):</strong> Adjust any additional recurring charges or add one-time charges associated with the renewal.</li>
-        <li><strong>Review and send:</strong> Review the renewal offers and click Send to deliver them to tenants.</li>
+        <li><strong>Open the page:</strong> Rental Info → Leasing → Create Renewal Offers.</li>
+        <li><strong>Select tenants:</strong> Filter by property, expiration date, term, or unit type, then pick who to offer.</li>
+        <li><strong>Set the terms:</strong> Let tenants keep their current term, take a new one, or choose between several — and adjust any recurring or one-time charges.</li>
+        <li><strong>Review and send.</strong></li>
       </ol>
-      <h4>Resending Existing Renewal Offers</h4>
-      <p>If you've already sent renewal offers and need to resend them:</p>
-      <ul>
-        <li><strong>Individual resend:</strong> Go to Rental Info → Leasing → Lease Renewal Board. On the tenant's card, click Resend Offer in the Sent Offer column. You can optionally change the expiration date and select signers before sending.</li>
-        <li><strong>Bulk resend:</strong> On the Lease Renewal Board, click Resend Offer in the Sent Offer column heading. Update the expiration date if needed, select signers, and send to all tenants at once.</li>
-      </ul>
-      <h4>Important Notes</h4>
-      <p>Renewal offers can only be sent to residential leases—commercial leases do not generate renewal offers. Renewal offers can be resent only if the status is "Offer Sent" and the delivery method is a Blue Moon lease or a signable document published to Tenant Web Access (TWA). Tenants without valid email addresses are excluded from bulk resend actions.</p>
-      <p>If your system requires approval of renewal rent increases before sending offers, you must approve rent increases first before creating renewal offers. For more details on that workflow, refer to the Create Renewal Offers with Rent Increase Approval process.</p>` },
+      <h4>Resending</h4>
+      <p>On the Lease Renewal Board, click Resend Offer on a tenant's card for one, or in the column heading for all of them. You can change the expiration date and pick signers first.</p>
+      <p><strong>Note:</strong> Residential leases only, and resending needs the status to be "Offer Sent" with a Blue Moon lease or a signable document on Tenant Web Access.</p>` },
   h3: { cat:0, icon:'payments', label:'How do I pay bills?',
     kw:'pay bills payable payables vendor check ach vendorpay avidxchange zego epay paydirect',
     rich:`
-      <p>In Rent Manager, you can pay bills to vendors and owners through the Pay Bills page. Here's how to get started:</p>
+      <p>Bills to vendors and owners are paid from the Pay Bills page.</p>
       <ol>
-        <li><strong>Access the Pay Bills page:</strong> Go to Payables → Bills → Pay Bills.</li>
-        <li><strong>Filter bills (optional):</strong> Use the filters on the left to narrow down which bills display. You can filter by property, vendor, bill date, due date, invoice number, or job.</li>
-        <li><strong>Select bills and payment methods:</strong> Check the boxes next to the bills you want to pay. For each bill, select your payment method from the Bank column. You can also set a default bank or credit card for all bills on the page.</li>
-        <li><strong>Choose your payment method:</strong> Rent Manager supports multiple payment options:
-          <ul>
-            <li><strong>Traditional bank or credit card:</strong> Select from your configured accounts.</li>
-            <li><strong>VendorPay:</strong> Powered by AvidXchange — if enrolled, can simplify and accelerate your payment processes with electronic payments to your vendors.</li>
-            <li><strong>Zego ePay (PayDirect):</strong> If enabled, you can pay vendors and owners electronically using their bank account information on file.</li>
-          </ul>
-        </li>
-        <li><strong>Complete the payment:</strong> Follow the prompts to finalize the payment. Depending on your payment method, the bill may be submitted for processing immediately or require additional approval steps.</li>
+        <li><strong>Open the page:</strong> Payables → Bills → Pay Bills.</li>
+        <li><strong>Narrow the list:</strong> Filter by property, vendor, bill or due date, invoice number, or job.</li>
+        <li><strong>Select and pay:</strong> Tick the bills, then choose a payment method per bill in the Bank column — a bank or credit card, VendorPay, or Zego ePay. You can set one default for the whole page.</li>
+        <li><strong>Finish:</strong> Follow the prompts. Some methods post straight away, others need approval.</li>
       </ol>
-      <p><strong>Note:</strong> You need the "Allow user to pay bills" privilege in the Payables group to pay bills. If you're paying a bill for the property management company, you also need the "Take owner Payments" privilege in the Receivables group. If you don't see certain payment options, contact your administrator to enable them in system preferences.</p>` },
+      <p><strong>Note:</strong> Needs the "Allow user to pay bills" privilege, and "Take owner Payments" as well if the bill is for the management company.</p>` },
   h4: { cat:0, icon:'summarize', label:'What report will tell me who is behind on rent?',
     kw:'report which tell delinquency behind rent aging receivables as of date',
     rich:`
-      <p>The <strong>Delinquency report</strong> is the primary report for identifying tenants who are behind on rent. This report displays tenants and prospects with delinquent charges as of a specified date, along with the balance of delinquent charges by property, a grand total for all selected properties, per-day late fee totals, and interest loan charges.</p>
-      <p>To run the Delinquency report:</p>
+      <p>The <strong>Delinquency report</strong>. It lists tenants and prospects with delinquent charges as of a date you choose, with balances by property and a grand total.</p>
       <ol>
-        <li><strong>Navigate to the report:</strong> Go to Receivables → Charges → Delinquency.</li>
-        <li><strong>Select properties:</strong> Choose each property or property group to include in the report.</li>
-        <li><strong>Set the report date:</strong> Enter an "As of Date" to examine delinquent charges up through that date.</li>
-        <li><strong>Filter by delinquency age (optional):</strong> Check "Exclude Tenants with Less Than X Delinquent Days" and enter a number (for example, 5) to show only tenants with charges that are at least that many days overdue.</li>
-        <li><strong>Choose detail level:</strong> Select "Detail" to see each delinquent charge individually, or "Summary" to see only the total delinquent amount per tenant.</li>
-        <li><strong>Include or exclude prospects:</strong> Check "Include Prospects" if you want prospect accounts in the results.</li>
-        <li><strong>Generate the report:</strong> Select your desired file format and run the report.</li>
+        <li><strong>Open the report:</strong> Receivables → Charges → Delinquency.</li>
+        <li><strong>Choose properties</strong> and an "As of Date".</li>
+        <li><strong>Filter by age:</strong> Optionally exclude tenants under a set number of delinquent days.</li>
+        <li><strong>Pick Detail or Summary</strong> — every charge, or one total per tenant — then run it.</li>
       </ol>
-      <p><strong>Important:</strong> This report examines unpaid charges, not ending balances. If a payment was received but not yet applied to outstanding charges, those charges will still appear as delinquent on this report.</p>
-      <p><strong>Note:</strong> You must have the "Run reports" privilege enabled and access to the Delinquency report on the Reports tab.</p>` },
+      <p><strong>Important:</strong> It reads unpaid charges, not ending balances. A payment received but not yet applied still shows as delinquent.</p>` },
   h5: { cat:0, icon:'receipt_long', label:'Is there an easy way to enter expense receipts into Rent Manager?',
     kw:'easy enter expense receipts smart receipts ai extraction rmappsuite capture mobile scan',
     rich:`
-      <p>Yes, Rent Manager offers the <strong>Smart Receipts</strong> feature, which is designed to make entering expense receipts easy and efficient.</p>
-      <h4>How it works</h4>
+      <p>Yes — <strong>Smart Receipts</strong>.</p>
       <ol>
-        <li><strong>Capture or upload receipts:</strong> You or your technicians can take a photo of a receipt using the Capture tool in rmAppSuite Pro, or upload an image file (PDF or image format) of a receipt.</li>
-        <li><strong>AI extraction:</strong> Orion AI automatically extracts the relevant transaction data from the receipt image, such as the amount, vendor, and date.</li>
-        <li><strong>Review and verify:</strong> The extracted details are populated into draft transactions in Rent Manager. You review the information to ensure accuracy and add any additional details like a memo.</li>
-        <li><strong>Classify the expense:</strong> You classify the charge as either a company credit card transaction or a personal reimbursement.</li>
-        <li><strong>Post the transaction:</strong> Once verified, you can save the receipt for later or post it directly as a credit card transaction or as a bill to reimburse an employee.</li>
+        <li><strong>Capture:</strong> Photograph a receipt with the Capture tool in rmAppSuite Pro, or upload a PDF or image.</li>
+        <li><strong>AI extraction:</strong> Orion reads the amount, vendor and date off the image into a draft transaction.</li>
+        <li><strong>Review:</strong> Check the details, add a memo, and classify it as a company card charge or a personal reimbursement.</li>
+        <li><strong>Post it</strong> as a credit card transaction or as a bill to reimburse the employee.</li>
       </ol>
-      <h4>Additional features</h4>
-      <ul>
-        <li>You can link Rent Manager users to vendor accounts, making it clear which employee is being reimbursed for personal charges.</li>
-        <li>You can use the Smart Receipts page to view all uploaded receipts and manage them in one place.</li>
-        <li>A dashboard tile shows pending Smart Receipts that have been uploaded but not yet posted.</li>
-      </ul>
-      <p><strong>Note:</strong> Smart Receipts is a licensed feature and must be purchased separately. Contact your sales representative for more information.</p>` },
+      <p>A dashboard tile shows receipts uploaded but not yet posted.</p>
+      <p><strong>Note:</strong> Smart Receipts is a licensed feature, purchased separately.</p>` },
 };
 
 const DATA_PROMPTS = {
@@ -4098,8 +4060,8 @@ function revealMessage(idx){
     el.hidden = false;
     el.classList.add('rv-in');
     /* An answer that is all rich HTML has no opening paragraph, so the rich
-       block is what types instead. */
-    if (!typedRich && el.querySelector('.mrich')){ typedRich = true; alsoWaitFor(); typeOutContent(el, done); }
+       block is what arrives a paragraph at a time instead. */
+    if (!typedRich && el.querySelector('.mrich')){ typedRich = true; alsoWaitFor(); revealProse(el.querySelector('.mrich'), done); }
     if (i < blocks.length) setTimeout(next, step); else done();
   };
   /* Chain the build-out to the paragraph actually finishing rather than to a
@@ -4111,6 +4073,61 @@ function revealMessage(idx){
   } else {
     setTimeout(next, 0);
   }
+}
+
+/* A formatted answer arrives a paragraph at a time, the way a person reads
+   one — not a cursor crawling through a skeleton.
+
+   Typing it character by character meant the whole shape landed first: the
+   numbers 1 to 8, the bullets, the headings, all sitting there empty while
+   text trickled in behind them. You could read the structure of an answer
+   before a word of it existed, which is not how anything writes.
+
+   So the unit is the paragraph, the heading, the list item. Each is hidden
+   outright — display:none, so a list has no empty rows and its numbering
+   counts only what has actually appeared — and they fade in one after
+   another in reading order. Nothing is ever on screen unfinished.
+
+   The pace is the answer's own length spread over a budget: long answers
+   move faster per paragraph than short ones rather than running for a
+   minute, and every answer clears in a predictable window. */
+const PROSE_MS_PER_CHAR = 13;
+const PROSE_MIN_MS = 3500;
+const PROSE_MAX_MS = 12000;
+const PROSE_MIN_STEP = 320;
+
+function revealProse(root, onDone){
+  if (!root){ if (onDone) onDone(); return; }
+  /* Leaf-level blocks, in reading order. A list item is a unit; the <ol>
+     around it is not, so the list appears with its first item rather than
+     as an empty box waiting to be filled. */
+  const units = [...root.querySelectorAll('p, h4, li')]
+    .filter(el => !el.querySelector('p, h4, li'));
+  if (!units.length){ if (onDone) onDone(); return; }
+
+  const shown = new Map();
+  for (const el of units){ shown.set(el, el.style.display); el.style.display = 'none'; }
+
+  const total = units.reduce((n, el) => n + el.textContent.length, 0) || 1;
+  const budget = Math.min(PROSE_MAX_MS, Math.max(PROSE_MIN_MS, total * PROSE_MS_PER_CHAR));
+
+  let i = 0;
+  const step = () => {
+    if (!root.isConnected){ if (onDone) onDone(); return; }
+    const el = units[i++];
+    if (!el){ if (onDone) onDone(); return; }
+    el.style.display = shown.get(el) || '';
+    /* Two frames: .rv puts it at zero opacity, .rv-in transitions it in.
+       Adding both together lands on the final state with nothing to
+       animate between, and the paragraph pops rather than arrives. */
+    el.classList.add('rv');
+    requestAnimationFrame(() => el.classList.add('rv-in'));
+    if (i < units.length){
+      const share = (el.textContent.length / total) * budget;
+      setTimeout(step, Math.max(PROSE_MIN_STEP, Math.round(share)));
+    } else if (onDone) onDone();
+  };
+  step();
 }
 
 /* Walks every text node under `content` in reading order and reveals each
@@ -4193,6 +4210,29 @@ const HOME_AUTOFILL_SEQUENCE = CATS
   .map((_, cat) => Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === cat))
   .flat();
 let homeAutoFillIndex = 0;
+
+/* A way out of the Find Answers questions mid-demo, for when the room has
+   seen enough of them and you want to be on the data ones. Double-click the
+   Orion mark in the panel header: the walk jumps to the first prompt of the
+   next category and carries on from there.
+
+   Deliberately unmarked — it is a presenter's shortcut, not a feature, and a
+   visible control for it would be one more thing to explain on a screen
+   whose whole point is being uncluttered. A double-click on the logo is
+   something nobody finds by accident. It confirms with a toast so you know
+   it took, since there is nothing else on screen to tell you. */
+function skipToCategory(cat){
+  const first = HOME_AUTOFILL_SEQUENCE.findIndex(k => PROMPTS[k].cat === cat);
+  if (first === -1) return;
+  homeAutoFillIndex = first;
+  /* Clear both, not whichever happens to be on screen — the other one keeps
+     its half-typed question and refuses to autofill when you get back to it. */
+  for (const id of ['homeInput', 'draftInput']){
+    const el = document.getElementById(id);
+    if (el){ el.value = ''; resetAsk(id); }
+  }
+  if (typeof RMX !== 'undefined' && RMX.toast) RMX.toast('Skipped to ' + CATS[cat].label, 'neutral');
+}
 function demoComposerAutoFill(elId){
   if (homeAutoFillIndex >= HOME_AUTOFILL_SEQUENCE.length) return;
   const el = document.getElementById(elId);
