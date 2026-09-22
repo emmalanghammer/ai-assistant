@@ -4045,12 +4045,23 @@ function render(){
    pause is anticipation, this is comprehension. Higher is slower. */
 const ORION_REVEAL = 4.5;
 
-/* How long the opening paragraph takes to type, whatever its length — capped
-   rather than per-character so a long answer still finishes in a couple of
-   seconds instead of crawling. Named because revealMessage waits
-   for it: the paragraph should be readable before the data starts landing
-   under it, not race it. */
-const TYPE_MS = 2600;
+/* Typing is a RATE, not a fixed total. It used to be a total — whatever the
+   answer, type it in TYPE_MS — which reads well for a 145-character opening
+   line and badly for a 1,500-character formatted answer: the same budget
+   spread over ten times the text, about ten characters a frame. A blur
+   rather than typing, which is why a rich answer still looked instant after
+   the total was raised.
+
+   So: a per-character pace, with a floor so a one-liner is not over before
+   it starts and a ceiling so a very long answer does not outstay its
+   welcome. A rich answer now runs the full TYPE_MAX_MS at roughly 170
+   characters a second instead of 600. */
+const TYPE_MS_PER_CHAR = 22;
+const TYPE_MIN_MS = 900;
+const TYPE_MAX_MS = 9000;
+function typeDurationFor(chars){
+  return Math.min(TYPE_MAX_MS, Math.max(TYPE_MIN_MS, chars * TYPE_MS_PER_CHAR));
+}
 
 function revealMessage(idx){
   const row = document.querySelector(`.msg-row[data-idx="${idx}"]`);
@@ -4061,7 +4072,7 @@ function revealMessage(idx){
   /* An answer is "still arriving" until the last block has been placed and
      the last character typed — which is not the same as "has not changed
      height for a moment". The pause between the opening paragraph finishing
-     and the first block appearing is TYPE_MS + 200 of complete stillness,
+     and the first block appearing is seconds of complete stillness,
      and settleSpacer used to read that as the end of the answer and place
      the view against half of it. The flag below is the honest signal; the
      settle waits for it to clear. */
@@ -4078,9 +4089,11 @@ function revealMessage(idx){
      a time, in reading order — a stat, then the next stat, then the table.
      Only prose types: running a register through a character-by-character
      reveal reads as a gimmick, and it keeps a single cursor on screen. */
-  if (leadHasText){ alsoWaitFor(); typeOutContent(lead, done); }
-
-  if (!blocks.length){ done(); return; }
+  if (!blocks.length){
+    if (leadHasText){ alsoWaitFor(); typeOutContent(lead, done); }
+    done();
+    return;
+  }
 
   /* Spread the build-out over a target window rather than a fixed delay per
      block, so a two-part answer is not glacial and a twenty-row register
@@ -4100,7 +4113,15 @@ function revealMessage(idx){
     if (!typedRich && el.querySelector('.mrich')){ typedRich = true; alsoWaitFor(); typeOutContent(el, done); }
     if (i < blocks.length) setTimeout(next, step); else done();
   };
-  setTimeout(next, leadHasText ? TYPE_MS + 200 : 0);
+  /* Chain the build-out to the paragraph actually finishing rather than to a
+     fixed delay — now that the duration varies with length, a guess would be
+     wrong in both directions. */
+  if (leadHasText){
+    alsoWaitFor();
+    typeOutContent(lead, () => { done(); setTimeout(next, 200); });
+  } else {
+    setTimeout(next, 0);
+  }
 }
 
 /* Walks every text node under `content` in reading order and reveals each
@@ -4133,7 +4154,7 @@ function typeOutContent(content, onDone){
     if (cur && cur.node.parentNode) cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
   };
 
-  const TICKS = Math.round(TYPE_MS / 16);
+  const TICKS = Math.round(typeDurationFor(totalChars) / 16);
   const charsPerTick = Math.max(1, Math.ceil(totalChars / TICKS));
   let ni = 0, ci = 0;
   placeCursor();
