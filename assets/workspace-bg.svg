@@ -1,12 +1,16 @@
 <!-- RMX_Background, Theme=Light / Device=Web. REAL GEOMETRY, harvested from
      RMX Iconography (doVDYRtepBULKGZntmmS5B, node 6:4644, page RMX_Background)
-     on 2026-09-22. Replaces a 204KB JPEG screenshot of the same artwork:
-     vector, a fifth the size, and sharp at any width. Figma's own canvas
-     rect was stripped so the artwork bleeds to the edges. -->
-<svg width="1932" height="853" viewBox="0 0 1932 853" fill="none" xmlns="http://www.w3.org/2000/svg">
+     on 2026-09-22. Replaces a 204KB JPEG screenshot of the same artwork.
+
+     Five things an export carries that a page background must not. Figma's
+     grey canvas rect and the dashed purple component-set boundary are editor
+     furniture. The component's drop shadow and its 1px #CEDBE7 hairline are
+     for a card sitting on a canvas, and both read as a hard line across the
+     top once the art is a full-bleed background. The viewBox is cropped from
+     1932x853 to the artwork's own 1920x841 at 6,3 so nothing is inset. -->
+<svg width="1920" height="841" viewBox="6 3 1920 841" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="RMX_Background">
-<rect x="-15.5" y="-15.5" width="3903" height="4800" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
-<g id="Theme=Light, Device=Web" filter="url(#filter0_d_3_11)">
+<g id="Theme=Light, Device=Web">
 <g clip-path="url(#clip0_3_11)">
 <rect x="6" y="3" width="1920" height="841" fill="white"/>
 <g id="Mask group" opacity="0.5">
@@ -164,7 +168,6 @@
 </g>
 </g>
 </g>
-<rect x="6.5" y="3.5" width="1919" height="840" stroke="#CEDBE7"/>
 </g>
 </g>
 <defs>
