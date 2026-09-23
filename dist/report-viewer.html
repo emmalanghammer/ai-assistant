@@ -4217,9 +4217,16 @@ function submitHome(){
    keeps advancing the same walk. homeAutoFillIndex is intentionally never
    reset by newChat(), so starting a new chat mid-sequence picks up where it
    left off rather than restarting at the first prompt. */
+/* Prompts the walk skips. They stay in the sheet — someone browsing
+   Prompt Suggestions still sees every question — but a demo that opens with
+   three how-do-I answers in a row spends its first minutes on documentation
+   before reaching anything Orion actually does with your data. */
+const AUTOFILL_SKIP = ['h1', 'h2', 'h3'];
+
 const HOME_AUTOFILL_SEQUENCE = CATS
   .map((_, cat) => Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === cat))
-  .flat();
+  .flat()
+  .filter(k => !AUTOFILL_SKIP.includes(k));
 let homeAutoFillIndex = 0;
 
 /* A way out of the Find Answers questions mid-demo, for when the room has
