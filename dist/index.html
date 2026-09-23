@@ -3912,7 +3912,14 @@ function followReveal(body, el){
   if (!handles || handles.userScrolled) return;
   const b = body.getBoundingClientRect();
   const r = el.getBoundingClientRect();
-  const below = r.bottom - b.bottom;
+  /* The composer floats OVER the foot of the body — the body carries its
+     height as bottom padding so content can be scrolled clear of it. So the
+     bottom of the body's box is not the bottom of what you can see: stopping
+     there leaves the last block sitting behind the ask field. Measure to
+     where the composer starts instead. */
+  const pad = parseFloat(getComputedStyle(body).paddingBottom) || 0;
+  const visibleBottom = b.bottom - pad;
+  const below = r.bottom - visibleBottom;
   if (below <= 0) return;                     /* already fully visible */
   handles.followed = true;
   smoothScrollTo(body, body.scrollTop + below + 12);
