@@ -3843,6 +3843,27 @@ function syncComposerInset(){
   }
 }
 
+/* Follows an answer down as it arrives, the way you would keep reading.
+
+   Each block scrolls the panel only as far as it takes to bring that block
+   fully into view — never to the very bottom, so the text above it does not
+   whip past. If the block already fits on screen, nothing moves at all,
+   which is why a short answer still sits perfectly still.
+
+   Stops the moment the reader scrolls for themselves: they are reading
+   something, and dragging the panel out from under them is the one thing it
+   must never do. */
+function followReveal(body, el){
+  const handles = settleTimers.get(body);
+  if (!handles || handles.userScrolled) return;
+  const b = body.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  const below = r.bottom - b.bottom;
+  if (below <= 0) return;                     /* already fully visible */
+  handles.followed = true;
+  smoothScrollTo(body, body.scrollTop + below + 12);
+}
+
 /* Collapse the room held open for an answer. Never leave it standing: a
    spacer outlives the reason it existed, and what is left is a panel of
    blank scroll under the last message. */
@@ -3875,10 +3896,37 @@ function settleSpacer(body, anchorRow){
   let userScrolled = false;
   const onScroll = () => {
     if (orionScrollIsProgrammatic()){ expected = Math.round(body.scrollTop); return; }
-    if (Math.abs(Math.round(body.scrollTop) - expected) > 24) userScrolled = true;
+    if (Math.abs(Math.round(body.scrollTop) - expected) > 24){
+      userScrolled = true;
+      const h = settleTimers.get(body);
+      if (h) h.userScrolled = true;      /* followReveal reads this */
+    }
   };
+  /* Scroll events say the view moved; they do not say who moved it, and a
+     reader reaching for the wheel while the panel is mid-animation is
+     indistinguishable from the animation itself by timing alone — which is
+     exactly when someone is most likely to grab it. Input events are not
+     ambiguous: a wheel, a drag, a page-down key only ever come from a
+     person. Those end the panel's control immediately. */
+  const onInput = () => {
+    userScrolled = true;
+    const h = settleTimers.get(body);
+    if (h) h.userScrolled = true;
+  };
+  const SCROLL_KEYS = ['PageUp','PageDown','Home','End','ArrowUp','ArrowDown',' '];
+  const onKey = e => { if (SCROLL_KEYS.includes(e.key)) onInput(); };
+
   body.addEventListener('scroll', onScroll, { passive: true });
-  const stop = () => { clearInterval(timer); body.removeEventListener('scroll', onScroll); };
+  body.addEventListener('wheel', onInput, { passive: true });
+  body.addEventListener('touchmove', onInput, { passive: true });
+  body.addEventListener('keydown', onKey);
+  const stop = () => {
+    clearInterval(timer);
+    body.removeEventListener('scroll', onScroll);
+    body.removeEventListener('wheel', onInput);
+    body.removeEventListener('touchmove', onInput);
+    body.removeEventListener('keydown', onKey);
+  };
 
   const timer = setInterval(() => {
     if (!userScrolled) expected = Math.round(body.scrollTop);
@@ -3916,6 +3964,12 @@ function settleSpacer(body, anchorRow){
        long answer reaches its own top and leads the panel; a short one
        stops at the bottom instead, because pinning it any higher would
        only open blank space underneath it. */
+    /* If the view followed the answer down as it arrived, the reader has
+       been watching it land and is already where they should be. Pulling
+       the panel back to the reply's first line would undo the very thing
+       they just watched. Only reposition when nothing followed. */
+    if (handles.followed){ releaseSpacer(body); return; }
+
     const bodyTop = body.getBoundingClientRect().top;
     const anchorScroll = body.scrollTop + (anchorRow.getBoundingClientRect().top - bodyTop);
     const maxScroll = Math.max(0, contentH - body.clientHeight);
@@ -3938,7 +3992,7 @@ function settleSpacer(body, anchorRow){
     smoothScrollTo(body, target);
     handles.drop = setTimeout(finish, 500);
   }, 200);
-  const handles = { poll: timer, drop: null };
+  const handles = { poll: timer, drop: null, userScrolled: false, followed: false };
   settleTimers.set(body, handles);
 }
 
@@ -4116,6 +4170,8 @@ function revealMessage(idx){
        indefinitely. A reflow always happens. */
     void el.offsetWidth;
     el.classList.add('rv-in');
+    const panelBody = document.getElementById('orionBody');
+    if (panelBody && panelBody.contains(el)) followReveal(panelBody, el);
     if (i < blocks.length) setTimeout(next, step); else done();
   };
   /* A beat after the thinking indicator clears, so the answer arrives rather
