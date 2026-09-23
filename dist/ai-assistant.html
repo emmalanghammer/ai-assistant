@@ -1134,7 +1134,13 @@ a { color: var(--text-link); }
 .msg-bot { display:flex; width:100%; }
 .msg-bot .content { flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--spacing-lg); }
 .msg-bot .text { font-size:14px; line-height:20px; color:var(--text-secondary); }
-.rv { opacity:0; transform:translateY(4px); transition:opacity .22s ease, transform .22s ease; }
+/* Blocks fade in rather than appear. .22s was quick enough to read as a
+   switch flipping; at .45s it reads as arriving. */
+.rv { opacity:0; transform:translateY(4px); transition:opacity .45s ease, transform .45s ease; }
+/* Prose takes longer still. It is the whole answer landing in one piece, so
+   it gets the slowest fade in the panel — the moment should be legible
+   without the text ever being half-there. */
+.rv.rv-slow { transition:opacity .9s ease, transform .9s ease; }
 .rv.rv-in { opacity:1; transform:none; }
 /* A real element, not a ::after on .text — the typewriter now runs across
    the whole answer (steps, bullets, rich content, all of it), so the
@@ -4164,8 +4170,6 @@ function revealMessage(idx){
   const alsoWaitFor = () => { pending++; };
 
   const blocks = [...content.querySelectorAll('.rv')];
-  const lead = content.querySelector(':scope > .text');
-  const leadHasText = !!(lead && lead.textContent.trim());
 
   /* Prose lands whole. Neither typed a character at a time nor built up a
      paragraph at a time — an answer is something Orion has already worked
@@ -4183,16 +4187,30 @@ function revealMessage(idx){
   const step = Math.min(600, Math.max(140,
     Math.round((900 * ORION_REVEAL) / blocks.length)));
 
-  let i = 0, typedRich = leadHasText;
+  let i = 0;
   const next = () => {
     if (!content.isConnected){ done(); return; }
     const el = blocks[i++];
     if (!el){ done(); return; }
     el.hidden = false;
+    /* Prose fades slower than data — the lead paragraph is marked in the
+       markup, a rich answer is marked here. See .rv-slow. */
+    if (el.querySelector('.mrich')) el.classList.add('rv-slow');
+    /* Unhiding and setting the end state together gives the browser no start
+       to transition from, so it lands on opacity 1 with no fade. Reading a
+       layout property in between forces the opacity-0 start to be computed,
+       and the class that follows then animates from it.
+
+       Deliberately not requestAnimationFrame: a throttled frame callback —
+       a background tab, a hidden pane — leaves the answer at opacity 0
+       indefinitely. A reflow always happens. */
+    void el.offsetWidth;
     el.classList.add('rv-in');
     if (i < blocks.length) setTimeout(next, step); else done();
   };
-  setTimeout(next, 0);
+  /* A beat after the thinking indicator clears, so the answer arrives rather
+     than replacing it in the same frame. */
+  setTimeout(next, 260);
 }
 
 /* A formatted answer arrives a paragraph at a time, the way a person reads
@@ -4321,7 +4339,10 @@ function renderMessage(m, idx, animate){
      gap applied after it all the same, so the space between the question
      and the answer came to 52 rather than 32. */
   const lead = (m.text == null ? '' : String(m.text)).trim();
-  let inner = lead ? `<div class="text">${esc(m.text)}</div>` : '';
+  let inner = lead
+    ? (animate ? `<div class="text rv rv-slow" hidden>${esc(m.text)}</div>`
+               : `<div class="text">${esc(m.text)}</div>`)
+    : '';
 
   /* A fully-formatted answer (its own headings, numbered steps with
      sub-options, a closing note) that text/steps/bullets/note can't shape

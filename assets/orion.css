@@ -214,7 +214,13 @@ a { color: var(--text-link); }
 .msg-bot { display:flex; width:100%; }
 .msg-bot .content { flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--spacing-lg); }
 .msg-bot .text { font-size:14px; line-height:20px; color:var(--text-secondary); }
-.rv { opacity:0; transform:translateY(4px); transition:opacity .22s ease, transform .22s ease; }
+/* Blocks fade in rather than appear. .22s was quick enough to read as a
+   switch flipping; at .45s it reads as arriving. */
+.rv { opacity:0; transform:translateY(4px); transition:opacity .45s ease, transform .45s ease; }
+/* Prose takes longer still. It is the whole answer landing in one piece, so
+   it gets the slowest fade in the panel — the moment should be legible
+   without the text ever being half-there. */
+.rv.rv-slow { transition:opacity .9s ease, transform .9s ease; }
 .rv.rv-in { opacity:1; transform:none; }
 /* A real element, not a ::after on .text — the typewriter now runs across
    the whole answer (steps, bullets, rich content, all of it), so the
