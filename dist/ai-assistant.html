@@ -3805,6 +3805,26 @@ function scrollAnchorIntoView(body, idx, jump, mode){
   const tailHeight = contentBottomOffset(body, spacer) - rowContentTop;
   const needed = Math.max(0, body.clientHeight - tailHeight);
 
+  /* If the anchor is already sitting fully inside the panel, there is
+     nowhere worth going. Scrolling it to the very top would mean opening a
+     spacer's worth of blank room, sliding the conversation up into it, and
+     then — once the answer turns out to fit after all — sliding it back
+     down when settleSpacer hands the room back. A short answer spent its
+     whole life doing that round trip, and the two moves cancelled out.
+
+     So: leave the view alone and let settleSpacer decide. It runs once the
+     answer has stopped growing, when its real height is finally known, and
+     positions from there. An answer that fits never moves the panel at all;
+     one that outgrows it gets a single scroll at the end instead of one at
+     each end. */
+  const anchorAlreadyVisible = jump
+    && rowRect.top >= bodyRect.top - 1
+    && rowRect.bottom <= bodyRect.bottom + 1;
+  if (anchorAlreadyVisible){
+    settleSpacer(body, row);
+    return;
+  }
+
   /* Between one message and the next the spacer may only GROW. This is what
      keeps a reply still while it builds. Every render recomputes `needed`
      against whatever of the answer has appeared so far, so it shrinks as the
