@@ -3763,12 +3763,66 @@ function contentBottomOffset(body, spacer){
    animation as the reader grabbing it, and abandons the reply half-placed. */
 let programmaticScrollUntil = 0;
 function orionScrollIsProgrammatic(){ return Date.now() < programmaticScrollUntil; }
+
+/* One animator that re-aims, instead of a new scroll each time.
+
+   An answer arrives in pieces a few hundred milliseconds apart, and each
+   piece wants the view a little further down. Calling the browser's own
+   smooth scroll for each of them starts a fresh animation over the top of
+   the one still running: the motion restarts from zero velocity every
+   time, which is the stutter. Native smooth scrolling also has no way to
+   change its destination mid-flight.
+
+   So the target is a variable and the motion is continuous. A new
+   destination while it is moving just moves the destination — the easing
+   carries straight on from wherever it is, at whatever speed it had. The
+   step is proportional to the distance left, so it accelerates away and
+   decelerates in, and it is driven on a timer rather than a frame callback
+   because a throttled callback would strand the panel mid-scroll. */
+const SCROLL_EASE = 0.14;   /* fraction of the remaining distance per tick */
+/* Ceiling on a single tick. Proportional easing alone starts at its fastest,
+   so a long jump opens with one big lurch before settling — capping the step
+   makes it ease in as well as out. ~16px a tick is around 1000px a second. */
+const SCROLL_MAX_STEP = 16;
+const scrollAnims = new WeakMap();
+
+function orionCancelScroll(body){
+  const a = scrollAnims.get(body);
+  if (a){ clearInterval(a.timer); scrollAnims.delete(body); }
+}
+
 function smoothScrollTo(body, target){
-  const clamped = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
+  const clamp = v => Math.max(0, Math.min(v, body.scrollHeight - body.clientHeight));
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  programmaticScrollUntil = Date.now() + 900;
-  if (reduced || Math.abs(clamped - body.scrollTop) < 8){ body.scrollTop = clamped; return; }
-  body.scrollTo({ top: clamped, behavior: 'smooth' });
+
+  if (reduced || Math.abs(clamp(target) - body.scrollTop) < 2){
+    orionCancelScroll(body);
+    programmaticScrollUntil = Date.now() + 200;
+    body.scrollTop = clamp(target);
+    return;
+  }
+
+  const running = scrollAnims.get(body);
+  if (running){ running.target = target; return; }   /* re-aim, keep moving */
+
+  const anim = { target };
+  anim.timer = setInterval(() => {
+    const to = clamp(anim.target);
+    const from = body.scrollTop;
+    const gap = to - from;
+    programmaticScrollUntil = Date.now() + 200;
+    if (Math.abs(gap) < 1){
+      body.scrollTop = to;
+      orionCancelScroll(body);
+      return;
+    }
+    /* At least a pixel a tick, or a tiny remainder crawls forever; at most
+       SCROLL_MAX_STEP, or a long jump lurches on its first frame. */
+    const eased = gap * SCROLL_EASE;
+    const size = Math.min(Math.max(Math.abs(eased), 1), SCROLL_MAX_STEP);
+    body.scrollTop = from + Math.sign(gap) * size;
+  }, 16);
+  scrollAnims.set(body, anim);
 }
 
 /* The spacer is the room the answer arrives into, so it has to be sized for
@@ -3878,6 +3932,7 @@ function settleSpacer(body, anchorRow){
     userScrolled = true;
     const h = settleTimers.get(body);
     if (h) h.userScrolled = true;
+    orionCancelScroll(body);   /* let go of the view mid-glide, not after it */
   };
   const SCROLL_KEYS = ['PageUp','PageDown','Home','End','ArrowUp','ArrowDown',' '];
   const onKey = e => { if (SCROLL_KEYS.includes(e.key)) onInput(); };
