@@ -4254,11 +4254,20 @@ function submitHome(){
    keeps advancing the same walk. homeAutoFillIndex is intentionally never
    reset by newChat(), so starting a new chat mid-sequence picks up where it
    left off rather than restarting at the first prompt. */
-/* Prompts the walk skips. They stay in the sheet — someone browsing
-   Prompt Suggestions still sees every question — but a demo that opens with
-   three how-do-I answers in a row spends its first minutes on documentation
-   before reaching anything Orion actually does with your data. */
-const AUTOFILL_SKIP = ['h1', 'h2', 'h3'];
+/* Prompts the walk skips. Every one of them stays in the sheet — someone
+   browsing Prompt Suggestions still sees the whole set — they are only out
+   of the click-through. */
+const AUTOFILL_SKIP = [
+  /* Find Answers. A demo that opens with three how-do-I answers in a row
+     spends its first minutes on documentation before reaching anything
+     Orion does with your data. */
+  'h1', 'h2', 'h3',
+  /* Take Action. One is enough to show what acting on data looks like, and
+     the batch charge is the one that shows it best — it stages real
+     records, flags two of them, and waits to be told to post. The rest
+     repeat that shape with different nouns. */
+  'x2', 'x3', 'x4', 'x5', 'x6',
+];
 
 const HOME_AUTOFILL_SEQUENCE = CATS
   .map((_, cat) => Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === cat))
