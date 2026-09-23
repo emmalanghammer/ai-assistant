@@ -220,7 +220,6 @@ a { color: var(--text-link); }
    the whole answer (steps, bullets, rich content, all of it), so the
    cursor has to be able to sit after whichever text node is currently
    filling in, not pinned to the intro line. */
-.mtype-cursor { display:inline-block; width:2px; height:14px; margin-left:1px; vertical-align:-2px; background:var(--background-primary-button); animation: eh-blink .8s step-end infinite; }
 /* Native scrolling can't push an element past the natural end of content
    — if the freshly-asked question is near the bottom with only a short
    reply below it, there's no scroll room to carry it up to the top of the

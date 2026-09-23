@@ -780,12 +780,11 @@ function smoothScrollTo(body, target){
   body.scrollTo({ top: clamped, behavior: 'smooth' });
 }
 
-/* The spacer is the room the answer types into, so it has to be sized for
-   an answer that has not arrived yet — at the moment a reply is pushed its
-   prose is still empty (typeOutContent blanks every text node before it
-   types them back in) and its blocks are still fading in one at a time.
-   The only safe assumption is a full panel, which is why it starts at
-   roughly clientHeight.
+/* The spacer is the room the answer arrives into, so it has to be sized for
+   an answer that is not all there yet — at the moment a reply is pushed its
+   blocks are still hidden and fade in one at a time. The only safe
+   assumption is a full panel, which is why it starts at roughly
+   clientHeight.
 
    An answer that ends up SHORTER than the panel therefore finishes with
    the difference left over as blank space below it — the room it turned
@@ -1029,36 +1028,14 @@ function render(){
   }
 }
 
-/* Types the ENTIRE reply out — intro line, steps, bullets, a rich answer's
-   headings and lists, all of it — not just the first line or two with
-   everything after it fading in as whole blocks. The .rv-wrapped blocks
-   are unhidden immediately (their own fade-in still plays), then
-   typeOutContent reveals every block's text in reading order. Doesn't
-   touch scroll — the caller (render) has already anchored the view to the
-   top of the question this is answering. */
 /* How long an answer takes to build itself out, once the thinking pause is
    over. Separate from ORION_PACE because they are different problems: the
    pause is anticipation, this is comprehension. Higher is slower. */
 const ORION_REVEAL = 4.5;
 
-/* Typing is a RATE, not a fixed total. It used to be a total — whatever the
-   answer, type it in TYPE_MS — which reads well for a 145-character opening
-   line and badly for a 1,500-character formatted answer: the same budget
-   spread over ten times the text, about ten characters a frame. A blur
-   rather than typing, which is why a rich answer still looked instant after
-   the total was raised.
-
-   So: a per-character pace, with a floor so a one-liner is not over before
-   it starts and a ceiling so a very long answer does not outstay its
-   welcome. A rich answer now runs the full TYPE_MAX_MS at roughly 170
-   characters a second instead of 600. */
-const TYPE_MS_PER_CHAR = 22;
-const TYPE_MIN_MS = 900;
-const TYPE_MAX_MS = 9000;
-function typeDurationFor(chars){
-  return Math.min(TYPE_MAX_MS, Math.max(TYPE_MIN_MS, chars * TYPE_MS_PER_CHAR));
-}
-
+/* Unhides a reply's blocks in reading order. The prose inside them is
+   already there — only the data blocks arrive one at a time. Does not touch
+   scroll: render() has already anchored the view. */
 function revealMessage(idx){
   const row = document.querySelector(`.msg-row[data-idx="${idx}"]`);
   if (!row) return;
@@ -1081,15 +1058,15 @@ function revealMessage(idx){
   const lead = content.querySelector(':scope > .text');
   const leadHasText = !!(lead && lead.textContent.trim());
 
-  /* The opening paragraph types. Everything after it fades in, one piece at
-     a time, in reading order — a stat, then the next stat, then the table.
-     Only prose types: running a register through a character-by-character
-     reveal reads as a gimmick, and it keeps a single cursor on screen. */
-  if (!blocks.length){
-    if (leadHasText){ alsoWaitFor(); typeOutContent(lead, done); }
-    done();
-    return;
-  }
+  /* Prose lands whole. Neither typed a character at a time nor built up a
+     paragraph at a time — an answer is something Orion has already worked
+     out, and watching it assemble is watching a loading state pretending to
+     be thought. The thinking indicator is where the waiting belongs.
+
+     The data that follows still arrives piece by piece: a stat, the next
+     stat, then the table. That reading is different — those are findings
+     being laid out, and the order is the point. */
+  if (!blocks.length){ done(); return; }
 
   /* Spread the build-out over a target window rather than a fixed delay per
      block, so a two-part answer is not glacial and a twenty-row register
@@ -1104,20 +1081,9 @@ function revealMessage(idx){
     if (!el){ done(); return; }
     el.hidden = false;
     el.classList.add('rv-in');
-    /* An answer that is all rich HTML has no opening paragraph, so the rich
-       block is what arrives a paragraph at a time instead. */
-    if (!typedRich && el.querySelector('.mrich')){ typedRich = true; alsoWaitFor(); revealProse(el.querySelector('.mrich'), done); }
     if (i < blocks.length) setTimeout(next, step); else done();
   };
-  /* Chain the build-out to the paragraph actually finishing rather than to a
-     fixed delay — now that the duration varies with length, a guess would be
-     wrong in both directions. */
-  if (leadHasText){
-    alsoWaitFor();
-    typeOutContent(lead, () => { done(); setTimeout(next, 200); });
-  } else {
-    setTimeout(next, 0);
-  }
+  setTimeout(next, 0);
 }
 
 /* A formatted answer arrives a paragraph at a time, the way a person reads
@@ -1136,92 +1102,8 @@ function revealMessage(idx){
    The pace is the answer's own length spread over a budget: long answers
    move faster per paragraph than short ones rather than running for a
    minute, and every answer clears in a predictable window. */
-const PROSE_MS_PER_CHAR = 13;
-const PROSE_MIN_MS = 3500;
-const PROSE_MAX_MS = 12000;
-const PROSE_MIN_STEP = 320;
 
-function revealProse(root, onDone){
-  if (!root){ if (onDone) onDone(); return; }
-  /* Leaf-level blocks, in reading order. A list item is a unit; the <ol>
-     around it is not, so the list appears with its first item rather than
-     as an empty box waiting to be filled. */
-  const units = [...root.querySelectorAll('p, h4, li')]
-    .filter(el => !el.querySelector('p, h4, li'));
-  if (!units.length){ if (onDone) onDone(); return; }
 
-  const shown = new Map();
-  for (const el of units){ shown.set(el, el.style.display); el.style.display = 'none'; }
-
-  const total = units.reduce((n, el) => n + el.textContent.length, 0) || 1;
-  const budget = Math.min(PROSE_MAX_MS, Math.max(PROSE_MIN_MS, total * PROSE_MS_PER_CHAR));
-
-  let i = 0;
-  const step = () => {
-    if (!root.isConnected){ if (onDone) onDone(); return; }
-    const el = units[i++];
-    if (!el){ if (onDone) onDone(); return; }
-    el.style.display = shown.get(el) || '';
-    /* Two frames: .rv puts it at zero opacity, .rv-in transitions it in.
-       Adding both together lands on the final state with nothing to
-       animate between, and the paragraph pops rather than arrives. */
-    el.classList.add('rv');
-    requestAnimationFrame(() => el.classList.add('rv-in'));
-    if (i < units.length){
-      const share = (el.textContent.length / total) * budget;
-      setTimeout(step, Math.max(PROSE_MIN_STEP, Math.round(share)));
-    } else if (onDone) onDone();
-  };
-  step();
-}
-
-/* Walks every text node under `content` in reading order and reveals each
-   a few characters at a time, so the whole answer reads as typed while
-   its structure (lists, bold, headings) is already fully in place — only
-   the text itself fills in. A real blinking-cursor element trails
-   whichever node is currently filling, rather than a ::after pinned to
-   one line. Material Symbols text is skipped: typing "check_ci…" a
-   letter at a time renders as broken fallback text, not the glyph, until
-   the full ligature string is back. Total typing time is capped rather
-   than scaling per character, so a long rich answer still finishes in a
-   couple of seconds instead of crawling. */
-function typeOutContent(content, onDone){
-  const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  let n;
-  while ((n = walker.nextNode())){
-    if (!n.nodeValue.trim()) continue;
-    if (n.parentElement && n.parentElement.closest('.rmx-icon')) continue;
-    nodes.push({ node: n, full: n.nodeValue });
-    n.nodeValue = '';
-  }
-  const totalChars = nodes.reduce((s, x) => s + x.full.length, 0);
-  if (!totalChars){ if (onDone) onDone(); return; }
-
-  const cursor = document.createElement('span');
-  cursor.className = 'mtype-cursor';
-  const placeCursor = () => {
-    const cur = nodes[ni];
-    if (cur && cur.node.parentNode) cur.node.parentNode.insertBefore(cursor, cur.node.nextSibling);
-  };
-
-  const TICKS = Math.round(typeDurationFor(totalChars) / 16);
-  const charsPerTick = Math.max(1, Math.ceil(totalChars / TICKS));
-  let ni = 0, ci = 0;
-  placeCursor();
-  const finish = () => { clearInterval(timer); cursor.remove(); if (onDone) onDone(); };
-  const timer = setInterval(() => {
-    if (!content.isConnected){ finish(); return; }
-    if (ni >= nodes.length){ finish(); return; }
-    const cur = nodes[ni];
-    ci = Math.min(cur.full.length, ci + charsPerTick);
-    cur.node.nodeValue = cur.full.slice(0, ci);
-    if (ci >= cur.full.length){
-      ni++; ci = 0;
-      if (ni < nodes.length) placeCursor(); else finish();
-    }
-  }, 16);
-}
 
 function submitHome(){
   const el = document.getElementById('homeInput');
