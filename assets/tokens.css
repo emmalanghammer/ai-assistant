@@ -44,7 +44,7 @@
   --text-disabled:  #b3b3b3;  /* [N] also placeholder, which is additionally italic */
   --text-inverse:   #ffffff;  /* [M] — confirmed on Header 18:2314 (avatar initials) */
   --text-ondark:    #ffffff;  /* [M] — confirmed on Header 18:2314 */
-  --text-onlight:   #13314c;  /* [N] */
+  --text-onlight:   #13314c;  /* [M] — confirmed on Toast State=Failure 12509:14556 */
   --text-error:     #eb343c;  /* [N] */
   --text-success:   #6eb744;  /* [N] */
 
@@ -91,11 +91,11 @@
   --component-register-row-default: #ffffff;  /* [M] Cell fill */
   --component-row-selected:         #e8f6fa;  /* [M] */
   --component-lozenge-success:      #e2f1da;  /* [M] */
-  --component-lozenge-error:        #fbd6d8;  /* [N] */
+  --component-lozenge-error:        #fbd6d8;  /* [M] — also the Toast State=Failure surface */
   --component-lozenge-brand:        #cce8f7;  /* [N] */
   --component-lozenge-caution:      #feedd2;  /* [N] note: Caution, not "notice" */
   --component-toast-brand:          #008dd5;  /* [M] Toast State=Action, Bulk Action */
-  --component-toast-success:        #6eb744;  /* [M] Reminder */
+  --component-toast-success:        #6eb744;  /* [M] Toast State=Success AND Reminder */
 
   /* ---- Layout ---- */
   --content-contentpadding: 16px;   /* [M] context bar side padding */

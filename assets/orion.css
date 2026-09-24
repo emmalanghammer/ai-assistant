@@ -333,14 +333,6 @@ a { color: var(--text-link); }
 .follow-chip .fl { flex:1; font-size:13.5px; line-height:20px; color:var(--text-secondary); }
 .follow-chip .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
-.mprint { background:#fff; border:1px solid var(--border-primary); border-radius:var(--radius-sm); overflow:hidden; }
-.mprint .pph { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border-primary); }
-.mprint .pph .rmx-icon { color:var(--text-link); }
-.mprint .pph .t { flex:1; font-size:14.5px; font-weight:500; color:var(--text-secondary); }
-.mprint .pph .pages { font-size:12.5px; color:var(--text-primary); }
-.mprint .pprow { display:grid; grid-template-columns:.8fr 1.2fr; gap:12px; align-items:baseline; padding:7px 14px; border-bottom:1px solid var(--border-disabled); }
-.mprint .pprow .l { font-size:12.5px; color:var(--text-primary); } .mprint .pprow .v { font-size:13.5px; color:var(--text-secondary); }
-.mprint .pfoot { display:flex; align-items:center; gap:8px; padding:11px 14px; background:var(--container-tertiary); }
 
 .marticle { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--border-primary); border-radius:var(--radius-md); padding:11px 14px; cursor:pointer; }
 .marticle:hover { border-color:var(--border-secondary); background:var(--container-tertiary); }
@@ -1072,3 +1064,26 @@ a { color: var(--text-link); }
 .orion-ask:focus-within { border-color: var(--border-secondary); }
 .home-ask textarea:focus,
 .orion-ask textarea:focus { outline: none; }
+
+/* ---------- house rule: blue action text is never underlined ----------
+   RESTORED 2026-09-23 after upgrading to skill 4.2.0.
+
+   Emma's rule: blue action text and links carry NO underline, in the default
+   state or on hover — action-text Buttons, .rmx-text--link, Context Bar text
+   actions. Her own 4.1.0 (2026-09-14) fixed this in rmx.css with
+   `a { color: var(--text-link); text-decoration: none }` plus hover resets.
+
+   The PUBLISHED skill line never had that fix. 4.2.0's rmx.css has no bare <a>
+   rule at all, sets `.rmx-text--link:hover { text-decoration: underline }` —
+   the opposite of the rule — and restores .rmx-btn--underline, the class 4.1.0
+   deleted for matching no Button variant. Upgrading therefore reintroduced
+   underlined links and browser-blue (#0000EE) anchors.
+
+   So the reset lives here, in a prototype-owned sheet loaded after rmx.css,
+   until the fix lands upstream. See PROTOTYPE.md, "Worth raising". */
+a                                    { color: var(--text-link); text-decoration: none; }
+.rmx-text--link,
+.rmx-text--link:hover                { text-decoration: none; }
+.rmx-btn--text:hover .rmx-btn__label { text-decoration: none; }
+.rmx-btn--underline,
+.rmx-btn--underline .rmx-btn__label  { text-decoration: none; }

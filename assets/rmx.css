@@ -334,7 +334,9 @@ body.rmx {
   height: 48px; padding: 0 var(--spacing-md); border-radius: var(--radius-sm);
   background: var(--component-toast-brand); color: var(--text-inverse);
 }
-/* Toast — State = Success | Action | Failure. Action (blue) is the default. */
+/* Toast — State = Success | Action | Failure. Action (blue) is the default.
+   Success is GREEN and is reserved for a completed write — see SKILL.md.
+   Failure is the PALE PINK surface with navy text, not a saturated red one. */
 .rmx-toast {
   display: flex; align-items: center; gap: var(--spacing-xs);
   padding: var(--spacing-md); border-radius: var(--radius-sm);
@@ -343,8 +345,9 @@ body.rmx {
   box-shadow: 0 3px 6px rgba(0,0,0,.25);
 }
 .rmx-toast--success { background: var(--component-toast-success); }
-.rmx-toast--failure { background: var(--text-error); }
-/* Reminder — the green surface belongs here, not to Toast. */
+.rmx-toast--failure { background: var(--component-lozenge-error); color: var(--text-onlight); }
+/* Reminder — green, like Toast State=Success. Both use component/toast-success;
+   Reminder is the persistent 376x80 card, Toast is the transient one. */
 .rmx-reminder {
   display: flex; gap: var(--spacing-md); width: 376px; padding: var(--spacing-md);
   border-radius: var(--radius-sm); background: var(--component-toast-success); color: var(--text-inverse);

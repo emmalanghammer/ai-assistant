@@ -115,9 +115,16 @@ function sfGo(screen, params, scrollTo){
   }
 }
 
-/* The four ways the prototype moves between screens. */
+/* The four ways the prototype moves between screens. Reports open in a new
+   tab like everywhere else — this file is its own destination, so the tab
+   is another copy of it opened straight onto the report. That is the only
+   place a query string appears, and it is one this document creates on a
+   click rather than anything a crawler can reach. */
 openTenantPage = tid => sfGo('tenant', 't=' + encodeURIComponent(tid));
-openReport     = id  => sfGo('report', 'r=' + encodeURIComponent(id));
+openReport     = id  => {
+  if (typeof saveConversation === 'function') saveConversation();
+  window.open(location.pathname + '?r=' + encodeURIComponent(id), '_blank', 'noopener');
+};
 showDashboard  = ()  => sfGo('home');
 onLinkClick    = e   => { e.preventDefault(); sfGo('home', '', 'orionTilesCol'); };
 
@@ -138,7 +145,14 @@ document.addEventListener('click', e => {
   if (href === '#/home') sfGo('home');
 }, true);
 
-sfShow('home', '');
+/* Open on the screen the address asks for, so a report tab lands on its
+   report. Anything else is the workspace. */
+(function(){
+  const q = new URLSearchParams(location.search);
+  if (q.get('r')) sfShow('report', 'r=' + q.get('r'));
+  else if (q.get('t')) sfShow('tenant', 't=' + q.get('t'));
+  else sfShow('home', '');
+})();
 `;
 
 const html = `<!doctype html>

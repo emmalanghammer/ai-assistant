@@ -310,11 +310,11 @@ const DATA_PROMPTS = {
     followups:['mt_vendor','mt_open','mt_cat'],
     tileName:'Slow Issues', tileRows:[ ['Over 7 days','14 issues · avg 12.4 days','Watch',RED] ],
     actions:['print'] },
-  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenant Vehicles', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
+  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
     kw:'camaro vehicle car red riverview plate parking',
     text:'One tenant at Riverview Apartments has a red Camaro on the vehicle record.',
     tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
-    note:"Vehicle data comes from the tenant's Vehicles tab. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
+    note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
     followups:['veh_parking','veh_missing'],
     actions:['print'] },
   q4: { reportName:'Unit Availability · Filtered', reportSource:'Rental Info · Unit Availability', cat:1, icon:'apartment', label:'What units are on the 2nd floor, are waterfront, and available next month?',
@@ -611,7 +611,7 @@ const ACTION_LABELS = {
   nextsteps:['Suggest next steps', false], tile:['Create a dashboard tile', false], list:['Show me the full list', false],
   article:['Open the article', true], browse:['Prompt Suggestions', false],
   post:['Post the charges', true], postbills:['Create the bills', true], held:['Why are 4 held back?', false],
-  print:['Print a report', false], flagged:['Remove the 2 flagged tenants', false], cancel:['Do not post', false],
+  print:['View Report', false], flagged:['Remove the 2 flagged tenants', false], cancel:['Do not post', false],
   summarize:['Summarize', false],
   post_credit:['Post the credits', true], log_violation:['Log the violation', true],
   apply_priorities:['Apply these priorities', true], send_drafts:['Send the drafts', true],
@@ -892,33 +892,6 @@ function syncComposerInset(){
   }
 }
 
-/* Follows an answer down as it arrives, the way you would keep reading.
-
-   Each block scrolls the panel only as far as it takes to bring that block
-   fully into view — never to the very bottom, so the text above it does not
-   whip past. If the block already fits on screen, nothing moves at all,
-   which is why a short answer still sits perfectly still.
-
-   Stops the moment the reader scrolls for themselves: they are reading
-   something, and dragging the panel out from under them is the one thing it
-   must never do. */
-function followReveal(body, el){
-  const handles = settleTimers.get(body);
-  if (!handles || handles.userScrolled) return;
-  const b = body.getBoundingClientRect();
-  const r = el.getBoundingClientRect();
-  /* The composer floats OVER the foot of the body — the body carries its
-     height as bottom padding so content can be scrolled clear of it. So the
-     bottom of the body's box is not the bottom of what you can see: stopping
-     there leaves the last block sitting behind the ask field. Measure to
-     where the composer starts instead. */
-  const pad = parseFloat(getComputedStyle(body).paddingBottom) || 0;
-  const visibleBottom = b.bottom - pad;
-  const below = r.bottom - visibleBottom;
-  if (below <= 0) return;                     /* already fully visible */
-  handles.followed = true;
-  smoothScrollTo(body, body.scrollTop + below + 12);
-}
 
 /* Collapse the room held open for an answer. Never leave it standing: a
    spacer outlives the reason it existed, and what is left is a panel of
@@ -955,7 +928,7 @@ function settleSpacer(body, anchorRow){
     if (Math.abs(Math.round(body.scrollTop) - expected) > 24){
       userScrolled = true;
       const h = settleTimers.get(body);
-      if (h) h.userScrolled = true;      /* followReveal reads this */
+      if (h) h.userScrolled = true;
     }
   };
   /* Scroll events say the view moved; they do not say who moved it, and a
@@ -1021,12 +994,6 @@ function settleSpacer(body, anchorRow){
        long answer reaches its own top and leads the panel; a short one
        stops at the bottom instead, because pinning it any higher would
        only open blank space underneath it. */
-    /* If the view followed the answer down as it arrived, the reader has
-       been watching it land and is already where they should be. Pulling
-       the panel back to the reply's first line would undo the very thing
-       they just watched. Only reposition when nothing followed. */
-    if (handles.followed){ releaseSpacer(body); return; }
-
     const bodyTop = body.getBoundingClientRect().top;
     const anchorScroll = body.scrollTop + (anchorRow.getBoundingClientRect().top - bodyTop);
     const maxScroll = Math.max(0, contentH - body.clientHeight);
@@ -1049,7 +1016,7 @@ function settleSpacer(body, anchorRow){
     smoothScrollTo(body, target);
     handles.drop = setTimeout(finish, 500);
   }, 200);
-  const handles = { poll: timer, drop: null, userScrolled: false, followed: false };
+  const handles = { poll: timer, drop: null, userScrolled: false };
   settleTimers.set(body, handles);
 }
 
@@ -1227,8 +1194,7 @@ function revealMessage(idx){
        indefinitely. A reflow always happens. */
     void el.offsetWidth;
     el.classList.add('rv-in');
-    const panelBody = document.getElementById('orionBody');
-    if (panelBody && panelBody.contains(el)) followReveal(panelBody, el);
+
     if (i < blocks.length) setTimeout(next, step); else done();
   };
   /* A beat after the thinking indicator clears, so the answer arrives rather
@@ -1416,7 +1382,6 @@ function renderMessage(m, idx, animate){
   if (m.picker) inner += wrapOne(renderPicker(m.src));
   if (m.reportLink) inner += wrapOne(`<a class="mlink" href="#" onclick="event.preventDefault(); openReport('${m.reportLink.id}')"><svg class="rmx-icon"><use href="#description"></use></svg><span class="lcol"><span class="t">${esc(m.reportLink.label)}</span><span class="h">${esc(m.reportLink.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
   if (m.link) inner += wrapOne(`<a class="mlink" href="#" onclick="onLinkClick(event)"><svg class="rmx-icon"><use href="#dashboard"></use></svg><span class="lcol"><span class="t">${esc(m.link.label)}</span><span class="h">${esc(m.link.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
-  if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
   if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${orderActions(m.actions).map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
     /* Every action offered after a response is the Secondary button —
@@ -1514,17 +1479,6 @@ function renderFollowups(keys){
   </div></div>`;
 }
 
-function renderPrint(print, id){
-  return `<div class="mprint">
-    <div class="pph"><svg class="rmx-icon"><use href="#print"></use></svg><span class="t">${esc(print.name)}</span><span class="pages">${esc(print.pages)}</span></div>
-    ${print.params.map(p=>`<div class="pprow"><span class="l">${esc(p[0])}</span><span class="v">${esc(p[1])}</span></div>`).join('')}
-    <div class="pfoot">
-      <button class="mact-btn primary" onclick="output('Print','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#print"></use></svg> Print</button>
-      <button class="mact-btn secondary" onclick="output('PDF','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#description"></use></svg> PDF</button>
-      <button class="mact-btn secondary" onclick="output('Excel','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#grid-view"></use></svg> Excel</button>
-    </div>
-  </div>`;
-}
 
 function renderTilePreview(p){
   if (!p) return '';
@@ -1652,11 +1606,11 @@ function act(key, id){
   }
   if (key === 'cancel'){ pushStandalone([{ role:'bot', text:'Nothing was posted. The batch is staged — tell me what to change and I will restage it, or ask me to discard it.', actions:['browse'] }]); return; }
   if (key === 'print'){
-    /* The page count is the real one — the report is laid out here, not guessed. */
-    const m = rptMeta(id);
-    const count = rptPageCount(id);
-    pushStandalone([{ role:'bot', src:id, text:'I can format this result as a report. Here is what it will contain.',
-      print:{ name: m.name, pages: count + (count === 1 ? ' page' : ' pages'), params: m.params } }]);
+    /* Straight to the report, in its own tab. It used to describe what a
+       report would contain and offer to build one — a step that exists in
+       the product but reads as a detour in a demo, where the point is that
+       Orion already has the thing. */
+    openReport(id);
     return;
   }
   if (key === 'held'){
@@ -1771,29 +1725,6 @@ function orionTileCardHtml(id){
    builder in the report block below. */
 const PRINT_REPORTS = { q1: buildOccupancySummaryReport, q5: buildProfitLossReport };
 
-/* Excel stays a message — a spreadsheet is not a document the viewer can show.
-   Print goes straight to the print overlay, the same way a browser's own
-   Print command does not stop to "build" anything first. PDF still builds
-   the report and opens it in the report viewer. */
-function output(fmt, id){
-  if (fmt === 'Excel'){
-    pushStandalone([{ role:'bot', text:'Exported to Excel with one row per record.',
-      note:'Report parameters are saved, so you can re-run this from My Reports without asking me again.' }]);
-    return;
-  }
-  if (fmt === 'Print'){ openPrintOverlay(id); return; }
-  const m = rptMeta(id);
-  const count = rptPageCount(id);
-  const pageTxt = count + (count === 1 ? ' page' : ' pages');
-  push([{ role:'user', text:'Generate it as a PDF.' }]);
-  thinkThen('Building ' + m.name, () => {
-    push([{ role:'bot', src:id,
-      text: 'Built. ' + m.name + ' came out at ' + pageTxt + '. Opening it in the report viewer.',
-      reportLink:{ id: id, label:'Open ' + m.name, hint: pageTxt },
-      note:'Report parameters are saved, so you can re-run this from My Reports without asking me again.' }]);
-    setTimeout(() => openReport(id), 900 * ORION_PACE);
-  }, 1200);
-}
 
 /* ---------- Print overlay ----------
    A recreation of the OS print dialog rather than a call to window.print() —
@@ -2542,9 +2473,19 @@ function openTenantPage(tid) {
   location.href = screenPath('tenant-detail.html') + '?t=' + encodeURIComponent(tid);
 }
 
+/* The URL a report lives at. Split out because opening one in a new tab and
+   navigating to one need the same address, and the single-file build swaps
+   this for its own. */
+function reportUrl(id) {
+  return screenPath('report-viewer.html') + '?r=' + encodeURIComponent(id);
+}
+
+/* Reports open in a new tab. A report is a thing you read alongside the
+   answer that produced it, not instead of it — leaving in place meant
+   losing your seat in the conversation and coming back through the logo. */
 function openReport(id) {
   saveConversation();
-  location.href = screenPath('report-viewer.html') + '?r=' + encodeURIComponent(id);
+  window.open(reportUrl(id), '_blank', 'noopener');
 }
 
 function showDashboard() {

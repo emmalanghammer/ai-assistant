@@ -9,7 +9,13 @@
    part a developer can throw away cleanly — the markup is the deliverable,
    this is the fake wiring around it.
 
-   Never use alert(), confirm() or prompt() in a prototype. Use RMX.toast().
+   Never use alert(), confirm() or prompt() in a prototype.
+
+   RMX.toast() is for ONE thing: confirming that an action completed. Saved,
+   submitted, added, deleted, imported. It is not an acknowledgement that a
+   click was received, and it never fires on navigation, filtering, sorting,
+   opening a panel or clicking something unbuilt. If nothing durable changed,
+   nothing pops.
 */
 (function () {
   'use strict';
@@ -225,7 +231,12 @@
   }
 
   /* ---------- toasts ----------
-     RMX.toast('Charge added', 'success')  — success | failure | neutral    */
+     RMX.toast('Charge added', 'success')  — success | failure | neutral
+
+     Only after something completed. 'success' is the green State=Success and
+     belongs to a completed write; 'failure' is the pale-pink State=Failure
+     when one did not go through; the neutral default is State=Action, for a
+     job that has started and will finish elsewhere. Nothing else gets one. */
   function toast(message, kind = 'neutral', ms = 3200) {
     let stack = $('.rmx-toaststack');
     if (!stack) {
@@ -243,20 +254,30 @@
   }
 
   /* ---------- unwired affordances ----------
-     Anything marked data-rmx-todo says so instead of doing nothing
-     silently — a stakeholder clicking a dead button assumes it is broken. */
+     data-rmx-todo marks something the prototype does not build. Clicking it
+     does NOTHING: the click is swallowed so a link cannot navigate to a page
+     that isn't there, and no message appears.
+
+     Until 4.2.0 this popped a neutral toast. It was removed because a toast
+     in RMX means an action completed, and firing one because someone clicked
+     an inert icon taught stakeholders to read every toast as noise — which
+     is exactly what makes a real save confirmation get ignored.
+
+     The attribute still earns its place: it keeps the intent in the source,
+     the audit can count what is unbuilt, and PROTOTYPE.md is where the
+     designer tells people what is faked. That is the honest channel for it,
+     not a pop-up mid-demo. */
   function todos() {
     document.addEventListener('click', e => {
       const el = e.target.closest('[data-rmx-todo]');
       if (!el) return;
       e.preventDefault();
-      toast(el.dataset.rmxTodo || 'Not built in this prototype', 'neutral');
     });
   }
 
   /* ---------- icons ----------
      Screens reference the shared symbol sheet: <svg class="rmx-icon">
-     <use href="../assets/icons.svg#chevron-down"></use></svg>
+     <use href="../assets/icons.svg#keyboard-arrow-down"></use></svg>
      bundle.mjs rewrites those into inlined symbols when publishing, so the
      same markup works in a repo and in a published page.                  */
 

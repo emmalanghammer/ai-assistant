@@ -1,0 +1,287 @@
+/* ============================================================
+   Every token below carries its RMX value as a fallback.
+   ------------------------------------------------------------
+   This file is meant to drop into any prototype, and it was reading seven
+   tokens (--background-card, --border-primary, --spacing-lg, --text-inverse,
+   --text-primary, --text-secondary, --type-heading-l-regular) with no fallback
+   at all. On a page that defines them it looked right; on a page that does not,
+   every one of those declarations was invalid and the menu came out with no
+   ground, no hairlines, no heading font and black text where white was meant.
+   Nothing errored, so it read as "the menu is broken" rather than "the host is
+   missing tokens". Values are tokens.css's and type.css's own, so a host that
+   defines them still wins. Found 2026-09-15 on a colleague's copy.
+   ============================================================ */
+/* RMX Mega Menu, shared between screens.
+   Real Figma frame (RMX-Pages 5XEzI94nmZsWE7rQQ7OIHP, node 4077:83115),
+   trued up against the frame's own SVG export. Lives here rather than in a
+   single screen's stylesheet because more than one screen needs it: the app
+   bar is on every screen, so its hamburger has to work on every screen.
+   Depends on tokens.css + type.css, which every screen already links.
+   Real Figma frame (RMX-Pages fileKey 5XEzI94nmZsWE7rQQ7OIHP, node
+   4077:83115), built in full: header tabs, all 7 Full Menu categories,
+   their real column content and footer links. See PROTOTYPE.md, "The Mega
+   Menu, built in full". z-index sits above the task-details frame (500),
+   since opening the menu while a task is open should sit on top of it.
+
+   Emma sent the frame's own SVG export (2026-09-10) to true up colors and
+   spacing exactly. Two findings kept as literal values, not tokens:
+   --mm-blue #0071AA is the accent used throughout this component (sidebar
+   text, active row, column-title underline): distinct from this
+   prototype's usual link blue (#008dd5); and the footer's "Version" text
+   is #666666 (--text-primary here), not the disabled gray it might look
+   like at a glance. Both are real, read off the export, not approximated. */
+.megamenu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(19, 49, 76, .45);
+  z-index: 600;
+  display: flex;
+  justify-content: center;
+  padding: 56px 24px 24px;
+}
+.megamenu-overlay[hidden] { display: none; }
+.megamenu {
+  --mm-blue: #0071AA;
+  background: var(--background-card, #ffffff);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(19, 49, 76, .3);
+  width: 100%;
+  max-width: 1320px;
+  max-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.megamenu__header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-primary, #cedbe7);
+  flex: none;
+}
+/* Brand lockup = the real `Admin Menu Logo` component (RMX-Components
+   YhvzfcXOniQJ7xlC8ONzS4, node 10135:5172): a 40x40 `Express Icon / Admin
+   Menu` mark, 20px gap (Spacing/lg), then the title in Web/Heading/L/Regular
+   (24px/32px) at --text-secondary. The first pass used the app bar's full
+   175x32 wordmark scaled to 20px, the wrong asset; this component uses the
+   mark on its own, with no "Rent Manager" wordmark. */
+.megamenu__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg, 20px);
+  flex: none;
+}
+.megamenu__brandmark {
+  width: 40px;
+  height: 40px;
+  flex: none;
+}
+.megamenu__title {
+  font: var(--type-heading-l-regular, 400 24px/32px Roboto, sans-serif);
+  color: var(--text-secondary, #13314c);
+  white-space: nowrap;
+}
+.megamenu__tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  flex: 1;
+  min-width: 0;
+}
+.megamenu__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary, #13314c);
+  background: none;
+  border: none;
+  font: 400 14px/1 'Roboto', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 4px 0;
+  text-decoration: none;
+}
+.megamenu__tab:hover { text-decoration: none; }
+/* The menu sizes its own icons. It marks them .rmx-icon and was relying on the
+   host stylesheet's base rule for that class to give them a width and a height;
+   without rmx.css the close button's X rendered at whatever size the SVG felt
+   like, which on the standalone export was enormous. Declared before the tab
+   and footer rules below so those still win on equal specificity.
+   Found while building the standalone export, 2026-09-15. */
+.megamenu-overlay .rmx-icon { width: 20px; height: 20px; flex: none; display: inline-block; fill: currentColor; }
+
+.megamenu__tab .rmx-icon { width: 18px; height: 18px; flex: none; }
+.megamenu__tab--current { cursor: default; }
+.megamenu__close {
+  flex: none;
+  background: none;
+  border: none;
+  color: var(--mm-blue);
+  cursor: pointer;
+  display: flex;
+  padding: 4px;
+}
+.megamenu__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+/* No scroll on the sidebar: seven fixed items (28px each, 12px apart) always
+   fit, and the frame has no scrollbar here either. It also has to not clip,
+   the active row bleeds 12px into the content area and hangs a notch off its
+   bottom-right corner, and an overflow value would cut both off. */
+.megamenu__sidebar {
+  width: 200px;
+  flex: none;
+  border-right: 1px solid var(--border-primary, #cedbe7);
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.megamenu__sidebar-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 28px;
+  text-align: left;
+  background: none;
+  border: none;
+  /* Spacing/xs vertical, Spacing/md horizontal, and Web/Heading/S/Regular --
+     18px on 24px, not the 14px this carried. Read off the component
+     (I4077:83118;2548:15171;10084:3716). */
+  padding: 8px 16px;
+  color: var(--mm-blue);
+  font: 400 18px/24px 'Roboto', sans-serif;
+  cursor: pointer;
+  position: relative;
+}
+.megamenu__sidebar-item--active {
+  background: var(--mm-blue);
+  color: var(--text-inverse, #ffffff);
+  width: calc(100% + 12px);
+}
+.megamenu__sidebar-item--active::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -12px;
+  width: 13px;
+  height: 12px;
+  /* The real Corner asset from the component, not a CSS border triangle:
+     13x12, Container/secondary-dark, sitting at the bar's right edge and
+     hanging 12px below it. The component draws it flipped
+     (-scale-y-100 rotate-180); that flip is baked into the path here, so
+     nothing needs transforming. Emma's call, 2026-09-11 -- twice, because
+     the hand-rolled triangle was never going to be right. */
+  background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDEzIDEyIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMTMgMEgwVjEyTDEzIDBaIiBmaWxsPSIjMTMzMTRDIi8+PC9zdmc+") no-repeat;
+}
+.megamenu__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 24px;
+}
+/* Columns hug their content, as they do in the frame: its five Rental Info
+   columns measure 185/198/188/162/170px wide, sized to their longest item,
+   not to a shared grid. A fixed basis here wrapped the last column onto a
+   second row that the real menu doesn't have. */
+.megamenu__col {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.megamenu__col-title {
+  color: var(--mm-blue);
+  font-size: 14px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--mm-blue);
+  white-space: nowrap;
+}
+.megamenu__item {
+  display: block;
+  padding: 6px 0;
+  color: var(--text-secondary, #13314c);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.megamenu__item:hover { text-decoration: none; }
+.megamenu__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-primary, #cedbe7);
+  flex-wrap: wrap;
+  flex: none;
+}
+.megamenu__footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.megamenu__footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary, #13314c);
+  font-size: 14px;
+  cursor: pointer;
+}
+.megamenu__footer-link .rmx-icon { width: 18px; height: 18px; }
+.megamenu__version {
+  color: var(--text-primary, #666666);
+  font-size: 12px;
+  flex: none;
+}
+
+/* Phone-width Mega Menu, a stopgap, not a design, the same way the phone
+   app bar above is. The frame is authored at a fixed 1384x541 and RMX has no
+   responsive variant of it, so at 338px the desktop layout arrives with its
+   header tabs clipped, the close button sitting on top of "Administration",
+   and a 200px sidebar eating most of a 290px-wide menu. This stacks the
+   category list above its content instead of beside it, which is how the
+   menu stops being broken at that width, it is not evidence that the real
+   component behaves this way. See PROTOTYPE.md, "Worth raising". */
+@media (max-width: 599px) {
+  .megamenu-overlay { padding: 8px; }
+  .megamenu { max-height: calc(100vh - 16px); }
+  /* Brand on its own line, tabs full-width beneath it. Left as one row, the
+     tabs get squeezed into whatever the brand leaves and the close button
+     lands on top of "Workspace". */
+  .megamenu__header {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 40px 10px 12px;
+  }
+  .megamenu__tabs { width: 100%; flex: none; gap: 8px 16px; }
+  .megamenu__close { position: absolute; top: 6px; right: 6px; }
+  .megamenu__body { flex-direction: column; min-height: 0; }
+  .megamenu__sidebar {
+    width: 100%;
+    flex: none;
+    flex-direction: row;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border-primary, #cedbe7);
+  }
+  .megamenu__sidebar-item { width: auto; flex: none; height: 36px; }
+  /* The active row's 12px bleed and corner notch both point into a content
+     area that is no longer to its right, so neither applies here. */
+  .megamenu__sidebar-item--active { width: auto; }
+  .megamenu__sidebar-item--active::after { display: none; }
+  .megamenu__content { overflow-x: auto; padding: 16px 12px; }
+  .megamenu__footer { padding: 10px 12px; }
+}

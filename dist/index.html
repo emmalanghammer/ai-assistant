@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="rmx-skill" content="4.0.0">
-<meta name="rmx-tokens" content="39c8f4c0ebcf">
+<meta name="rmx-skill" content="4.2.0">
+<meta name="rmx-tokens" content="6144b103c405">
 <title>AI Assistant</title>
 <!-- RMX brand mark, RMX Iconography 68:2992. Inlined as a data URI rather
      than linked, so the icon survives bundling into dist/ where a relative
@@ -16,6 +16,7 @@
 
 
 
+<link rel="stylesheet" href="../assets/megamenu.css">
 
 <style>
 /* tokens.css */
@@ -65,7 +66,7 @@
   --text-disabled:  #b3b3b3;  /* [N] also placeholder, which is additionally italic */
   --text-inverse:   #ffffff;  /* [M] — confirmed on Header 18:2314 (avatar initials) */
   --text-ondark:    #ffffff;  /* [M] — confirmed on Header 18:2314 */
-  --text-onlight:   #13314c;  /* [N] */
+  --text-onlight:   #13314c;  /* [M] — confirmed on Toast State=Failure 12509:14556 */
   --text-error:     #eb343c;  /* [N] */
   --text-success:   #6eb744;  /* [N] */
 
@@ -112,11 +113,11 @@
   --component-register-row-default: #ffffff;  /* [M] Cell fill */
   --component-row-selected:         #e8f6fa;  /* [M] */
   --component-lozenge-success:      #e2f1da;  /* [M] */
-  --component-lozenge-error:        #fbd6d8;  /* [N] */
+  --component-lozenge-error:        #fbd6d8;  /* [M] — also the Toast State=Failure surface */
   --component-lozenge-brand:        #cce8f7;  /* [N] */
   --component-lozenge-caution:      #feedd2;  /* [N] note: Caution, not "notice" */
   --component-toast-brand:          #008dd5;  /* [M] Toast State=Action, Bulk Action */
-  --component-toast-success:        #6eb744;  /* [M] Reminder */
+  --component-toast-success:        #6eb744;  /* [M] Toast State=Success AND Reminder */
 
   /* ---- Layout ---- */
   --content-contentpadding: 16px;   /* [M] context bar side padding */
@@ -548,7 +549,9 @@ body.rmx {
   height: 48px; padding: 0 var(--spacing-md); border-radius: var(--radius-sm);
   background: var(--component-toast-brand); color: var(--text-inverse);
 }
-/* Toast — State = Success | Action | Failure. Action (blue) is the default. */
+/* Toast — State = Success | Action | Failure. Action (blue) is the default.
+   Success is GREEN and is reserved for a completed write — see SKILL.md.
+   Failure is the PALE PINK surface with navy text, not a saturated red one. */
 .rmx-toast {
   display: flex; align-items: center; gap: var(--spacing-xs);
   padding: var(--spacing-md); border-radius: var(--radius-sm);
@@ -557,8 +560,9 @@ body.rmx {
   box-shadow: 0 3px 6px rgba(0,0,0,.25);
 }
 .rmx-toast--success { background: var(--component-toast-success); }
-.rmx-toast--failure { background: var(--text-error); }
-/* Reminder — the green surface belongs here, not to Toast. */
+.rmx-toast--failure { background: var(--component-lozenge-error); color: var(--text-onlight); }
+/* Reminder — green, like Toast State=Success. Both use component/toast-success;
+   Reminder is the persistent 376x80 card, Toast is the transient one. */
 .rmx-reminder {
   display: flex; gap: var(--spacing-md); width: 376px; padding: var(--spacing-md);
   border-radius: var(--radius-sm); background: var(--component-toast-success); color: var(--text-inverse);
@@ -1259,14 +1263,6 @@ a { color: var(--text-link); }
 .follow-chip .fl { flex:1; font-size:13.5px; line-height:20px; color:var(--text-secondary); }
 .follow-chip .rmx-icon.chev { width:18px; height:18px; color:var(--text-link); }
 
-.mprint { background:#fff; border:1px solid var(--border-primary); border-radius:var(--radius-sm); overflow:hidden; }
-.mprint .pph { display:flex; align-items:center; gap:10px; padding:10px 14px; border-bottom:1px solid var(--border-primary); }
-.mprint .pph .rmx-icon { color:var(--text-link); }
-.mprint .pph .t { flex:1; font-size:14.5px; font-weight:500; color:var(--text-secondary); }
-.mprint .pph .pages { font-size:12.5px; color:var(--text-primary); }
-.mprint .pprow { display:grid; grid-template-columns:.8fr 1.2fr; gap:12px; align-items:baseline; padding:7px 14px; border-bottom:1px solid var(--border-disabled); }
-.mprint .pprow .l { font-size:12.5px; color:var(--text-primary); } .mprint .pprow .v { font-size:13.5px; color:var(--text-secondary); }
-.mprint .pfoot { display:flex; align-items:center; gap:8px; padding:11px 14px; background:var(--container-tertiary); }
 
 .marticle { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--border-primary); border-radius:var(--radius-md); padding:11px 14px; cursor:pointer; }
 .marticle:hover { border-color:var(--border-secondary); background:var(--container-tertiary); }
@@ -1999,6 +1995,29 @@ a { color: var(--text-link); }
 .home-ask textarea:focus,
 .orion-ask textarea:focus { outline: none; }
 
+/* ---------- house rule: blue action text is never underlined ----------
+   RESTORED 2026-09-23 after upgrading to skill 4.2.0.
+
+   Emma's rule: blue action text and links carry NO underline, in the default
+   state or on hover — action-text Buttons, .rmx-text--link, Context Bar text
+   actions. Her own 4.1.0 (2026-09-14) fixed this in rmx.css with
+   `a { color: var(--text-link); text-decoration: none }` plus hover resets.
+
+   The PUBLISHED skill line never had that fix. 4.2.0's rmx.css has no bare <a>
+   rule at all, sets `.rmx-text--link:hover { text-decoration: underline }` —
+   the opposite of the rule — and restores .rmx-btn--underline, the class 4.1.0
+   deleted for matching no Button variant. Upgrading therefore reintroduced
+   underlined links and browser-blue (#0000EE) anchors.
+
+   So the reset lives here, in a prototype-owned sheet loaded after rmx.css,
+   until the fix lands upstream. See PROTOTYPE.md, "Worth raising". */
+a                                    { color: var(--text-link); text-decoration: none; }
+.rmx-text--link,
+.rmx-text--link:hover                { text-decoration: none; }
+.rmx-btn--text:hover .rmx-btn__label { text-decoration: none; }
+.rmx-btn--underline,
+.rmx-btn--underline .rmx-btn__label  { text-decoration: none; }
+
 </style>
 </head>
 <body class="rmx">
@@ -2135,7 +2154,7 @@ a { color: var(--text-link); }
 
   <div class="rmx-appbar__launch">
     <div class="rmx-appbar__icons">
-      <button aria-label="Mega Menu"><svg class="rmx-icon"><use href="#menu"></use></svg></button>
+      <button aria-label="Mega Menu" data-rmx-megamenu><svg class="rmx-icon"><use href="#menu"></use></svg></button>
       <button aria-label="Reports"><svg class="rmx-icon"><use href="#description"></use></svg></button>
       <button aria-label="Favorites"><svg class="rmx-icon"><use href="#grade"></use></svg></button>
     </div>
@@ -2401,7 +2420,13 @@ function iconHref(name) {
    part a developer can throw away cleanly — the markup is the deliverable,
    this is the fake wiring around it.
 
-   Never use alert(), confirm() or prompt() in a prototype. Use RMX.toast().
+   Never use alert(), confirm() or prompt() in a prototype.
+
+   RMX.toast() is for ONE thing: confirming that an action completed. Saved,
+   submitted, added, deleted, imported. It is not an acknowledgement that a
+   click was received, and it never fires on navigation, filtering, sorting,
+   opening a panel or clicking something unbuilt. If nothing durable changed,
+   nothing pops.
 */
 (function () {
   'use strict';
@@ -2617,7 +2642,12 @@ function iconHref(name) {
   }
 
   /* ---------- toasts ----------
-     RMX.toast('Charge added', 'success')  — success | failure | neutral    */
+     RMX.toast('Charge added', 'success')  — success | failure | neutral
+
+     Only after something completed. 'success' is the green State=Success and
+     belongs to a completed write; 'failure' is the pale-pink State=Failure
+     when one did not go through; the neutral default is State=Action, for a
+     job that has started and will finish elsewhere. Nothing else gets one. */
   function toast(message, kind = 'neutral', ms = 3200) {
     let stack = $('.rmx-toaststack');
     if (!stack) {
@@ -2635,20 +2665,30 @@ function iconHref(name) {
   }
 
   /* ---------- unwired affordances ----------
-     Anything marked data-rmx-todo says so instead of doing nothing
-     silently — a stakeholder clicking a dead button assumes it is broken. */
+     data-rmx-todo marks something the prototype does not build. Clicking it
+     does NOTHING: the click is swallowed so a link cannot navigate to a page
+     that isn't there, and no message appears.
+
+     Until 4.2.0 this popped a neutral toast. It was removed because a toast
+     in RMX means an action completed, and firing one because someone clicked
+     an inert icon taught stakeholders to read every toast as noise — which
+     is exactly what makes a real save confirmation get ignored.
+
+     The attribute still earns its place: it keeps the intent in the source,
+     the audit can count what is unbuilt, and PROTOTYPE.md is where the
+     designer tells people what is faked. That is the honest channel for it,
+     not a pop-up mid-demo. */
   function todos() {
     document.addEventListener('click', e => {
       const el = e.target.closest('[data-rmx-todo]');
       if (!el) return;
       e.preventDefault();
-      toast(el.dataset.rmxTodo || 'Not built in this prototype', 'neutral');
     });
   }
 
   /* ---------- icons ----------
      Screens reference the shared symbol sheet: <svg class="rmx-icon">
-     <use href="../assets/icons.svg#chevron-down"></use></svg>
+     <use href="../assets/icons.svg#keyboard-arrow-down"></use></svg>
      bundle.mjs rewrites those into inlined symbols when publishing, so the
      same markup works in a repo and in a published page.                  */
 
@@ -2668,6 +2708,7 @@ function iconHref(name) {
 })();
 
 </script>
+<script src="../assets/megamenu.js"></script>
 <script>
 /* ============================================================
    Printed report — the document builder
@@ -3315,11 +3356,11 @@ const DATA_PROMPTS = {
     followups:['mt_vendor','mt_open','mt_cat'],
     tileName:'Slow Issues', tileRows:[ ['Over 7 days','14 issues · avg 12.4 days','Watch',RED] ],
     actions:['print'] },
-  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenant Vehicles', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
+  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
     kw:'camaro vehicle car red riverview plate parking',
     text:'One tenant at Riverview Apartments has a red Camaro on the vehicle record.',
     tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
-    note:"Vehicle data comes from the tenant's Vehicles tab. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
+    note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
     followups:['veh_parking','veh_missing'],
     actions:['print'] },
   q4: { reportName:'Unit Availability · Filtered', reportSource:'Rental Info · Unit Availability', cat:1, icon:'apartment', label:'What units are on the 2nd floor, are waterfront, and available next month?',
@@ -3616,7 +3657,7 @@ const ACTION_LABELS = {
   nextsteps:['Suggest next steps', false], tile:['Create a dashboard tile', false], list:['Show me the full list', false],
   article:['Open the article', true], browse:['Prompt Suggestions', false],
   post:['Post the charges', true], postbills:['Create the bills', true], held:['Why are 4 held back?', false],
-  print:['Print a report', false], flagged:['Remove the 2 flagged tenants', false], cancel:['Do not post', false],
+  print:['View Report', false], flagged:['Remove the 2 flagged tenants', false], cancel:['Do not post', false],
   summarize:['Summarize', false],
   post_credit:['Post the credits', true], log_violation:['Log the violation', true],
   apply_priorities:['Apply these priorities', true], send_drafts:['Send the drafts', true],
@@ -3897,33 +3938,6 @@ function syncComposerInset(){
   }
 }
 
-/* Follows an answer down as it arrives, the way you would keep reading.
-
-   Each block scrolls the panel only as far as it takes to bring that block
-   fully into view — never to the very bottom, so the text above it does not
-   whip past. If the block already fits on screen, nothing moves at all,
-   which is why a short answer still sits perfectly still.
-
-   Stops the moment the reader scrolls for themselves: they are reading
-   something, and dragging the panel out from under them is the one thing it
-   must never do. */
-function followReveal(body, el){
-  const handles = settleTimers.get(body);
-  if (!handles || handles.userScrolled) return;
-  const b = body.getBoundingClientRect();
-  const r = el.getBoundingClientRect();
-  /* The composer floats OVER the foot of the body — the body carries its
-     height as bottom padding so content can be scrolled clear of it. So the
-     bottom of the body's box is not the bottom of what you can see: stopping
-     there leaves the last block sitting behind the ask field. Measure to
-     where the composer starts instead. */
-  const pad = parseFloat(getComputedStyle(body).paddingBottom) || 0;
-  const visibleBottom = b.bottom - pad;
-  const below = r.bottom - visibleBottom;
-  if (below <= 0) return;                     /* already fully visible */
-  handles.followed = true;
-  smoothScrollTo(body, body.scrollTop + below + 12);
-}
 
 /* Collapse the room held open for an answer. Never leave it standing: a
    spacer outlives the reason it existed, and what is left is a panel of
@@ -3960,7 +3974,7 @@ function settleSpacer(body, anchorRow){
     if (Math.abs(Math.round(body.scrollTop) - expected) > 24){
       userScrolled = true;
       const h = settleTimers.get(body);
-      if (h) h.userScrolled = true;      /* followReveal reads this */
+      if (h) h.userScrolled = true;
     }
   };
   /* Scroll events say the view moved; they do not say who moved it, and a
@@ -4026,12 +4040,6 @@ function settleSpacer(body, anchorRow){
        long answer reaches its own top and leads the panel; a short one
        stops at the bottom instead, because pinning it any higher would
        only open blank space underneath it. */
-    /* If the view followed the answer down as it arrived, the reader has
-       been watching it land and is already where they should be. Pulling
-       the panel back to the reply's first line would undo the very thing
-       they just watched. Only reposition when nothing followed. */
-    if (handles.followed){ releaseSpacer(body); return; }
-
     const bodyTop = body.getBoundingClientRect().top;
     const anchorScroll = body.scrollTop + (anchorRow.getBoundingClientRect().top - bodyTop);
     const maxScroll = Math.max(0, contentH - body.clientHeight);
@@ -4054,7 +4062,7 @@ function settleSpacer(body, anchorRow){
     smoothScrollTo(body, target);
     handles.drop = setTimeout(finish, 500);
   }, 200);
-  const handles = { poll: timer, drop: null, userScrolled: false, followed: false };
+  const handles = { poll: timer, drop: null, userScrolled: false };
   settleTimers.set(body, handles);
 }
 
@@ -4232,8 +4240,7 @@ function revealMessage(idx){
        indefinitely. A reflow always happens. */
     void el.offsetWidth;
     el.classList.add('rv-in');
-    const panelBody = document.getElementById('orionBody');
-    if (panelBody && panelBody.contains(el)) followReveal(panelBody, el);
+
     if (i < blocks.length) setTimeout(next, step); else done();
   };
   /* A beat after the thinking indicator clears, so the answer arrives rather
@@ -4421,7 +4428,6 @@ function renderMessage(m, idx, animate){
   if (m.picker) inner += wrapOne(renderPicker(m.src));
   if (m.reportLink) inner += wrapOne(`<a class="mlink" href="#" onclick="event.preventDefault(); openReport('${m.reportLink.id}')"><svg class="rmx-icon"><use href="#description"></use></svg><span class="lcol"><span class="t">${esc(m.reportLink.label)}</span><span class="h">${esc(m.reportLink.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
   if (m.link) inner += wrapOne(`<a class="mlink" href="#" onclick="onLinkClick(event)"><svg class="rmx-icon"><use href="#dashboard"></use></svg><span class="lcol"><span class="t">${esc(m.link.label)}</span><span class="h">${esc(m.link.hint)}</span></span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></a>`);
-  if (m.print) inner += wrapOne(renderPrint(m.print, m.src));
   if (m.actions && m.actions.length) inner += wrapOne(`<div class="mactions">${orderActions(m.actions).map(k=>{
     if (k === 'summarize') return `<button class="mact-btn orion-summarize" onclick="act('${k}','${m.src||''}')">${orionMark(16)}Summarize</button>`;
     /* Every action offered after a response is the Secondary button —
@@ -4519,17 +4525,6 @@ function renderFollowups(keys){
   </div></div>`;
 }
 
-function renderPrint(print, id){
-  return `<div class="mprint">
-    <div class="pph"><svg class="rmx-icon"><use href="#print"></use></svg><span class="t">${esc(print.name)}</span><span class="pages">${esc(print.pages)}</span></div>
-    ${print.params.map(p=>`<div class="pprow"><span class="l">${esc(p[0])}</span><span class="v">${esc(p[1])}</span></div>`).join('')}
-    <div class="pfoot">
-      <button class="mact-btn primary" onclick="output('Print','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#print"></use></svg> Print</button>
-      <button class="mact-btn secondary" onclick="output('PDF','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#description"></use></svg> PDF</button>
-      <button class="mact-btn secondary" onclick="output('Excel','${id||''}')"><svg class="rmx-icon rmx-icon--16" style="vertical-align:-3px"><use href="#grid-view"></use></svg> Excel</button>
-    </div>
-  </div>`;
-}
 
 function renderTilePreview(p){
   if (!p) return '';
@@ -4657,11 +4652,11 @@ function act(key, id){
   }
   if (key === 'cancel'){ pushStandalone([{ role:'bot', text:'Nothing was posted. The batch is staged — tell me what to change and I will restage it, or ask me to discard it.', actions:['browse'] }]); return; }
   if (key === 'print'){
-    /* The page count is the real one — the report is laid out here, not guessed. */
-    const m = rptMeta(id);
-    const count = rptPageCount(id);
-    pushStandalone([{ role:'bot', src:id, text:'I can format this result as a report. Here is what it will contain.',
-      print:{ name: m.name, pages: count + (count === 1 ? ' page' : ' pages'), params: m.params } }]);
+    /* Straight to the report, in its own tab. It used to describe what a
+       report would contain and offer to build one — a step that exists in
+       the product but reads as a detour in a demo, where the point is that
+       Orion already has the thing. */
+    openReport(id);
     return;
   }
   if (key === 'held'){
@@ -4776,29 +4771,6 @@ function orionTileCardHtml(id){
    builder in the report block below. */
 const PRINT_REPORTS = { q1: buildOccupancySummaryReport, q5: buildProfitLossReport };
 
-/* Excel stays a message — a spreadsheet is not a document the viewer can show.
-   Print goes straight to the print overlay, the same way a browser's own
-   Print command does not stop to "build" anything first. PDF still builds
-   the report and opens it in the report viewer. */
-function output(fmt, id){
-  if (fmt === 'Excel'){
-    pushStandalone([{ role:'bot', text:'Exported to Excel with one row per record.',
-      note:'Report parameters are saved, so you can re-run this from My Reports without asking me again.' }]);
-    return;
-  }
-  if (fmt === 'Print'){ openPrintOverlay(id); return; }
-  const m = rptMeta(id);
-  const count = rptPageCount(id);
-  const pageTxt = count + (count === 1 ? ' page' : ' pages');
-  push([{ role:'user', text:'Generate it as a PDF.' }]);
-  thinkThen('Building ' + m.name, () => {
-    push([{ role:'bot', src:id,
-      text: 'Built. ' + m.name + ' came out at ' + pageTxt + '. Opening it in the report viewer.',
-      reportLink:{ id: id, label:'Open ' + m.name, hint: pageTxt },
-      note:'Report parameters are saved, so you can re-run this from My Reports without asking me again.' }]);
-    setTimeout(() => openReport(id), 900 * ORION_PACE);
-  }, 1200);
-}
 
 /* ---------- Print overlay ----------
    A recreation of the OS print dialog rather than a call to window.print() —
@@ -5547,9 +5519,19 @@ function openTenantPage(tid) {
   location.href = screenPath('tenant-detail.html') + '?t=' + encodeURIComponent(tid);
 }
 
+/* The URL a report lives at. Split out because opening one in a new tab and
+   navigating to one need the same address, and the single-file build swaps
+   this for its own. */
+function reportUrl(id) {
+  return screenPath('report-viewer.html') + '?r=' + encodeURIComponent(id);
+}
+
+/* Reports open in a new tab. A report is a thing you read alongside the
+   answer that produced it, not instead of it — leaving in place meant
+   losing your seat in the conversation and coming back through the logo. */
 function openReport(id) {
   saveConversation();
-  location.href = screenPath('report-viewer.html') + '?r=' + encodeURIComponent(id);
+  window.open(reportUrl(id), '_blank', 'noopener');
 }
 
 function showDashboard() {
