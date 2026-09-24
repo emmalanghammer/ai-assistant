@@ -352,20 +352,20 @@ const DATA_PROMPTS = {
 };
 
 const ACTION_PROMPTS = {
-  x1: { cat:2, icon:'ac_unit', label:'Add a charge to several tenants',
-    kw:'add snow removal charge all tenants riverview apartments batch post charges fee',
+  x1: { cat:2, icon:'ac_unit', label:'Add a $25 snow removal charge to all tenants at Clearcreek Condominiums',
+    kw:'add snow removal charge all tenants clearcreek condominiums association batch post charges fee',
     text:"I can stage this as a batch charge. Here is exactly what I will post — nothing is written until you post it.",
     plan:{ title:'Batch Charge · Snow Removal', rows:[
-        ['Property','Riverview Apartments'], ['Applies to','148 active tenants · occupied units only'],
+        ['Property','Clearcreek Condominiums · Association'], ['Applies to','148 active tenants · occupied units only'],
         ['Charge type','Snow Removal · GL 4120 Other Income'], ['Amount','$25.00 each · one time, not recurring'],
-        ['Charge date','Aug 28, 2026 · due Sep 1, 2026'], ['Batch total','$3,700.00'],
+        ['Charge date','Aug 28, 2026'], ['Batch total','$3,700.00'],
         ['Excluded','6 vacant units · 2 tenants on move-out notice'] ],
       warn:'Two tenants have a lease clause that caps ancillary charges. I left them in the batch but flagged them below — remove them before posting if that clause applies.' },
     findings:['Flagged: Sam Ortega (512) and Anh Nguyen (902) — lease addendum limits pass-through charges.','The charge type Snow Removal already exists, so no new setup is needed.','Tenant Web Access will show the charge to residents as soon as it posts.'],
     actions:['post','flagged','cancel'],
-    posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Riverview Apartments tenant ledgers, dated Aug 28, 2026.',
+    posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Clearcreek Condominiums tenant ledgers, dated Aug 28, 2026.',
       stats:[ ['148','Charges posted'], ['$3,700.00','Batch total'], ['#20458','Batch reference number'] ] },
-    tileName:'Snow Removal Charge Collection', tileRows:[ ['Riverview Apartments','148 charged · 0 paid','$3,700',ORANGE], ['Due Sep 1','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
+    tileName:'Snow Removal Charge Collection', tileRows:[ ['Clearcreek Condominiums','148 charged · 0 paid','$3,700',ORANGE], ['Charged Aug 28','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
   x3: { cat:2, icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
     kw:'add credit tenant accounts open maintenance requests over 7 days goodwill',
     text:'I can stage this as a batch credit. Here is exactly what I will post — nothing is written until you post it.',
@@ -1257,6 +1257,10 @@ const AUTOFILL_SKIP = [
      spends its first minutes on documentation before reaching anything
      Orion does with your data. */
   'h1', 'h2', 'h3',
+  /* Analyze Data. The maintenance list makes the same point as the
+     occupancy one with more rows, and the vehicle lookup leans on vehicle
+     data being linked to contacts, which it is not. */
+  'q2', 'q3',
   /* Take Action. One is enough to show what acting on data looks like, and
      the batch charge is the one that shows it best — it stages real
      records, flags two of them, and waits to be told to post. The rest
@@ -1627,7 +1631,9 @@ function act(key, id){
   }
   if (key === 'post'){
     push([{ role:'user', text:'Post the charges.' }]);
-    thinkThen('Posting the batch', ()=>{ const d = p.posted; push([{ role:'bot', src:id, text:d.text, stats:d.stats, table:d.table, note:d.note, actions:['print'] }]); }, 1000);
+    /* Posting ends the flow. The confirmation used to offer another action,
+       which read as though something were still outstanding. */
+    thinkThen('Posting the batch', ()=>{ const d = p.posted; push([{ role:'bot', src:id, text:d.text, stats:d.stats, table:d.table, note:d.note }]); }, 1000);
     return;
   }
   if (key === 'post_credit'){
