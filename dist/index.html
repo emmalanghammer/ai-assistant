@@ -3724,60 +3724,22 @@ function scrollAnchorIntoView(body, idx, jump, mode){
     return;
   }
 
-  const currentSpacerHeight = spacer ? spacer.offsetHeight : 0;
-  const bodyRect = body.getBoundingClientRect();
-  const rowRect = row.getBoundingClientRect();
-  const rowContentTop = body.scrollTop + (rowRect.top - bodyRect.top);
-  /* Height of everything from the anchor's own top down to the very end
-     of the scrollable content (excluding the spacer's own contribution)
-     — if that's shorter than the panel itself, scrolling the anchor to
-     the top is physically impossible without the spacer padding out the
-     difference. */
-  const tailHeight = contentBottomOffset(body, spacer) - rowContentTop;
-  const needed = Math.max(0, body.clientHeight - tailHeight);
+  /* An answer never moves the view. It arrives below whatever you are
+     reading and stays there until you go to it — the chevron appears when
+     there is more below the fold, and that is the only invitation.
 
-  /* If the anchor is already sitting fully inside the panel, there is
-     nowhere worth going. Scrolling it to the very top would mean opening a
-     spacer's worth of blank room, sliding the conversation up into it, and
-     then — once the answer turns out to fit after all — sliding it back
-     down when settleSpacer hands the room back. A short answer spent its
-     whole life doing that round trip, and the two moves cancelled out.
+     This used to pin the reply's first line to the top of the panel, which
+     meant holding a spacer's worth of blank room open beneath the
+     conversation so there was somewhere to scroll to. Both are gone: no
+     room is reserved, nothing is repositioned. The spacer element stays at
+     zero so the scroll maths has something to measure the end of the
+     content against.
 
-     So: leave the view alone and let settleSpacer decide. It runs once the
-     answer has stopped growing, when its real height is finally known, and
-     positions from there. An answer that fits never moves the panel at all;
-     one that outgrows it gets a single scroll at the end instead of one at
-     each end. */
-  const anchorAlreadyVisible = jump
-    && rowRect.top >= bodyRect.top - 1
-    && rowRect.bottom <= bodyRect.bottom + 1;
-  if (anchorAlreadyVisible){
-    settleSpacer(body, row);
-    return;
-  }
-
-  /* Between one message and the next the spacer may only GROW. This is what
-     keeps a reply still while it builds. Every render recomputes `needed`
-     against whatever of the answer has appeared so far, so it shrinks as the
-     answer fills in — and each shrink narrows the scroll range under a view
-     that is already scrolled near the end of it, so the browser clamps
-     scrollTop and the whole conversation lurches upward. That was the
-     juddering during a reply: not the reply moving, the floor moving.
-
-     Holding the high-water mark until the answer is finished means nothing
-     moves at all — the reply simply grows into room that is already there.
-     settleSpacer hands the leftover back in one smooth motion at the end. */
-  if (spacer){
-    spacer.style.height = (jump ? needed : Math.max(currentSpacerHeight, needed)) + 'px';
-  }
-
-  if (jump){
-    const bodyRect2 = body.getBoundingClientRect();
-    const rowRect2 = row.getBoundingClientRect();
-    const target = Math.round(body.scrollTop + (rowRect2.top - bodyRect2.top));
-    smoothScrollTo(body, target);
-    settleSpacer(body, row);
-  }
+     Landing positions are different and still apply — opening the panel,
+     or a chat from History, goes to the end of it. Those are arrivals, not
+     a reply shifting under you mid-read. */
+  if (spacer) spacer.style.height = '0px';
+  if (jump) settleSpacer(body, row);
 }
 
 /* A way back down when you have scrolled up to re-read something. Shows only
@@ -3956,7 +3918,7 @@ function settleSpacer(body, anchorRow){
      immediately dragged elsewhere by the previous answer's leftover
      timeout. */
   const prev = settleTimers.get(body);
-  if (prev){ clearInterval(prev.poll); clearTimeout(prev.drop); }
+  if (prev) clearInterval(prev.poll);
 
   let lastContentH = -1, stableFor = 0, polls = 0;
   /* If the reader scrolls while the answer is still arriving, the panel
@@ -4027,42 +3989,13 @@ function settleSpacer(body, anchorRow){
     if (++stableFor < 5) return;
     stop();
 
-    /* The answer has stopped growing, so its real height is finally known —
-       which is the first moment the view can be placed correctly. The
-       spacer was sized before any of the answer existed, and the pin was
-       applied against that same collapsed content, so neither reflects
-       what is actually on screen now.
-
-       Two positions matter. `anchorScroll` puts the answer's first line at
-       the top of the panel, which is where it belongs while it is being
-       read. `maxScroll` is the furthest the content can go once the
-       spacer's unused room is handed back. Take whichever is smaller: a
-       long answer reaches its own top and leads the panel; a short one
-       stops at the bottom instead, because pinning it any higher would
-       only open blank space underneath it. */
-    const bodyTop = body.getBoundingClientRect().top;
-    const anchorScroll = body.scrollTop + (anchorRow.getBoundingClientRect().top - bodyTop);
-    const maxScroll = Math.max(0, contentH - body.clientHeight);
-    const target = Math.max(0, Math.round(Math.min(anchorScroll, maxScroll)));
-
-    /* Reader took over: give the room back where they are, and leave the
-       view exactly as they left it. */
-    if (userScrolled){ releaseSpacer(body); return; }
-
-    const finish = () => {
-      programmaticScrollUntil = Date.now() + 300;
-      releaseSpacer(body);
-      /* Dropping the spacer cuts any smooth scroll still in flight short and
-         re-clamps the range, so land the final position explicitly. */
-      body.scrollTop = Math.max(0, Math.min(target, body.scrollHeight - body.clientHeight));
-      updateJumpToLatest();
-    };
-
-    if (Math.abs(target - body.scrollTop) < 2){ finish(); return; }
-    smoothScrollTo(body, target);
-    handles.drop = setTimeout(finish, 500);
+    /* The answer has stopped growing. There is nothing to position — the
+       panel does not move for a reply any more — so this only hands back
+       the spacer and refreshes the chevron, which is the thing that tells
+       you there is more below the fold. */
+    releaseSpacer(body);
   }, 200);
-  const handles = { poll: timer, drop: null, userScrolled: false };
+  const handles = { poll: timer, userScrolled: false };
   settleTimers.set(body, handles);
 }
 
