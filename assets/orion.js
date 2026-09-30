@@ -245,15 +245,15 @@ const HELP_PROMPTS = {
   /* The second half of h0, asked as a follow-up in the demo walk. No cat, so
      it stays out of the sheet: on its own, "that charge" refers to nothing. */
   h0f: { help:true, after:'h0', icon:'recurring-charges', label:'There is one tenant that does not get that charge. How do I handle that?',
-    kw:'one tenant does not get that charge exclude exception exempt skip handle',
+    kw:'one tenant does not get that charge exclude uncheck inherited exempt skip handle',
     rich:`
-      <p>Add an <strong>exception</strong> to the property charge for that tenant. The charge keeps posting to everyone else.</p>
+      <p>Uncheck the <strong>inherited charge</strong> on that tenant. A property recurring charge shows up on every tenant's recurring charges as inherited, and unchecking it turns it off for that tenant only. Everyone else keeps it.</p>
       <ol>
-        <li><strong>Open the charge:</strong> Properties → select the property → Recurring Charges, then open Trash Collection.</li>
-        <li><strong>Add an exception:</strong> In Exceptions, click Add and choose the tenant.</li>
-        <li><strong>Save.</strong> They are skipped from the next posting on.</li>
+        <li><strong>Open the tenant:</strong> Tenants → select the tenant → Recurring Charges.</li>
+        <li><strong>Find the charge:</strong> Trash Collection is listed with the charges they inherit from the property.</li>
+        <li><strong>Uncheck it and save.</strong> It stops posting to them from the next posting on.</li>
       </ol>
-      <p><strong>Note:</strong> An exception only affects future postings. If the charge has already posted to them, reverse it on their ledger.</p>` },
+      <p><strong>Note:</strong> Unchecking only affects future postings. If the charge has already posted to them, reverse it on their ledger.</p>` },
   h1: { cat:0, icon:'trending_up', label:'How do I raise rents?',
     kw:'raise rent increase rents renewal increases market rent recurring charges batch',
     rich:`
