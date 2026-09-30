@@ -345,6 +345,7 @@ a { color: var(--text-link); }
 .mnote .t { font-size:12.5px; line-height:18px; color:var(--text-secondary); }
 .mnote .t a { display:block; margin-top:4px; }
 
+.mquestion { font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .mactions { display:flex; flex-wrap:wrap; gap:var(--spacing-xs); }
 /* DESIGN.md 7.1 — 36px tall, radius 4, 14px label, ~16px side padding. */
 .mact-btn { height:36px; padding:0 16px; border-radius:var(--radius-sm);

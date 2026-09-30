@@ -1268,6 +1268,7 @@ a { color: var(--text-link); }
 .mnote .t { font-size:12.5px; line-height:18px; color:var(--text-secondary); }
 .mnote .t a { display:block; margin-top:4px; }
 
+.mquestion { font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .mactions { display:flex; flex-wrap:wrap; gap:var(--spacing-xs); }
 /* DESIGN.md 7.1 — 36px tall, radius 4, 14px label, ~16px side padding. */
 .mact-btn { height:36px; padding:0 16px; border-radius:var(--radius-sm);
@@ -3588,6 +3589,50 @@ const BILLING_PROMPTS = {
 };
 
 const INSIGHT_PROMPTS = {
+  x7: { cat:2, icon:'prospects', label:'Do I have any duplicate prospects?',
+    kw:'duplicate duplicates prospects merge dedupe same person twice guest card web lead',
+    text:'Yes. 30 of your prospect records are duplicates — 15 people who were each entered twice, mostly as a web lead and a walk-in guest card for the same person.',
+    stats:[ ['30','Duplicate records'], ['15','People affected'], ['11','Matched on email and phone'] ],
+    table:[
+      ['Priya Raman','Riverview Apartments · email + phone','2 records',GRAY],
+      ['Jordan Wells','Harbor Flats · email + phone','2 records',GRAY],
+      ['Dana Whitfield','Union Street Lofts · email','2 records',GRAY],
+      ['Marisol Vega','Riverview Apartments · email + phone','2 records',GRAY],
+      ['Devin Park','Willowbrook · email + phone','2 records',GRAY],
+      ['Keisha Holloway','Ridgeline · phone','2 records',GRAY],
+      ['Grant Lindqvist','Meadowbrook Apartments · email + phone','2 records',GRAY],
+      ['Chloe Nakamura','Harbor Flats · email + phone','2 records',GRAY],
+      ['Omar Farouk','Ashford Commons · email','2 records',GRAY],
+      ['Rachel Dunmore','Birchwood Flats · email + phone','2 records',GRAY],
+      ['Luis Ortiz','Hawthorne Ridge · email + phone','2 records',GRAY],
+      ['Hannah Voss','Union Street Lofts · email + phone','2 records',GRAY],
+      ['Tariq Bell','Riverview Apartments · email','2 records',GRAY],
+      ['Wen Li','Willowbrook · email + phone','2 records',GRAY],
+      ['Sofia Marchetti','Ridgeline · email + phone','2 records',GRAY] ],
+    question:'Would you like me to merge the prospects?',
+    actions:['merge_yes','merge_no'],
+    mergePlan:{
+      text:'Here are the 15 I will merge. For each person I keep the older record, since it holds the showing history, and fold the newer one into it.',
+      table:[
+        ['Priya Raman','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Jordan Wells','Keep the web lead · merge the guest card','2 → 1',GREEN],
+        ['Dana Whitfield','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Marisol Vega','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Devin Park','Keep the web lead · merge the guest card','2 → 1',GREEN],
+        ['Keisha Holloway','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Grant Lindqvist','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Chloe Nakamura','Keep the web lead · merge the guest card','2 → 1',GREEN],
+        ['Omar Farouk','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Rachel Dunmore','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Luis Ortiz','Keep the web lead · merge the guest card','2 → 1',GREEN],
+        ['Hannah Voss','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Tariq Bell','Keep the guest card · merge the web lead','2 → 1',GREEN],
+        ['Wen Li','Keep the web lead · merge the guest card','2 → 1',GREEN],
+        ['Sofia Marchetti','Keep the guest card · merge the web lead','2 → 1',GREEN] ],
+      note:'Notes, activity history and documents move to the record that is kept. Nothing changes until you merge.' },
+    merged:{
+      text:'Merged. Your 30 duplicate records are now 15, one per person, with each one\'s notes and activity history combined.',
+      stats:[ ['15','Prospects merged'], ['15','Duplicate records removed'], ['All','Notes and history kept'] ] } },
   d1: { reportName:'Delinquency Detail', reportSource:'Receivables · Delinquency', icon:'task_alt', label:'Where should I focus on delinquency this month?',
     kw:'delinquency focus this month behind pace collections',
     text:'You are behind where you were at this point last month. On day 18 of the period you had collected 93.40%; today you are at 91.18%, which is $23,410 more outstanding than the same day last month.',
@@ -3769,6 +3814,8 @@ const ACTION_LABELS = {
   summarize:['Summarize', false],
   post_credit:['Post the credits', true], log_violation:['Log the violation', true],
   apply_priorities:['Apply these priorities', true], send_drafts:['Send the drafts', true],
+  merge_yes:['Yes', false], merge_no:['No', false],
+  merge:['Merge', true], merge_cancel:['Cancel', false],
 };
 
 /* ============================================================
@@ -4340,19 +4387,18 @@ function submitHome(){
    browsing Prompt Suggestions still sees the whole set — they are only out
    of the click-through. */
 const AUTOFILL_SKIP = [
-  /* Find Answers. A demo that opens with three how-do-I answers in a row
-     spends its first minutes on documentation before reaching anything
-     Orion does with your data. */
-  'h1', 'h2', 'h3',
+  /* Find Answers — all five. The demo opens on Orion working with your
+     data rather than on documentation answers. */
+  'h1', 'h2', 'h3', 'h4', 'h5',
   /* Analyze Data. The maintenance list makes the same point as the
      occupancy one with more rows, and the vehicle lookup leans on vehicle
      data being linked to contacts, which it is not. */
   'q2', 'q3',
-  /* Take Action. One is enough to show what acting on data looks like, and
-     the batch charge is the one that shows it best — it stages real
-     records, flags two of them, and waits to be told to post. The rest
-     repeat that shape with different nouns. */
-  'x2', 'x3', 'x4', 'x5', 'x6',
+  /* Take Action. The demo ends on duplicate prospects (x7): it finds a
+     real problem, asks before acting, shows exactly what it will change,
+     and waits to be told. The rest, the snow removal charge included,
+     stay in the sheet. */
+  'x1', 'x2', 'x3', 'x4', 'x5', 'x6',
 ];
 
 const HOME_AUTOFILL_SEQUENCE = CATS
@@ -4467,7 +4513,12 @@ function renderMessage(m, idx, animate){
     inner += wrapOne(`<div class="mnote"><svg class="rmx-icon"><use href="#info"></use></svg><span class="t">${esc(m.note)}${toggle}</span></div>`);
   }
 
-  /* what you can do with it — Print a report sits above the follow-ups */
+  /* A question Orion is asking back, placed directly above the buttons that
+     answer it rather than up with the prose, so the ask and the choice read
+     as one thing. Navy regular like every other part of a reply. */
+  if (m.question) inner += wrapOne(`<div class="mquestion">${esc(m.question)}</div>`);
+
+  /* what you can do with it — View Report sits above the follow-ups */
   if (m.article) inner += wrapOne(`<div class="marticle" onclick="act('article','${m.src||''}')"><span class="lab">Suggested Article</span><span class="t">${esc(m.article)}</span><svg class="rmx-icon"><use href="#open-in-new"></use></svg></div>`);
   if (m.tile) inner += wrapOne(renderTilePreview(p));
   if (m.picker) inner += wrapOne(renderPicker(m.src));
@@ -4603,7 +4654,7 @@ function botMsg(id){
   const p = PROMPTS[id];
   return { role:'bot', src:id, text:p.text, rich:p.rich, steps:p.steps, stats:p.stats, findings:p.findings,
     bullets:p.bullets, table:p.table, report:p.report, tenants:p.tenants, plan:p.plan,
-    unitList:p.unitList, article:p.article, note:p.note, followups:p.followups, actions:p.actions };
+    unitList:p.unitList, article:p.article, note:p.note, question:p.question, followups:p.followups, actions:p.actions };
 }
 
 function matchPrompt(q){
@@ -4721,6 +4772,31 @@ function act(key, id){
     /* Posting ends the flow. The confirmation used to offer another action,
        which read as though something were still outstanding. */
     thinkThen('Posting the batch', ()=>{ const d = p.posted; push([{ role:'bot', src:id, text:d.text, stats:d.stats, table:d.table, note:d.note }]); }, 1000);
+    return;
+  }
+  /* Duplicate prospects: asked whether to merge, shown exactly what will be
+     merged, then merged — three steps, each waiting for the one before. */
+  if (key === 'merge_yes'){
+    push([{ role:'user', text:'Yes' }]);
+    thinkThen('Preparing the merge', () => {
+      const d = p.mergePlan;
+      push([{ role:'bot', src:id, text:d.text, table:d.table, note:d.note, actions:['merge','merge_cancel'] }]);
+    }, 900);
+    return;
+  }
+  if (key === 'merge_no' || key === 'merge_cancel'){
+    push([{ role:'user', text: key === 'merge_no' ? 'No' : 'Cancel' },
+          { role:'bot', src:id, text:'Nothing was merged. Ask me again whenever you want to clean them up.' }]);
+    return;
+  }
+  if (key === 'merge'){
+    push([{ role:'user', text:'Merge them.' }]);
+    /* Merging ends the flow, like posting does — a confirmation and nothing
+       further to do. */
+    thinkThen('Merging prospects', () => {
+      const d = p.merged;
+      push([{ role:'bot', src:id, text:d.text, stats:d.stats }]);
+    }, 1000);
     return;
   }
   if (key === 'post_credit'){
