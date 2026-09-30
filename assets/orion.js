@@ -910,6 +910,16 @@ function smoothScrollTo(body, target){
    height as padding — otherwise the last line of an answer can never be
    scrolled out from under it. Measured rather than guessed, because the
    composer grows with the field and with the Prompt Suggestions row. */
+/* Dragging the panel's edges or resizing the window changes its height
+   without a render, and the composer's wash is sized to that height. */
+if (typeof ResizeObserver !== 'undefined'){
+  const watchPanel = () => {
+    const panel = document.getElementById('orionPanel');
+    if (panel) new ResizeObserver(() => syncComposerInset()).observe(panel);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchPanel);
+  else watchPanel();
+}
 function syncComposerInset(){
   const body = document.getElementById('orionBody');
   const composer = document.getElementById('orionComposer');
@@ -917,6 +927,13 @@ function syncComposerInset(){
   if (!body || !composer) return;
   /* Sit the composer directly on top of the footer. */
   if (footer) composer.style.bottom = Math.round(footer.getBoundingClientRect().height) + 'px';
+  /* Line the composer's copy of the panel wash up with the panel's own. */
+  const panel = composer.closest('.orion-panel');
+  if (panel){
+    const padBottom = panel.getBoundingClientRect().top + panel.clientTop + panel.clientHeight;
+    composer.style.setProperty('--wash-h', panel.clientHeight + 'px');
+    composer.style.setProperty('--wash-below', (padBottom - composer.getBoundingClientRect().bottom) + 'px');
+  }
   const inset = composer.hidden ? 16 : Math.round(composer.getBoundingClientRect().height) + 8;
   if (body.dataset.inset !== String(inset)){
     body.dataset.inset = String(inset);

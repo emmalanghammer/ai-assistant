@@ -1370,13 +1370,17 @@ a { color: var(--text-link); }
    composer above the panel entirely, where overflow:hidden ate it. */
 .orion-composer { position:absolute; left:0; right:0; bottom:0; z-index:7;
   border-top:none;
-  /* Filled, but with the panel's own surface rather than white. .orion-panel
-     lays a 6% brand-blue wash over white and the composer sits at the bottom
-     of it, so repainting that exact pair leaves no seam — the controls have
-     something solid to sit on and the bar still reads as part of the panel
-     instead of a white band across it. --container-tertiary is two points
-     off and shows as a faint edge against its neighbour. */
-  background:linear-gradient(rgba(0,141,213,.06) 0 100%), var(--container-primary);
+  /* Filled with the panel's own surface, so the controls have something
+     solid to sit on and the bar still reads as part of the panel. The panel's
+     wash is a gradient over its whole height, not one colour, so this is the
+     same gradient drawn at the panel's size (--wash-h) and anchored to the
+     panel's bottom edge (--wash-below under the composer). Both are written
+     by syncComposerInset. A flat copy of the bottom colour only matched on a
+     tall panel, and showed as a band on a short one. */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.15) 0%, rgba(0,141,213,.06) 100%)
+      left 0 bottom calc(-1 * var(--wash-below, 0px)) / 100% var(--wash-h, 100%) no-repeat,
+    var(--container-primary);
   padding:12px 18px 14px; display:flex; flex-direction:column; gap:8px; }
 /* The composer at the foot of a conversation is the same Orion_Input Fields
    component, so it grows the same way. Snapped to the component's own values
@@ -3957,6 +3961,16 @@ function smoothScrollTo(body, target){
    height as padding — otherwise the last line of an answer can never be
    scrolled out from under it. Measured rather than guessed, because the
    composer grows with the field and with the Prompt Suggestions row. */
+/* Dragging the panel's edges or resizing the window changes its height
+   without a render, and the composer's wash is sized to that height. */
+if (typeof ResizeObserver !== 'undefined'){
+  const watchPanel = () => {
+    const panel = document.getElementById('orionPanel');
+    if (panel) new ResizeObserver(() => syncComposerInset()).observe(panel);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchPanel);
+  else watchPanel();
+}
 function syncComposerInset(){
   const body = document.getElementById('orionBody');
   const composer = document.getElementById('orionComposer');
@@ -3964,6 +3978,13 @@ function syncComposerInset(){
   if (!body || !composer) return;
   /* Sit the composer directly on top of the footer. */
   if (footer) composer.style.bottom = Math.round(footer.getBoundingClientRect().height) + 'px';
+  /* Line the composer's copy of the panel wash up with the panel's own. */
+  const panel = composer.closest('.orion-panel');
+  if (panel){
+    const padBottom = panel.getBoundingClientRect().top + panel.clientTop + panel.clientHeight;
+    composer.style.setProperty('--wash-h', panel.clientHeight + 'px');
+    composer.style.setProperty('--wash-below', (padBottom - composer.getBoundingClientRect().bottom) + 'px');
+  }
   const inset = composer.hidden ? 16 : Math.round(composer.getBoundingClientRect().height) + 8;
   if (body.dataset.inset !== String(inset)){
     body.dataset.inset = String(inset);
