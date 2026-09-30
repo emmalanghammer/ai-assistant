@@ -334,13 +334,6 @@ const DATA_PROMPTS = {
     followups:['mt_vendor','mt_open','mt_cat'],
     tileName:'Slow Issues', tileRows:[ ['Over 7 days','14 issues · avg 12.4 days','Watch',RED] ],
     actions:['print'] },
-  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
-    kw:'camaro vehicle car red riverview plate parking',
-    text:'One tenant at Riverview Apartments has a red Camaro on the vehicle record.',
-    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
-    note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
-    followups:['veh_parking','veh_missing'],
-    actions:['print'] },
   q4: { reportName:'Unit Availability · Filtered', reportSource:'Rental Info · Unit Availability', cat:1, icon:'apartment', label:'What 2nd floor waterfront units are available next month?',
     kw:'units 2nd second floor waterfront available next month vacant',
     text:'Three units match all three conditions — second floor, waterfront exposure, and available during September.',
@@ -349,6 +342,13 @@ const DATA_PROMPTS = {
     note:"Floor comes from the unit's Floor field; waterfront comes from each unit's own amenity flag, not the property — some units at Riverview and Harbor Flats aren't waterfront.",
     followups:['unit_prospects','unit_rents'],
     tileName:'Waterfront Availability', tileRows:[ ['2nd floor waterfront','3 units available in September','Open',GREEN] ],
+    actions:['print'] },
+  q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
+    kw:'camaro vehicle car red riverview plate parking',
+    text:'One tenant at Riverview Apartments has a red Camaro on the vehicle record.',
+    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
+    note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
+    followups:['veh_parking','veh_missing'],
     actions:['print'] },
   q5: { reportName:'Profit & Loss · MTD vs. Last Year', reportSource:'Financial · Comparative P&L', cat:1, icon:'assessment', label:'Run a P&L this month to date compared to last year same period',
     kw:'profit loss statement compared last year period income expenses noi report',
@@ -1221,9 +1221,9 @@ const AUTOFILL_SKIP = [
      (h0, then h0f), and the other five stay in the sheet. */
   'h1', 'h2', 'h3', 'h4', 'h5',
   /* Analyze Data. The maintenance list makes the same point as the
-     occupancy one with more rows, and the vehicle lookup leans on vehicle
-     data being linked to contacts, which it is not. */
-  'q2', 'q3',
+     occupancy one with more rows. (The red Camaro, q3, sits after the
+     waterfront units in PROMPTS so the walk reaches it just before the P&L.) */
+  'q2',
   /* Take Action. The demo ends on duplicate prospects (x7): it finds a
      real problem, asks before acting, shows exactly what it will change,
      and waits to be told. The rest, the snow removal charge included,
