@@ -44,11 +44,11 @@ function rptMeta(id){
     name: p.reportName || p.tileName || 'Result Summary',
     source: p.reportSource || 'Custom · built from this result',
     options: (p.reportSource || 'Custom · built from this result') + ' — 10 properties selected · class60',
-    dateRange: 'As of Aug 28, 2026',
+    dateRange: 'As of Oct 20, 2026',
     params: [
       ['Report', p.reportSource || 'Custom · built from this result'],
       ['Properties', '10 selected · class60'],
-      ['As of', 'Aug 28, 2026 · day 18 of period'],
+      ['As of', 'Oct 20, 2026 · day 20 of period'],
       ['Layout', 'Summary with detail rows, portrait, letter'],
     ],
     builtFrom: p.label || 'this result',
@@ -156,7 +156,7 @@ function rptCells(b){
 
 function rptBlockHtml(b){
   switch (b.t){
-    case 'orion': return `<div class="rptx-orion">${orionMark(16)}<span class="t">Written by Orion Assistant on Aug 28, 2026 from the result it analyzed. AI may be inaccurate — verify before distributing.</span></div>`;
+    case 'orion': return `<div class="rptx-orion">${orionMark(16)}<span class="t">Written by Orion Assistant on Oct 20, 2026 from the result it analyzed. AI may be inaccurate — verify before distributing.</span></div>`;
     case 'para':  return `<p class="rptx-para">${esc(b.text)}</p>`;
     case 'stats': return `<div class="rptx-stats">${b.items.map(s=>`<div class="rptx-stat"><div class="v">${esc(s[0])}</div><div class="l">${esc(s[1])}</div></div>`).join('')}</div>`;
     case 'li':    return `<div class="rptx-li"><span class="n">${b.bullet ? '&bull;' : esc(b.n + '.')}</span><span class="t">${esc(b.text)}</span></div>`;
@@ -181,7 +181,7 @@ function rptPageShell(bodyHtml, n, total, m){
     <div class="rpt-footer">
       <div class="rpt-foot-left">
         <svg class="rmx-icon rpt-foot-ico"><use href="#properties"></use></svg>
-        <span>RentManager.com</span><span>08/28/26</span><span>7:14 AM</span>
+        <span>RentManager.com</span><span>10/20/26</span><span>7:14 AM</span>
       </div>
       <div class="rpt-foot-page">${n} of ${total}</div>
     </div>

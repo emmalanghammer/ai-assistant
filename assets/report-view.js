@@ -394,7 +394,7 @@ function discardDraft(i){
 }
 
 const PL_ANALYSIS_HTML = `
-<p>The <strong>Profit &amp; Loss (Month to Date)</strong> for <strong>Aug 1–28, 2026</strong> compares this period against the same dates in <strong>2025</strong>, across all <strong>10 properties</strong>. Here is the <strong>executive summary</strong> of the key financial metrics:</p>
+<p>The <strong>Profit &amp; Loss (Month to Date)</strong> for <strong>Oct 1–20, 2026</strong> compares this period against the same dates in <strong>2025</strong>, across all <strong>10 properties</strong>. Here is the <strong>executive summary</strong> of the key financial metrics:</p>
 <h4>Income:</h4>
 <ul>
   <li><strong>Total Income:</strong> <strong>$1,380,730</strong>, up <strong>6.4%</strong> from $1,297,090.

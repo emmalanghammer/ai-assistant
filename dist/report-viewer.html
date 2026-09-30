@@ -3307,11 +3307,11 @@ function rptMeta(id){
     name: p.reportName || p.tileName || 'Result Summary',
     source: p.reportSource || 'Custom · built from this result',
     options: (p.reportSource || 'Custom · built from this result') + ' — 10 properties selected · class60',
-    dateRange: 'As of Aug 28, 2026',
+    dateRange: 'As of Oct 20, 2026',
     params: [
       ['Report', p.reportSource || 'Custom · built from this result'],
       ['Properties', '10 selected · class60'],
-      ['As of', 'Aug 28, 2026 · day 18 of period'],
+      ['As of', 'Oct 20, 2026 · day 20 of period'],
       ['Layout', 'Summary with detail rows, portrait, letter'],
     ],
     builtFrom: p.label || 'this result',
@@ -3419,7 +3419,7 @@ function rptCells(b){
 
 function rptBlockHtml(b){
   switch (b.t){
-    case 'orion': return `<div class="rptx-orion">${orionMark(16)}<span class="t">Written by Orion Assistant on Aug 28, 2026 from the result it analyzed. AI may be inaccurate — verify before distributing.</span></div>`;
+    case 'orion': return `<div class="rptx-orion">${orionMark(16)}<span class="t">Written by Orion Assistant on Oct 20, 2026 from the result it analyzed. AI may be inaccurate — verify before distributing.</span></div>`;
     case 'para':  return `<p class="rptx-para">${esc(b.text)}</p>`;
     case 'stats': return `<div class="rptx-stats">${b.items.map(s=>`<div class="rptx-stat"><div class="v">${esc(s[0])}</div><div class="l">${esc(s[1])}</div></div>`).join('')}</div>`;
     case 'li':    return `<div class="rptx-li"><span class="n">${b.bullet ? '&bull;' : esc(b.n + '.')}</span><span class="t">${esc(b.text)}</span></div>`;
@@ -3444,7 +3444,7 @@ function rptPageShell(bodyHtml, n, total, m){
     <div class="rpt-footer">
       <div class="rpt-foot-left">
         <svg class="rmx-icon rpt-foot-ico"><use href="#properties"></use></svg>
-        <span>RentManager.com</span><span>08/28/26</span><span>7:14 AM</span>
+        <span>RentManager.com</span><span>10/20/26</span><span>7:14 AM</span>
       </div>
       <div class="rpt-foot-page">${n} of ${total}</div>
     </div>
@@ -3933,12 +3933,12 @@ const DATA_PROMPTS = {
     actions:['print'] },
   q4: { reportName:'Unit Availability · Filtered', reportSource:'Rental Info · Unit Availability', cat:1, icon:'apartment', label:'What 2nd floor waterfront units are available next month?',
     kw:'units 2nd second floor waterfront available next month vacant',
-    text:'Three units match all three conditions — second floor, waterfront exposure, and available during September.',
-    table:[ ['Riverview 204B','2 bed · $1,890 · waterfront','Sep 30',GREEN], ['Riverview 212','1 bed · $1,610 · waterfront','Sep 5',GREEN], ['Harbor Flats 208','2 bed · $1,975 · waterfront','Sep 1',GREEN] ],
+    text:'Three units match all three conditions — second floor, waterfront exposure, and available during November.',
+    table:[ ['Riverview 204B','2 bed · $1,890 · waterfront','Nov 30',GREEN], ['Riverview 212','1 bed · $1,610 · waterfront','Nov 5',GREEN], ['Harbor Flats 208','2 bed · $1,975 · waterfront','Nov 1',GREEN] ],
     findings:['Riverview 212 has 2 interested prospects with a waterfront preference logged.'],
     note:"Floor comes from the unit's Floor field; waterfront comes from each unit's own amenity flag, not the property — some units at Riverview and Harbor Flats aren't waterfront.",
     followups:['unit_prospects','unit_rents'],
-    tileName:'Waterfront Availability', tileRows:[ ['2nd floor waterfront','3 units available in September','Open',GREEN] ],
+    tileName:'Waterfront Availability', tileRows:[ ['2nd floor waterfront','3 units available in November','Open',GREEN] ],
     actions:['print'] },
   q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
     kw:'camaro vehicle car red riverview plate parking',
@@ -3949,8 +3949,8 @@ const DATA_PROMPTS = {
     actions:['print'] },
   q5: { reportName:'Profit & Loss · MTD vs. Last Year', reportSource:'Financial · Comparative P&L', cat:1, icon:'assessment', label:'Run a P&L this month to date compared to last year same period',
     kw:'profit loss statement compared last year period income expenses noi report',
-    text:'P&L for August 1–28, 2026 against August 1–28, 2025. All 10 properties, accrual basis.',
-    report:{ title:'Profit & Loss · MTD vs. same period last year', cols:['Aug 1–28, 2026','Aug 1–28, 2025','Var'],
+    text:'P&L for October 1–20, 2026 against October 1–20, 2025. All 10 properties, accrual basis.',
+    report:{ title:'Profit & Loss · MTD vs. same period last year', cols:['Oct 1–20, 2026','Oct 1–20, 2025','Var'],
       rows:[
         {kind:'head', a:'Income'},
         {kind:'row', a:'Rental Income', b:'$1,284,310', c:'$1,208,940', d:'+6.2%', dir:'up'},
@@ -3979,14 +3979,14 @@ const ACTION_PROMPTS = {
     plan:{ title:'Batch Charge · Snow Removal', rows:[
         ['Property','Clearcreek Condominiums · Association'], ['Applies to','148 active tenants · occupied units only'],
         ['Charge type','Snow Removal · GL 4120 Other Income'], ['Amount','$25.00 each · one time, not recurring'],
-        ['Charge date','Aug 28, 2026'], ['Batch total','$3,700.00'],
+        ['Charge date','Oct 20, 2026'], ['Batch total','$3,700.00'],
         ['Excluded','6 vacant units · 2 tenants on move-out notice'] ],
       warn:'Two tenants have a lease clause that caps ancillary charges. I left them in the batch but flagged them below — remove them before posting if that clause applies.' },
     findings:['Flagged: Sam Ortega (512) and Anh Nguyen (902) — lease addendum limits pass-through charges.','The charge type Snow Removal already exists, so no new setup is needed.','Tenant Web Access will show the charge to residents as soon as it posts.'],
     actions:['post','flagged','cancel'],
-    posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Clearcreek Condominiums tenant ledgers, dated Aug 28, 2026.',
+    posted:{ text:'Posted. 148 Snow Removal charges totaling $3,700.00 hit the Clearcreek Condominiums tenant ledgers, dated Oct 20, 2026.',
       stats:[ ['148','Charges posted'], ['$3,700.00','Batch total'], ['#20458','Batch reference number'] ] },
-    tileName:'Snow Removal Charge Collection', tileRows:[ ['Clearcreek Condominiums','148 charged · 0 paid','$3,700',ORANGE], ['Charged Aug 28','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
+    tileName:'Snow Removal Charge Collection', tileRows:[ ['Clearcreek Condominiums','148 charged · 0 paid','$3,700',ORANGE], ['Charged Oct 20','Appears on TWA today','0%',GRAY], ['Flagged leases','2 excluded by clause','-$50',GRAY] ] },
   x3: { cat:2, icon:'redeem', label:'Add a $25 credit to tenant accounts with open maintenance requests over 7 days old',
     kw:'add credit tenant accounts open maintenance requests over 7 days goodwill',
     text:'I can stage this as a batch credit. Here is exactly what I will post — nothing is written until you post it.',
@@ -3995,12 +3995,12 @@ const ACTION_PROMPTS = {
         ['Applies to','14 tenants · 6 properties'],
         ['Charge type','Goodwill Credit · GL 4120 Other Income (contra)'],
         ['Amount','-$25.00 each · one time, not recurring'],
-        ['Credit date','Aug 28, 2026'],
+        ['Credit date','Oct 20, 2026'],
         ['Batch total','-$350.00'] ] },
     table:[ ['Hailey Brooks · Riverview 118','Open 9 days · plumbing','-$25.00',GREEN], ['Anh Nguyen · Hawthorne 410','Open 8 days · HVAC','-$25.00',GREEN], ['Maria Delgado · Riverview 204B','Open 12 days · appliance','-$25.00',GREEN], ['Rob Feldman · Union 214','Open 11 days · appliance','-$25.00',GREEN], ['Devon Marsh · Harbor 702','Open 10 days · electrical','-$25.00',GREEN], ['Nia Carter · Union 610','Open 8 days · electrical','-$25.00',GREEN], ['Carla Jimenez · Crestline 118','Open 16 days · roof','-$25.00',GREEN], ['Brian Sato · Willowbrook 145','Open 10 days · appliance','-$25.00',GREEN], ['Latasha Green · Ridgeline 420','Open 8 days · general','-$25.00',GREEN], ['Tom Reyes · Harbor Flats 1108','Open 9 days · plumbing','-$25.00',GREEN], ['Sam Ortega · Riverview 512','Open 13 days · plumbing','-$25.00',GREEN], ['Terrance Boyd · Hawthorne 1108','Open 16 days · HVAC','-$25.00',GREEN], ['Grace Liu · Riverview 305','Open 9 days · electrical','-$25.00',GREEN], ['Omar Hassan · Crestline 220','Open 14 days · plumbing','-$25.00',GREEN] ],
     findings:['Two of the 14 already have a vendor visit scheduled, so the delay may resolve before the credit posts.','The other 12 have no visit scheduled yet.'],
     actions:['post_credit','cancel'],
-    posted:{ text:'Posted. 14 goodwill credits totaling $350.00 hit the affected tenant ledgers, dated Aug 28, 2026.',
+    posted:{ text:'Posted. 14 goodwill credits totaling $350.00 hit the affected tenant ledgers, dated Oct 20, 2026.',
       stats:[ ['14','Credits posted'], ['$350.00','Batch total'], ['#20512','Batch reference number'] ] },
     tileName:'Maintenance Delay Credits', tileRows:[ ['This batch','14 tenants · $350.00 credited','Posted',GREEN] ],
     reportName:'Batch Credit · Maintenance Delay Goodwill', reportSource:'Transactions · Batch Credits' },
@@ -4012,10 +4012,10 @@ const ACTION_PROMPTS = {
         ['Vehicle','2019 Chevrolet Camaro · Red · Plate 8XKJ221'],
         ['Violation type','Parked in another unit’s assigned space'],
         ['Details','Found in space P-118, assigned to Unit 204B'],
-        ['Date observed','Aug 28, 2026'],
+        ['Date observed','Oct 20, 2026'],
         ['Notice','Standard warning notice attached to the tenant record'] ] },
     actions:['log_violation','cancel'],
-    posted:{ text:'Logged. A parking violation was added to Marcus Reed’s tenant record, dated Aug 28, 2026.',
+    posted:{ text:'Logged. A parking violation was added to Marcus Reed’s tenant record, dated Oct 20, 2026.',
       stats:[ ['1','Violation logged'], ['P-118','Space parked in'], ['#PV-3042','Violation reference number'] ] } },
   x5: { cat:2, icon:'assignment_late', label:'Help me prioritize the maintenance requests submitted via the resident portal this week',
     kw:'prioritize maintenance requests resident portal this week triage',
@@ -4024,7 +4024,7 @@ const ACTION_PROMPTS = {
     findings:['The no-heat and water-leak requests are emergency-priority regardless of submission order.','The other four are routine and can be scheduled around your crew’s current workload.'],
     actions:['apply_priorities','cancel'],
     posted:{ text:'Applied. Priority levels were set on all 6 issues — the 2 urgent requests now show at the top of the technician queue.',
-      stats:[ ['6','Priorities updated'], ['2','Marked urgent'], ['Aug 28, 2026','Applied date'] ] } },
+      stats:[ ['6','Priorities updated'], ['2','Marked urgent'], ['Oct 20, 2026','Applied date'] ] } },
   x6: { cat:2, icon:'drafts', label:'Draft follow-up emails to all my leads that haven’t responded in over 7 days',
     kw:'draft follow up emails leads no response 7 days prospects',
     text:'Six leads have gone quiet for more than 7 days after real engagement. I drafted a short, personalized check-in for each — nothing sends until you approve.',
@@ -4032,7 +4032,7 @@ const ACTION_PROMPTS = {
     findings:['Each draft references their specific unit or tour so it doesn’t read as a form email.','None of the six have an active application in progress, so a check-in is unlikely to feel premature.'],
     actions:['send_drafts','cancel'],
     posted:{ text:'Sent. 6 personalized check-in emails went out, logged to each guest card.',
-      stats:[ ['6','Emails sent'], ['0','Replies so far'], ['Aug 28, 2026','Sent date'] ] } },
+      stats:[ ['6','Emails sent'], ['0','Replies so far'], ['Oct 20, 2026','Sent date'] ] } },
 };
 
 const BILLING_PROMPTS = {
@@ -4040,15 +4040,15 @@ const BILLING_PROMPTS = {
     kw:'find all unbilled maintenance requests property owners create bills billable issues rebill charge back',
     text:'I found 23 completed issues across 6 owners with billable cost and no owner charge posted against them. Here is the batch I would create — nothing posts until you say so.',
     plan:{ title:'Owner Billing Batch · Unbilled Maintenance', rows:[
-        ['Source','Completed issues, Jun 1 – Aug 28, 2026'], ['Found unbilled','23 issues · 6 owners · 9 properties'],
+        ['Source','Completed issues, Aug 1 – Oct 20, 2026'], ['Found unbilled','23 issues · 6 owners · 9 properties'],
         ['Billable cost','$18,940.00 labor, parts and vendor invoices'], ['Management markup','10% per management agreement · $1,894.00'],
         ['Batch total','$20,834.00 across 6 owner bills'], ['Charge type','Maintenance Reimbursement · GL 5210'],
-        ['Bill date','Aug 28, 2026 · net 15'], ['Held back','4 issues · missing vendor invoice or cost'] ],
+        ['Bill date','Oct 20, 2026 · net 15'], ['Held back','4 issues · missing vendor invoice or cost'] ],
       warn:'Two issues at Hawthorne Ridge exceed the $2,500 owner approval threshold in the management agreement and have no approval on file. They are excluded from the batch until approval is logged.' },
     table:[ ['Delgado Holdings','7 issues · Riverview','$6,320',GRAY], ['Ridgeline Partners LP','5 issues · Ridgeline','$4,720',GRAY], ['Harbor Equity Group','4 issues · Harbor Flats','$3,650',GRAY], ['Union Street Trust','3 issues · Union Lofts','$2,780',GRAY], ['Crestline Ventures','2 issues · Crestline','$1,790',GRAY], ['Meridian Holdings','2 issues · Willowbrook','$1,574',GRAY] ],
     findings:['The oldest unbilled order is 84 days old — 4090, HVAC at Hawthorne 1108, $2,180.','9 of the 23 have a vendor invoice attached, so those bills carry documentation automatically.','4 orders are held back because cost is still $0 — vendor invoice not entered yet.'],
     actions:['postbills','held','cancel'],
-    posted:{ text:'Created. 6 owner bills totaling $20,834.00, dated Aug 28, 2026, each itemized by issue with the vendor invoice attached where one exists.',
+    posted:{ text:'Created. 6 owner bills totaling $20,834.00, dated Oct 20, 2026, each itemized by issue with the vendor invoice attached where one exists.',
       stats:[ ['6','Owner bills created'], ['$20,834.00','Billed · incl. $1,894 markup'], ['19','Issues marked billed'] ],
       table:[ ['Delgado Holdings','Bill 10442 · 6 orders · net 15','$6,320',GREEN], ['Ridgeline Partners LP','Bill 10443 · 4 orders · net 15','$4,720',GREEN], ['Harbor Equity Group','Bill 10444 · 3 orders · net 15','$3,650',GREEN], ['Union Street Trust','Bill 10445 · 2 orders · net 15','$2,780',GREEN], ['Crestline Ventures','Bill 10446 · 2 orders · net 15','$1,790',GREEN], ['Meridian Holdings','Bill 10447 · 2 orders · net 15','$1,574',GREEN] ],
       note:'Bills sit in Owner Statements as unsent. Review and send them from Owners > Pay Owners.' } },
@@ -4115,13 +4115,13 @@ const INSIGHT_PROMPTS = {
   d2: { reportName:'Upcoming Vacancy & Prospect Coverage', reportSource:'Rental Info · Lease Expiration', icon:'insights', label:'Show me upcoming vacant units and any prospects that have shown interest or may be a good fit.',
     kw:'upcoming vacant units prospects interest good fit coverage',
     text:'Here is what I found across your 10 selected properties for the next 30 days.',
-    bullets:['14 units are vacating, and 9 applications are pending across 5 of them.','4 units have logged prospect interest but no application yet.','5 units have no interest logged at all, and Unit 420 at Ridgeline is the closest of those at Sep 24.','23 prospects are interested across all vacating units, and 6 more match Unit 420’s preferences without having asked about it.','Harbor Flats has the thinnest coverage of any property, at 44% of its vacating units.'],
+    bullets:['14 units are vacating, and 9 applications are pending across 5 of them.','4 units have logged prospect interest but no application yet.','5 units have no interest logged at all, and Unit 420 at Ridgeline is the closest of those at Nov 16.','23 prospects are interested across all vacating units, and 6 more match Unit 420’s preferences without having asked about it.','Harbor Flats has the thinnest coverage of any property, at 44% of its vacating units.'],
     note:'Based on lease end dates, move-out notices, application status and prospect preferences.',
     actions:['nextsteps','list','print'],
     nextSteps:[ ['Prioritize Unit 420','No interest logged and 24 days out. Six preference matches exist in your prospect register.'], ['Confirm the 9 pending applications','Three are missing income verification, which is the usual stall point.'], ['Re-list Harbor Flats early','Coverage there has run below 50% for three consecutive months.'] ],
     tileName:'Upcoming Vacancy Coverage', tileKind:'vacancy', unitList:true,
     tileHead:['Unit','Vacant · applications','Interest'], tileNote:'14 vacating · 5 covered · 4 interest only · 5 with no interest logged',
-    tileRows:[ ['420 · Ridgeline','Sep 24 · no applications','None',RED], ['1108 · Harbor Flats','Sep 19 · 1 pending','3',ORANGE], ['305 · Ridgeline','Sep 12 · 2 pending','4',GREEN] ],
+    tileRows:[ ['420 · Ridgeline','Nov 16 · no applications','None',RED], ['1108 · Harbor Flats','Nov 11 · 1 pending','3',ORANGE], ['305 · Ridgeline','Nov 4 · 2 pending','4',GREEN] ],
     tileFooter:'14 units · 23 interested prospects' },
   d3: { reportName:'Resident Sentiment Watchlist', reportSource:'Rental Info · Tenant History', icon:'insights', label:'Flag escalated residents before they vacate',
     kw:'escalated residents sentiment flag vacate churn',
@@ -4153,7 +4153,7 @@ const INSIGHT_PROMPTS = {
     kw:'pre tour briefing showings today',
     text:'You have two showings today. I cross-referenced each prospect’s stated preferences against current availability.',
     stats:[ ['2','Showings today'], ['5','Units ranked'], ['96','Best fit score'] ],
-    findings:['Jordan Wells at 2:30 PM: Unit 305 meets all five stated preferences at $1,795.','Unit 420 is $50 over his stated ceiling, so hold it as a fallback only.','Chris Okafor at 4:15 PM: Unit 610 meets all four preferences and his Oct 1 move-in.'],
+    findings:['Jordan Wells at 2:30 PM: Unit 305 meets all five stated preferences at $1,795.','Unit 420 is $50 over his stated ceiling, so hold it as a fallback only.','Chris Okafor at 4:15 PM: Unit 610 meets all four preferences and his Dec 1 move-in.'],
     note:'Based on prospect preferences, unit availability and pricing, and your showing calendar.',
     actions:['nextsteps','print'],
     nextSteps:[ ['Lead with Unit 305 for Jordan','Five of five preferences met and under his budget ceiling.'], ['Print the comparison for both prospects','Fit ranking, price and availability date in one page.'], ['Hold Unit 610 for the 4:15 showing','It matches Chris on every preference and his move-in date.'] ],
@@ -4184,20 +4184,20 @@ const INSIGHT_PROMPTS = {
 const PROMPTS = Object.assign({}, HELP_PROMPTS, DATA_PROMPTS, INSIGHT_PROMPTS, ACTION_PROMPTS, BILLING_PROMPTS);
 
 const UNITS = [
-  { unit:'420', property:'Ridgeline', vacant:'Sep 24', apps:0, interest:0, prospects:[], matches:6 },
-  { unit:'702', property:'Harbor Flats', vacant:'Sep 28', apps:0, interest:0, prospects:[] },
-  { unit:'145', property:'Willowbrook', vacant:'Oct 1', apps:0, interest:0, prospects:[] },
-  { unit:'318', property:'Crestline', vacant:'Oct 3', apps:0, interest:0, prospects:[] },
-  { unit:'1204', property:'Hawthorne Ridge', vacant:'Oct 5', apps:0, interest:0, prospects:[] },
-  { unit:'431', property:'Harbor Flats', vacant:'Oct 2', apps:0, interest:1, prospects:['Marcus Reed'] },
-  { unit:'512', property:'Riverview', vacant:'Sep 26', apps:0, interest:2, prospects:['Sam Ortega','Nia Carter'] },
-  { unit:'208', property:'Willowbrook', vacant:'Sep 29', apps:0, interest:2, prospects:['Hailey Brooks','Devon Marsh'] },
-  { unit:'902', property:'Riverview', vacant:'Oct 4', apps:0, interest:2, prospects:['Rob Feldman','Anh Nguyen'] },
-  { unit:'118', property:'Ridgeline', vacant:'Sep 30', apps:1, interest:2, prospects:['Jordan Wells','Chris Okafor'] },
-  { unit:'1108', property:'Harbor Flats', vacant:'Sep 19', apps:1, interest:3, prospects:['Dana Whitfield','Marcus Reed','Sam Ortega'] },
-  { unit:'214', property:'Union Street Lofts', vacant:'Sep 15', apps:2, interest:3, prospects:['Chris Okafor','Nia Carter','Devon Marsh'] },
-  { unit:'305', property:'Ridgeline', vacant:'Sep 12', apps:2, interest:4, prospects:['Jordan Wells','Priya Raman','Hailey Brooks','Marcus Reed'] },
-  { unit:'610', property:'Union Street Lofts', vacant:'Sep 22', apps:3, interest:4, prospects:['Chris Okafor','Priya Raman','Rob Feldman','Dana Whitfield'] },
+  { unit:'420', property:'Ridgeline', vacant:'Nov 16', apps:0, interest:0, prospects:[], matches:6 },
+  { unit:'702', property:'Harbor Flats', vacant:'Nov 20', apps:0, interest:0, prospects:[] },
+  { unit:'145', property:'Willowbrook', vacant:'Nov 23', apps:0, interest:0, prospects:[] },
+  { unit:'318', property:'Crestline', vacant:'Nov 25', apps:0, interest:0, prospects:[] },
+  { unit:'1204', property:'Hawthorne Ridge', vacant:'Nov 27', apps:0, interest:0, prospects:[] },
+  { unit:'431', property:'Harbor Flats', vacant:'Nov 24', apps:0, interest:1, prospects:['Marcus Reed'] },
+  { unit:'512', property:'Riverview', vacant:'Nov 18', apps:0, interest:2, prospects:['Sam Ortega','Nia Carter'] },
+  { unit:'208', property:'Willowbrook', vacant:'Nov 21', apps:0, interest:2, prospects:['Hailey Brooks','Devon Marsh'] },
+  { unit:'902', property:'Riverview', vacant:'Nov 26', apps:0, interest:2, prospects:['Rob Feldman','Anh Nguyen'] },
+  { unit:'118', property:'Ridgeline', vacant:'Nov 22', apps:1, interest:2, prospects:['Jordan Wells','Chris Okafor'] },
+  { unit:'1108', property:'Harbor Flats', vacant:'Nov 11', apps:1, interest:3, prospects:['Dana Whitfield','Marcus Reed','Sam Ortega'] },
+  { unit:'214', property:'Union Street Lofts', vacant:'Nov 7', apps:2, interest:3, prospects:['Chris Okafor','Nia Carter','Devon Marsh'] },
+  { unit:'305', property:'Ridgeline', vacant:'Nov 4', apps:2, interest:4, prospects:['Jordan Wells','Priya Raman','Hailey Brooks','Marcus Reed'] },
+  { unit:'610', property:'Union Street Lofts', vacant:'Nov 14', apps:3, interest:4, prospects:['Chris Okafor','Priya Raman','Rob Feldman','Dana Whitfield'] },
 ];
 
 const FOLLOWUPS = {
@@ -4205,7 +4205,7 @@ const FOLLOWUPS = {
     table:[ ['Anh Nguyen · Hawthorne 410','$11,640 · 68 days · no contact','Eligible',RED], ['Delgado Holdings · Crestline 120','$18,900 · 71 days · commercial terms','Eligible',RED], ['Terrance Boyd · Hawthorne 1108','$21,480 · 94 days · no contact','Eligible',RED], ['Maria Delgado · Riverview 204B','$4,310 · 47 days · no contact','Eligible',ORANGE], ['Nia Carter · Union 610','$2,940 · 41 days · no contact','Eligible',ORANGE] ],
     note:'Notice templates live in Letters & Notices. I can surface the list and the balances; generating and serving the notice is yours.', followups:['del_plans'] },
   del_plans: { q:'Which tenants are on a payment plan?', text:'Twelve tenants have an active plan. Ten are current against it; two have missed an installment.',
-    table:[ ['Hailey Brooks · Riverview 118','$3,220 · 4 of 6 installments paid','Current',GREEN], ['Anh Nguyen · Hawthorne 410','$11,640 · 3 of 5 installments paid','Current',GREEN], ['Maria Delgado · Riverview 204B','$4,310 · 2 of 4 installments paid','Current',GREEN], ['Rob Feldman · Union 214','$1,845 · 2 of 3 installments paid','Current',GREEN], ['Devon Marsh · Harbor 702','$1,190 · 1 of 2 installments paid','Current',GREEN], ['Nia Carter · Union 610','$2,940 · 3 of 5 installments paid','Current',GREEN], ['Carla Jimenez · Crestline 118','$2,410 · 2 of 3 installments paid','Current',GREEN], ['Brian Sato · Willowbrook 145','$1,975 · 1 of 3 installments paid','Current',GREEN], ['Latasha Green · Ridgeline 420','$3,680 · 3 of 4 installments paid','Current',GREEN], ['Tom Reyes · Harbor Flats 1108','$2,205 · 1 of 2 installments paid','Current',GREEN], ['Sam Ortega · Riverview 512','$9,280 · missed Aug 15 installment','Missed',RED], ['Terrance Boyd · Hawthorne 1108','$21,480 · missed 2 installments','Missed',RED] ],
+    table:[ ['Hailey Brooks · Riverview 118','$3,220 · 4 of 6 installments paid','Current',GREEN], ['Anh Nguyen · Hawthorne 410','$11,640 · 3 of 5 installments paid','Current',GREEN], ['Maria Delgado · Riverview 204B','$4,310 · 2 of 4 installments paid','Current',GREEN], ['Rob Feldman · Union 214','$1,845 · 2 of 3 installments paid','Current',GREEN], ['Devon Marsh · Harbor 702','$1,190 · 1 of 2 installments paid','Current',GREEN], ['Nia Carter · Union 610','$2,940 · 3 of 5 installments paid','Current',GREEN], ['Carla Jimenez · Crestline 118','$2,410 · 2 of 3 installments paid','Current',GREEN], ['Brian Sato · Willowbrook 145','$1,975 · 1 of 3 installments paid','Current',GREEN], ['Latasha Green · Ridgeline 420','$3,680 · 3 of 4 installments paid','Current',GREEN], ['Tom Reyes · Harbor Flats 1108','$2,205 · 1 of 2 installments paid','Current',GREEN], ['Sam Ortega · Riverview 512','$9,280 · missed Oct 15 installment','Missed',RED], ['Terrance Boyd · Hawthorne 1108','$21,480 · missed 2 installments','Missed',RED] ],
     followups:['del_notice'] },
   ar_prop: { q:'Which properties moved the most?', text:'Four properties account for the change. Hawthorne Ridge is the only one materially worse.',
     table:[ ['Hawthorne Ridge','$64,870 open · was $38,140','+$26,730',RED], ['Riverview Apartments','$32,072 open · was $31,640','+$432',GRAY], ['Union Street Lofts','$21,940 open · was $22,610','-$670',GREEN], ['Crestline Business Park','$26,012 open · was $29,880','-$3,868',GREEN] ],
@@ -4216,7 +4216,7 @@ const FOLLOWUPS = {
   ar_latefee: { q:'Were late fees posted this period?', text:'Not everywhere. Late fees posted on 8 of your 10 properties. Hawthorne Ridge and Crestline were skipped, and Hawthorne has now missed two of the last three cycles.',
     bullets:['Unposted late fees at Hawthorne Ridge total roughly $4,900 across 31 delinquent leases.','Hawthorne is also the property where aging past 30 days grew the most, which usually follows missed fee posting.'],
     note:'Post Late Fees can be run for a single property, so this does not require re-running the whole portfolio.', followups:['ar_prop'] },
-  occ_month: { q:'How does that compare to last month?', text:'Occupancy was 90.4% on July 28, so you are down 0.8 points — four net move-outs, three of them at Hawthorne Ridge.',
+  occ_month: { q:'How does that compare to last month?', text:'Occupancy was 90.4% on September 20, so you are down 0.8 points — four net move-outs, three of them at Hawthorne Ridge.',
     table:[ ['Hawthorne Ridge','84.6% · was 87.5%','-2.9 pts',RED], ['Riverview Apartments','91.6% · was 91.0%','+0.6 pts',GREEN], ['Union Street Lofts','89.5% · was 89.5%','Flat',GRAY] ], followups:['occ_old','occ_econ'] },
   occ_old: { q:'Which vacancies are oldest?', text:'Seventeen units have been vacant more than 30 days. These four are past 60.',
     table:[ ['Hawthorne Ridge 902','Vacant 94 days · 2 bed','94 d',RED], ['Hawthorne Ridge 410','Vacant 78 days · 1 bed','78 d',RED], ['Crestline Suite 120','Vacant 71 days · commercial','71 d',RED], ['Union Street Lofts 214','Vacant 63 days · studio','63 d',ORANGE] ], followups:['occ_econ'] },
@@ -4235,12 +4235,12 @@ const FOLLOWUPS = {
     table:[ ['Priya Raman','Application on Riverview 212 · 4 days','91',GREEN], ['Jordan Wells','Toured Riverview 204B · 6 days','84',GREEN], ['Chris Okafor','Toured Harbor Flats 208 · 3 days','88',GREEN], ['Dana Whitfield','Application on Riverview 212 · 9 days','76',GREEN], ['Sam Ortega','Guest card · no visit yet','52',ORANGE], ['Devon Marsh','Guest card · no visit yet','45',ORANGE] ] },
   unit_rents: { q:'How do those rents compare to the property average?', text:'All three are priced above their property average, which is consistent with the waterfront premium on file.',
     table:[ ['Riverview 204B','$1,890 · 2 bed average $1,742','+8.5%',GREEN], ['Riverview 212','$1,610 · 1 bed average $1,505','+7.0%',GREEN], ['Harbor Flats 208','$1,975 · 2 bed average $1,860','+6.2%',GREEN] ] },
-  pl_rm: { q:'Why is Repairs & Maintenance up?', text:'Repairs & Maintenance is up $38,660 against last August. Three items account for $34,100 of it.',
-    bullets:['Hawthorne Ridge roof repairs — $18,400 across two issues, no comparable spend last year.','Riverview HVAC compressor replacements — $9,900 on three units.','Turn-related drywall and paint at Union Street Lofts — $5,800, tied to 9 turns this month against 4 last August.'],
+  pl_rm: { q:'Why is Repairs & Maintenance up?', text:'Repairs & Maintenance is up $38,660 against last October. Three items account for $34,100 of it.',
+    bullets:['Hawthorne Ridge roof repairs — $18,400 across two issues, no comparable spend last year.','Riverview HVAC compressor replacements — $9,900 on three units.','Turn-related drywall and paint at Union Street Lofts — $5,800, tied to 9 turns this month against 4 last October.'],
     note:'The roof work is capital-eligible. Moving it out of R&M would put the category at +3.7% year over year.', followups:['pl_noi','pl_byprop'] },
   pl_noi: { q:'Which property drove the NOI change?', text:'NOI is up $29,570. Riverview carried it; Hawthorne Ridge is the only property down year over year.',
     table:[ ['Riverview Apartments','NOI $341,200 · was $318,600','+7.1%',GREEN], ['Union Street Lofts','NOI $198,400 · was $191,050','+3.8%',GREEN], ['Crestline Business Park','NOI $151,900 · was $149,800','+1.4%',GRAY], ['Hawthorne Ridge','NOI $115,500 · was $117,980','-2.1%',RED] ], followups:['pl_rm','pl_byprop'] },
-  pl_byprop: { q:'Show the same period by property', text:'Income and expense for August 1–28, 2026, by property, with the year-over-year variance on total income.',
+  pl_byprop: { q:'Show the same period by property', text:'Income and expense for October 1–20, 2026, by property, with the year-over-year variance on total income.',
     table:[ ['Riverview Apartments','Income $521,400 · Expense $180,200','+7.4%',GREEN], ['Union Street Lofts','Income $312,900 · Expense $114,500','+5.1%',GREEN], ['Crestline Business Park','Income $268,300 · Expense $116,400','+2.2%',GRAY], ['Hawthorne Ridge','Income $278,130 · Expense $162,630','+1.1%',ORANGE] ],
     note:'I can export this summary to the Financial Analytics board or build it as a dashboard tile.' },
 };
@@ -4345,22 +4345,38 @@ function scrollAnchorIntoView(body, idx, jump, mode){
     return;
   }
 
-  /* An answer never moves the view. It arrives below whatever you are
-     reading and stays there until you go to it — the chevron appears when
-     there is more below the fold, and that is the only invitation.
+  /* A reply scrolls once, to its own first line, and stops there. It never
+     follows the answer down: whatever runs past the fold stays there until
+     you go to it, and the chevron says there is more. A short reply can
+     only scroll as far as the content allows, so it comes to rest fully in
+     view instead, with no blank room held open beneath it to reach the top.
 
-     This used to pin the reply's first line to the top of the panel, which
-     meant holding a spacer's worth of blank room open beneath the
-     conversation so there was somewhere to scroll to. Both are gone: no
-     room is reserved, nothing is repositioned. The spacer element stays at
-     zero so the scroll maths has something to measure the end of the
-     content against.
+     A question does the smaller thing: brings itself and the thinking
+     indicator under it into view, if they landed below the fold.
 
-     Landing positions are different and still apply — opening the panel,
-     or a chat from History, goes to the end of it. Those are arrivals, not
-     a reply shifting under you mid-read. */
+     settleSpacer watches for the reader's own wheel, drag or keys, which
+     cancel the glide mid-flight, and hands the chevron its final state. */
   if (spacer) spacer.style.height = '0px';
-  if (jump) settleSpacer(body, row);
+  if (!jump) return;
+  settleSpacer(body, row);
+  const isReply = !!row.querySelector('.msg-bot');
+  /* After the reveal has laid the reply out (it unhides every block at
+     260ms); measured any earlier, the reply is zero height and the target
+     clamps short. The question waits a tick for the thinking indicator. */
+  setTimeout(() => {
+    if (!row.isConnected) return;
+    const h = settleTimers.get(body);
+    if (h && h.userScrolled) return;
+    const bodyTop = body.getBoundingClientRect().top;
+    if (isReply){
+      const padTop = parseFloat(getComputedStyle(body).paddingTop) || 0;
+      smoothScrollTo(body, body.scrollTop + (row.getBoundingClientRect().top - bodyTop) - padTop);
+    } else {
+      const end = contentBottomOffset(body, body.querySelector('.scroll-spacer'));
+      const target = end - body.clientHeight;
+      if (target > body.scrollTop) smoothScrollTo(body, target);
+    }
+  }, isReply ? 320 : 40);
 }
 
 /* A way back down when you have scrolled up to re-read something. Shows only
@@ -5423,7 +5439,7 @@ function buildOccupancySummaryReport(){
       <div class="rpt-header">
         <div class="rpt-title-row">
           <span class="rpt-title">${esc(p.reportName)}</span>
-          <span class="rpt-daterange">As of Aug 28, 2026</span>
+          <span class="rpt-daterange">As of Oct 20, 2026</span>
         </div>
         <div class="rpt-options">${esc(p.reportSource)} — 10 properties selected · class60</div>
       </div>
@@ -5459,7 +5475,7 @@ function buildOccupancySummaryReport(){
       <div class="rpt-footer">
         <div class="rpt-foot-left">
           <svg class="rmx-icon rpt-foot-ico"><use href="#properties"></use></svg>
-          <span>RentManager.com</span><span>08/28/26</span><span>7:14 AM</span>
+          <span>RentManager.com</span><span>10/20/26</span><span>7:14 AM</span>
         </div>
         <div class="rpt-foot-page">1 of 1</div>
       </div>
@@ -5577,7 +5593,7 @@ function buildProfitLossReport(){
       <div class="rpt-footer">
         <div class="rpt-foot-left">
           <svg class="rmx-icon rpt-foot-ico"><use href="#properties"></use></svg>
-          <span>RentManager.com</span><span>08/28/26</span><span>7:22 AM</span>
+          <span>RentManager.com</span><span>10/20/26</span><span>7:22 AM</span>
         </div>
         <div class="rpt-foot-page">${n} of ${total}</div>
       </div>
@@ -6505,7 +6521,7 @@ function discardDraft(i){
 }
 
 const PL_ANALYSIS_HTML = `
-<p>The <strong>Profit &amp; Loss (Month to Date)</strong> for <strong>Aug 1–28, 2026</strong> compares this period against the same dates in <strong>2025</strong>, across all <strong>10 properties</strong>. Here is the <strong>executive summary</strong> of the key financial metrics:</p>
+<p>The <strong>Profit &amp; Loss (Month to Date)</strong> for <strong>Oct 1–20, 2026</strong> compares this period against the same dates in <strong>2025</strong>, across all <strong>10 properties</strong>. Here is the <strong>executive summary</strong> of the key financial metrics:</p>
 <h4>Income:</h4>
 <ul>
   <li><strong>Total Income:</strong> <strong>$1,380,730</strong>, up <strong>6.4%</strong> from $1,297,090.
