@@ -346,7 +346,7 @@ const DATA_PROMPTS = {
   q3: { reportName:'Vehicle Register · Riverview Apartments', reportSource:'Rental Info · Tenants · User-Defined Fields', cat:1, icon:'directions_car', label:'Who has a red Camaro in Riverview Apartments?',
     kw:'camaro vehicle car red riverview plate parking',
     text:'One tenant at Riverview Apartments has a red Camaro on the vehicle record.',
-    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
+    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', photo:'camaro', match:'exact'}, {id:'brooks', name:'Hailey Brooks', unit:'Riverview Apartments · 118', vehicle:'2021 Dodge Charger · Red · Plate 4TRM905', match:'near'}, {id:'cho', name:'Elena Cho', unit:'Riverview Apartments · 204B', vehicle:'2020 Honda Civic · Red · Plate 6PLM230', match:'near'} ],
     note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
     followups:['veh_parking','veh_missing'],
     actions:['print'] },
@@ -410,7 +410,7 @@ const ACTION_PROMPTS = {
   x4: { cat:2, icon:'local_parking', label:'Add a parking violation for red Camaro at Riverview Apartments',
     kw:'add parking violation red camaro riverview',
     text:"I found the vehicle. Marcus Reed's 2019 Chevrolet Camaro is the only exact red Camaro match at Riverview Apartments — here's the violation I'll log.",
-    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', match:'exact'} ],
+    tenants:[ {id:'reed', name:'Marcus Reed', unit:'Riverview Apartments · 512', vehicle:'2019 Chevrolet Camaro · Red · Plate 8XKJ221', photo:'camaro', match:'exact'} ],
     plan:{ title:'Parking Violation · Marcus Reed', rows:[
         ['Vehicle','2019 Chevrolet Camaro · Red · Plate 8XKJ221'],
         ['Violation type','Parked in another unit’s assigned space'],
@@ -1450,7 +1450,8 @@ function renderTenants(tenants, idx, showAll){
   return `<div class="mtenants">${visible.map(t=>`
     <div class="mtenant-row" onclick="openTenant('${t.id}')">
       <svg class="rmx-icon person"><use href="#person"></use></svg>
-      <div class="tmeta"><span class="name">${esc(t.name)}</span><span class="unit">${esc(t.unit)}</span><span class="veh">${esc(t.vehicle)}</span></div>
+      <div class="tmeta"><span class="name">${esc(t.name)}</span><span class="unit">${esc(t.unit)}</span><span class="veh">${t.vehicle.split(' · ').map(v => `<span class="seg">${esc(v)}</span>`).join(' · ')}</span></div>
+      ${t.photo ? `<span class="veh-photo veh-photo--${t.photo}" role="img" aria-label="${esc(t.vehicle)}"></span>` : ''}
       <span class="rmx-lozenge rmx-lozenge--${t.match==='exact'?'success':'neutral'}" data-rmx-component="Lozenge">${t.match==='exact'?'Exact match':'Red, not a Camaro'}</span>
       <svg class="rmx-icon chevron"><use href="#chevron-right"></use></svg>
     </div>`).join('')}</div>`;
