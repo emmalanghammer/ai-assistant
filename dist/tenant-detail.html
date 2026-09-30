@@ -4313,6 +4313,7 @@ function toneClass(t){ return t===GREEN?'success':t===RED?'error':t===ORANGE?'ca
 function scrollAnchorIntoView(body, idx, jump, mode){
   const spacer = body.querySelector('.scroll-spacer');
   if (idx === -1){
+    heldSpacer = 0;
     if (spacer) spacer.style.height = '0px';
     if (jump) body.scrollTop = 0;
     return;
@@ -4321,6 +4322,7 @@ function scrollAnchorIntoView(body, idx, jump, mode){
   if (!row) return;
 
   if (mode === 'reveal'){
+    heldSpacer = 0;
     if (spacer) spacer.style.height = '0px';
     if (jump){
       const bodyRect = body.getBoundingClientRect();
@@ -4334,38 +4336,44 @@ function scrollAnchorIntoView(body, idx, jump, mode){
     return;
   }
 
-  /* A reply scrolls once, to its own first line, and stops there. It never
-     follows the answer down: whatever runs past the fold stays there until
-     you go to it, and the chevron says there is more. A short reply can
-     only scroll as far as the content allows, so it comes to rest fully in
-     view instead, with no blank room held open beneath it to reach the top.
+  /* A question glides to the top of the panel the moment it is sent, and
+     its answer arrives underneath it ('hold') without moving the view
+     again. However long the answer runs, it is read from its first line;
+     whatever passes the fold stays there, and the chevron says so.
 
-     A question does the smaller thing: brings itself and the thinking
-     indicator under it into view, if they landed below the fold.
-
-     settleSpacer watches for the reader's own wheel, drag or keys, which
-     cancel the glide mid-flight, and hands the chevron its final state. */
-  if (spacer) spacer.style.height = '0px';
+     A short answer cannot fill the panel below the question, so the spacer
+     holds open just enough room for the question to reach the top, and no
+     more. It is resized as the answer fills in and whenever the panel
+     changes size. */
+  holdSpacer(body);
   if (!jump) return;
   settleSpacer(body, row);
-  const isReply = !!row.querySelector('.msg-bot');
-  /* After the reveal has laid the reply out (it unhides every block at
-     260ms); measured any earlier, the reply is zero height and the target
-     clamps short. The question waits a tick for the thinking indicator. */
-  setTimeout(() => {
-    if (!row.isConnected) return;
-    const h = settleTimers.get(body);
-    if (h && h.userScrolled) return;
-    const bodyTop = body.getBoundingClientRect().top;
-    if (isReply){
-      const padTop = parseFloat(getComputedStyle(body).paddingTop) || 0;
-      smoothScrollTo(body, body.scrollTop + (row.getBoundingClientRect().top - bodyTop) - padTop);
-    } else {
-      const end = contentBottomOffset(body, body.querySelector('.scroll-spacer'));
-      const target = end - body.clientHeight;
-      if (target > body.scrollTop) smoothScrollTo(body, target);
-    }
-  }, isReply ? 320 : 40);
+  if (mode === 'top') smoothScrollTo(body, pinTarget(body, row));
+}
+
+/* Where the scroll has to be for a row to sit at the top of the panel,
+   under the body's own top padding. */
+function pinTarget(body, row){
+  const padTop = parseFloat(getComputedStyle(body).paddingTop) || 0;
+  return body.scrollTop + (row.getBoundingClientRect().top - body.getBoundingClientRect().top) - padTop;
+}
+
+/* The room under the conversation that lets the pinned question reach the
+   top of the panel. Kept in a variable as well as on the element because
+   render() rebuilds the element: it is written back into the new markup at
+   its old height, since a spacer rebuilt at zero shrinks the scroll range
+   for a moment and the browser clamps the view down before it can be
+   resized. */
+let heldSpacer = 0;
+function holdSpacer(body){
+  const spacer = body.querySelector('.scroll-spacer');
+  if (!spacer) return;
+  const row = lastAnchorIdx >= 0 && lastAnchorMode !== 'reveal'
+    ? body.querySelector(`[data-idx="${lastAnchorIdx}"]`) : null;
+  if (!row){ heldSpacer = 0; spacer.style.height = '0px'; return; }
+  const end = contentBottomOffset(body, spacer);
+  heldSpacer = Math.max(0, Math.ceil(pinTarget(body, row) + body.clientHeight - end));
+  spacer.style.height = heldSpacer + 'px';
 }
 
 /* A way back down when you have scrolled up to re-read something. Shows only
@@ -4517,7 +4525,11 @@ function smoothScrollTo(body, target){
 if (typeof ResizeObserver !== 'undefined'){
   const watchPanel = () => {
     const panel = document.getElementById('orionPanel');
-    if (panel) new ResizeObserver(() => syncComposerInset()).observe(panel);
+    if (panel) new ResizeObserver(() => {
+      syncComposerInset();
+      const body = document.getElementById('orionBody');
+      if (body) holdSpacer(body);
+    }).observe(panel);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchPanel);
   else watchPanel();
@@ -4544,12 +4556,11 @@ function syncComposerInset(){
 }
 
 
-/* Collapse the room held open for an answer. Never leave it standing: a
-   spacer outlives the reason it existed, and what is left is a panel of
-   blank scroll under the last message. */
+/* Once an answer has stopped growing, size the room under it to exactly
+   what keeps its question at the top: any extra it held while the answer
+   was still arriving goes, and what the pin needs stays. */
 function releaseSpacer(body){
-  const sp = body.querySelector('.scroll-spacer');
-  if (sp) sp.style.height = '0px';
+  holdSpacer(body);
   updateJumpToLatest();
 }
 
@@ -4632,10 +4643,10 @@ function settleSpacer(body, anchorRow){
     if (++stableFor < 5) return;
     stop();
 
-    /* The answer has stopped growing. There is nothing to position — the
-       panel does not move for a reply any more — so this only hands back
-       the spacer and refreshes the chevron, which is the thing that tells
-       you there is more below the fold. */
+    /* The answer has stopped growing. Nothing to position, since the
+       question is already at the top: resize the room under it and refresh
+       the chevron, which is the thing that tells you there is more below
+       the fold. */
     releaseSpacer(body);
   }, 200);
   const handles = { poll: timer, userScrolled: false };
@@ -4674,16 +4685,17 @@ function updateAnchor(messages, fromIdx){
   if (forceNewAnchor && newUserIdx === -1){
     lastAnchorIdx = fromIdx;
     lastAnchorMode = 'reveal';
-  } else if (newBotIdx !== -1){
-    /* The reply leads once it arrives: its first line goes to the top of the
-       panel and it builds downwards from there. */
-    lastAnchorIdx = newBotIdx;
-    lastAnchorMode = 'top';
   } else if (newUserIdx !== -1){
-    /* Until then the question holds the top, so the thinking indicator
-       appears under it rather than off the bottom. */
+    /* A question takes the top of the panel, and the thinking indicator and
+       then the answer appear under it. */
     lastAnchorIdx = newUserIdx;
     lastAnchorMode = 'top';
+  } else if (newBotIdx !== -1){
+    /* An answer arriving under its question leaves the question where it
+       is: it holds the top and the view does not move. With no question
+       above it to hold, it is simply brought into view. */
+    if (lastAnchorIdx >= 0 && lastAnchorMode !== 'reveal') lastAnchorMode = 'hold';
+    else { lastAnchorIdx = newBotIdx; lastAnchorMode = 'reveal'; }
   }
   forceNewAnchor = false;
   return lastAnchorIdx;
@@ -4697,7 +4709,7 @@ function render(){
   const wrap = document.getElementById('messagesWrap');
   const toReveal = [];
   state.messages.forEach((m,i) => { if (m.role === 'bot' && !m._shown) toReveal.push(i); });
-  wrap.innerHTML = state.messages.map((m,i) => renderMessage(m, i, toReveal.indexOf(i) >= 0)).join('') + (state.thinking ? renderThinking() : '') + '<div class="scroll-spacer"></div>';
+  wrap.innerHTML = state.messages.map((m,i) => renderMessage(m, i, toReveal.indexOf(i) >= 0)).join('') + (state.thinking ? renderThinking() : '') + `<div class="scroll-spacer" style="height:${heldSpacer}px"></div>`;
   toReveal.forEach(i => { state.messages[i]._shown = true; });
   /* Reveal (which un-hides each message's .rv blocks synchronously,
      before it starts the async per-character typing) has to run BEFORE
@@ -5782,6 +5794,7 @@ function newChat(){
   state.messages = []; state.thinking = null; state.sheetOpen = false;
   lastAnchorIdx = -1;
   lastAnchorMode = 'top';
+  heldSpacer = 0;
   document.getElementById('historyView').hidden = true;
   document.getElementById('orionBody').hidden = false;
   document.getElementById('orionFooter').hidden = false;
