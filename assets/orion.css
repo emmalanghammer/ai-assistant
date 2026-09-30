@@ -199,7 +199,9 @@ a { color: var(--text-link); }
 .msg-row { display:flex; animation: eh-in .18s ease-out; }
 /* Orion Express Help 2695:15935 — the question bubble is square on the bottom
    right only: 8 / 8 / 0 / 8, clockwise from the top left. */
-.msg-user { width:100%; background: var(--container-tertiary); border:1px solid var(--border-primary);
+/* Hugs the question and sits on the right, like a sent message; a long one
+   wraps at the panel's width. */
+.msg-user { max-width:100%; margin-left:auto; background: var(--container-tertiary); border:1px solid var(--border-primary);
   border-radius: var(--radius-md) var(--radius-md) 0 var(--radius-md);
   padding:12px 14px; font-size:14px; line-height:20px; color:var(--text-secondary); }
 /* A finished answer carries no Orion mark. The mark is how Orion signals it

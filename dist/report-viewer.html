@@ -1418,7 +1418,9 @@ a { color: var(--text-link); }
 .msg-row { display:flex; animation: eh-in .18s ease-out; }
 /* Orion Express Help 2695:15935 — the question bubble is square on the bottom
    right only: 8 / 8 / 0 / 8, clockwise from the top left. */
-.msg-user { width:100%; background: var(--container-tertiary); border:1px solid var(--border-primary);
+/* Hugs the question and sits on the right, like a sent message; a long one
+   wraps at the panel's width. */
+.msg-user { max-width:100%; margin-left:auto; background: var(--container-tertiary); border:1px solid var(--border-primary);
   border-radius: var(--radius-md) var(--radius-md) 0 var(--radius-md);
   padding:12px 14px; font-size:14px; line-height:20px; color:var(--text-secondary); }
 /* A finished answer carries no Orion mark. The mark is how Orion signals it
@@ -4746,95 +4748,39 @@ function render(){
   }
 }
 
-/* How long an answer takes to build itself out, once the thinking pause is
-   over. Separate from ORION_PACE because they are different problems: the
-   pause is anticipation, this is comprehension. Higher is slower. */
-const ORION_REVEAL = 4.5;
-
-/* Unhides a reply's blocks in reading order. The prose inside them is
-   already there — only the data blocks arrive one at a time. Does not touch
-   scroll: render() has already anchored the view. */
+/* Unhides a reply in one pass: the prose, the stats, the table, the buttons,
+   all fading in together with the slow prose fade, so the answer lands as
+   one finished thing rather than assembling in front of you. The thinking
+   indicator is where the waiting belongs. Does not touch scroll: render()
+   has already anchored the view. */
 function revealMessage(idx){
   const row = document.querySelector(`.msg-row[data-idx="${idx}"]`);
   if (!row) return;
   const content = row.querySelector('.content');
   if (!content) return;
-
-  /* An answer is "still arriving" until the last block has been placed and
-     the last character typed — which is not the same as "has not changed
-     height for a moment". The pause between the opening paragraph finishing
-     and the first block appearing is seconds of complete stillness,
-     and settleSpacer used to read that as the end of the answer and place
-     the view against half of it. The flag below is the honest signal; the
-     settle waits for it to clear. */
-  row.dataset.revealing = '1';
-  let pending = 1;                      /* the reveal schedule itself */
-  const done = () => { if (--pending <= 0) delete row.dataset.revealing; };
-  const alsoWaitFor = () => { pending++; };
-
   const blocks = [...content.querySelectorAll('.rv')];
+  if (!blocks.length) return;
 
-  /* Prose lands whole. Neither typed a character at a time nor built up a
-     paragraph at a time — an answer is something Orion has already worked
-     out, and watching it assemble is watching a loading state pretending to
-     be thought. The thinking indicator is where the waiting belongs.
-
-     The data that follows still arrives piece by piece: a stat, the next
-     stat, then the table. That reading is different — those are findings
-     being laid out, and the order is the point. */
-  if (!blocks.length){ done(); return; }
-
-  /* Spread the build-out over a target window rather than a fixed delay per
-     block, so a two-part answer is not glacial and a twenty-row register
-     does not take a minute. Clamped at both ends. */
-  const step = Math.min(600, Math.max(140,
-    Math.round((900 * ORION_REVEAL) / blocks.length)));
-
-  let i = 0;
-  const next = () => {
-    if (!content.isConnected){ done(); return; }
-    const el = blocks[i++];
-    if (!el){ done(); return; }
-    el.hidden = false;
-    /* Prose fades slower than data — the lead paragraph is marked in the
-       markup, a rich answer is marked here. See .rv-slow. */
-    if (el.querySelector('.mrich')) el.classList.add('rv-slow');
-    /* Unhiding and setting the end state together gives the browser no start
-       to transition from, so it lands on opacity 1 with no fade. Reading a
-       layout property in between forces the opacity-0 start to be computed,
-       and the class that follows then animates from it.
-
-       Deliberately not requestAnimationFrame: a throttled frame callback —
-       a background tab, a hidden pane — leaves the answer at opacity 0
-       indefinitely. A reflow always happens. */
-    void el.offsetWidth;
-    el.classList.add('rv-in');
-
-    if (i < blocks.length) setTimeout(next, step); else done();
-  };
+  /* An answer is "still arriving" until it has been placed — settleSpacer
+     waits for this flag to clear rather than guessing from a quiet moment. */
+  row.dataset.revealing = '1';
   /* A beat after the thinking indicator clears, so the answer arrives rather
      than replacing it in the same frame. */
-  setTimeout(next, 260);
+  setTimeout(() => {
+    if (content.isConnected){
+      blocks.forEach(el => { el.hidden = false; el.classList.add('rv-slow'); });
+      /* Unhiding and setting the end state together gives the browser no
+         start to transition from, so it would land at opacity 1 with no
+         fade. Reading a layout property in between forces the opacity-0
+         start to be computed. Deliberately not requestAnimationFrame: a
+         throttled frame callback (a background tab, a hidden pane) leaves
+         the answer at opacity 0 indefinitely. A reflow always happens. */
+      void content.offsetWidth;
+      blocks.forEach(el => el.classList.add('rv-in'));
+    }
+    delete row.dataset.revealing;
+  }, 260);
 }
-
-/* A formatted answer arrives a paragraph at a time, the way a person reads
-   one — not a cursor crawling through a skeleton.
-
-   Typing it character by character meant the whole shape landed first: the
-   numbers 1 to 8, the bullets, the headings, all sitting there empty while
-   text trickled in behind them. You could read the structure of an answer
-   before a word of it existed, which is not how anything writes.
-
-   So the unit is the paragraph, the heading, the list item. Each is hidden
-   outright — display:none, so a list has no empty rows and its numbering
-   counts only what has actually appeared — and they fade in one after
-   another in reading order. Nothing is ever on screen unfinished.
-
-   The pace is the answer's own length spread over a budget: long answers
-   move faster per paragraph than short ones rather than running for a
-   minute, and every answer clears in a predictable window. */
-
-
 
 function submitHome(){
   const el = document.getElementById('homeInput');
@@ -5162,7 +5108,7 @@ function matchPrompt(q){
    for a room without hunting through the file — and because the relative
    rhythm matters: a summary should still land faster than a posted batch.
    1 is the original pace; higher is slower. At 1.6 the standard beat is
-   ~1.5s. How fast the ANSWER then builds is ORION_REVEAL, separately. */
+   ~1.5s. */
 const ORION_PACE = 1.6;
 
 function thinkThen(text, fn, delay){
