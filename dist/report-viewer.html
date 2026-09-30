@@ -3821,6 +3821,30 @@ function setIconGlyph(id, symbol) {
 const GREEN='green', RED='red', ORANGE='orange', GRAY='gray';
 
 const HELP_PROMPTS = {
+  h0: { cat:0, icon:'recurring-charges', label:'I want everyone in the property to have a trash collection charge every month. How do I do this?',
+    kw:'everyone property trash collection charge every month monthly recurring charge all tenants',
+    rich:`
+      <p>Add it as a <strong>property recurring charge</strong>. A recurring charge set on the property posts to every tenant in it, so you set it up once rather than tenant by tenant.</p>
+      <ol>
+        <li><strong>Open the property:</strong> Properties → select the property → Recurring Charges.</li>
+        <li><strong>Add the charge:</strong> Click Add and choose a Trash Collection charge type. If you do not have one yet, create the charge type first.</li>
+        <li><strong>Set the amount:</strong> Enter the monthly amount and set the frequency to Monthly.</li>
+        <li><strong>Set the dates:</strong> Choose the first month it should post as the From Date, and leave the To Date blank so it keeps going.</li>
+        <li><strong>Save.</strong> It posts with the rest of the month's recurring charges.</li>
+      </ol>
+      <p><strong>Note:</strong> Tenants who move in later get the charge automatically, because it belongs to the property rather than to them.</p>` },
+  /* The second half of h0, asked as a follow-up in the demo walk. No cat, so
+     it stays out of the sheet: on its own, "that charge" refers to nothing. */
+  h0f: { help:true, after:'h0', icon:'recurring-charges', label:'There is one tenant that does not get that charge. How do I handle that?',
+    kw:'one tenant does not get that charge exclude exception exempt skip handle',
+    rich:`
+      <p>Add an <strong>exception</strong> to the property charge for that tenant. The charge keeps posting to everyone else.</p>
+      <ol>
+        <li><strong>Open the charge:</strong> Properties → select the property → Recurring Charges, then open Trash Collection.</li>
+        <li><strong>Add an exception:</strong> In Exceptions, click Add and choose the tenant.</li>
+        <li><strong>Save.</strong> They are skipped from the next posting on.</li>
+      </ol>
+      <p><strong>Note:</strong> An exception only affects future postings. If the charge has already posted to them, reverse it on their ledger.</p>` },
   h1: { cat:0, icon:'trending_up', label:'How do I raise rents?',
     kw:'raise rent increase rents renewal increases market rent recurring charges batch',
     rich:`
@@ -4823,8 +4847,8 @@ function submitHome(){
    browsing Prompt Suggestions still sees the whole set — they are only out
    of the click-through. */
 const AUTOFILL_SKIP = [
-  /* Find Answers — all five. The demo opens on Orion working with your
-     data rather than on documentation answers. */
+  /* Find Answers. The demo opens on one help question and its follow-up
+     (h0, then h0f), and the other five stay in the sheet. */
   'h1', 'h2', 'h3', 'h4', 'h5',
   /* Analyze Data. The maintenance list makes the same point as the
      occupancy one with more rows, and the vehicle lookup leans on vehicle
@@ -4840,7 +4864,10 @@ const AUTOFILL_SKIP = [
 const HOME_AUTOFILL_SEQUENCE = CATS
   .map((_, cat) => Object.keys(PROMPTS).filter(k => PROMPTS[k].cat === cat))
   .flat()
-  .filter(k => !AUTOFILL_SKIP.includes(k));
+  .filter(k => !AUTOFILL_SKIP.includes(k))
+  /* A follow-up (a prompt with `after`) is walked straight after the prompt
+     it follows, and never on its own. */
+  .flatMap(k => [k, ...Object.keys(PROMPTS).filter(f => PROMPTS[f].after === k)]);
 let homeAutoFillIndex = 0;
 
 /* A way out of the Find Answers questions mid-demo, for when the room has
@@ -5094,6 +5121,11 @@ function botMsg(id){
 }
 
 function matchPrompt(q){
+  /* The walk types labels verbatim, so an exact label wins outright rather
+     than on word overlap, which a follow-up sharing words with its parent
+     ("charge", "tenant") could lose. */
+  const exact = Object.keys(PROMPTS).find(id => PROMPTS[id].label.toLowerCase() === q.trim().toLowerCase());
+  if (exact) return exact;
   const words = (q.toLowerCase().match(/[a-z&]{3,}/g)) || [];
   let best = null, bestScore = 1;
   Object.keys(PROMPTS).forEach(id => {
@@ -5123,7 +5155,7 @@ function ask(id){
   state.sheetOpen = false;
   if (state.messages.length === 0) state.rootId = id;
   push([{ role:'user', text:p.label }]);
-  thinkThen(p.cat===0 ? 'Searching Express Help' : 'Reading your data', ()=>push([botMsg(id)]), 900);
+  thinkThen(p.cat===0 || p.help ? 'Searching Express Help' : 'Reading your data', ()=>push([botMsg(id)]), 900);
 }
 
 function submitDraft(){
@@ -5143,7 +5175,7 @@ function routeQuestion(q){
     const p = PROMPTS[id];
     if (isFirst) state.rootId = id;
     push([{ role:'user', text:q }]);
-    thinkThen(p.cat===0 ? 'Searching Express Help' : 'Reading your data', ()=>push([botMsg(id)]), 900);
+    thinkThen(p.cat===0 || p.help ? 'Searching Express Help' : 'Reading your data', ()=>push([botMsg(id)]), 900);
     return;
   }
   push([{ role:'user', text:q }]);
