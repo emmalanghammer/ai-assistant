@@ -3082,6 +3082,42 @@ function rptPageCount(id){ return rptPages(id).length; }
    Claude Design canvas (orion-design-export/Orion Assistant Panel.dc.html).
    ============================================================ */
 
+/* A reload starts the demo over: a hard refresh, or an ordinary one. Only
+   moving between screens (a tenant record, a report, and back) carries the
+   conversation, the chat history and any dashboard tiles along; refreshing
+   the page is how a presenter gets back to a clean start. Runs first, before
+   anything reads the saved state back. Only this prototype's own keys, so
+   another prototype open on the same origin keeps its state. */
+function clearDemoState(){
+  try {
+    Object.keys(sessionStorage).filter(k => k.startsWith('rmx-orion')).forEach(k => sessionStorage.removeItem(k));
+  } catch (e) { /* storage disabled — nothing was saved to clear */ }
+}
+let demoResetting = false;
+try {
+  const nav = performance.getEntriesByType('navigation')[0];
+  if (nav && nav.type === 'reload') clearDemoState();
+} catch (e) {}
+
+/* The Rent Manager logo resets the whole prototype: the walk starts again
+   at its first prompt, the conversation and history go back to the demo's
+   own, and the workspace opens fresh. In the separate-file build the logo is
+   already a link to the workspace, so clearing the state first is enough;
+   in the single-file build it is a route, so the document reloads itself
+   (dropping any ?r= or ?t= along the way). Capture phase, ahead of the
+   single-file router's own handler for the same link. */
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('.rmx-appbar__leading a');
+  if (!a) return;
+  clearDemoState();
+  demoResetting = true;
+  if (a.getAttribute('href') === '#/home'){
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    location.replace(location.pathname);
+  }
+}, true);
+
 const ORION_PRINT_OVERLAY_HTML = `<div id="printOverlay" hidden>
   <div class="po-backdrop" onclick="closePrintOverlay()"></div>
   <div class="po-dialog">
@@ -4795,6 +4831,7 @@ function loadOrionTiles(){
   try { return JSON.parse(sessionStorage.getItem(ORION_TILE_STORE) || '[]'); } catch (e) { return []; }
 }
 function saveOrionTiles(tiles){
+  if (demoResetting) return;
   try { sessionStorage.setItem(ORION_TILE_STORE, JSON.stringify(tiles)); } catch (e) {}
 }
 
@@ -5502,6 +5539,7 @@ function entryHover(on){
 const ORION_STORE = 'rmx-orion-conversation';
 
 function saveConversation() {
+  if (demoResetting) return;   /* the logo was just clicked: stay cleared */
   try {
     sessionStorage.setItem(ORION_STORE, JSON.stringify({
       messages: state.messages, cat: state.cat, rootId: state.rootId,
