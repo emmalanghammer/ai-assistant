@@ -556,8 +556,6 @@ a { color: var(--text-link); }
 .rpt-cell.amount { text-align: right; }
 .rpt-headrow { border-bottom: 1px solid #848484; align-items: flex-end; padding-bottom: 6px; }
 .rpt-total { border-top: 1px solid #848484; margin-top: 2px; padding-top: 6px; color: #2a75b8; font-weight: 600; }
-.rpt-pl-subtotal { font-weight: 600; }
-.rpt-pl-grand { border-top: 1px solid #848484; margin-top: 2px; padding-top: 6px; }
 
 .rpt-crow { display: flex; justify-content: space-between; gap: 24px; max-width: 320px; padding: 3.7px 0; font-size: 10px; }
 .rpt-csum { border-top: 1px solid #848484; margin-top: 2px; padding-top: 6px; font-weight: 600; }
@@ -566,6 +564,61 @@ a { color: var(--text-link); }
 .rpt-foot-left { display: flex; align-items: center; gap: 32px; font-size: 10px; font-weight: 300; }
 .rpt-foot-ico { font-size: 16px; color: #2a75b8; vertical-align: -3px; }
 .rpt-foot-page { background: #eef3fa; border-radius: 4px; height: 19.2px; box-sizing: border-box; display: flex; align-items: center; padding: 0 4.8px; font-size: 10px; font-style: italic; }
+
+/* ---------- Profit & Loss Previous Year Comparison ----------
+   Matched to the real Rent Manager printout of this report, measured off
+   the PDF at 816px to the letter page (1pt = 1.333px), so every value here
+   is the printout's own rather than an RMX token, like the rest of the
+   report styles. Blue #2860a8, band #eef3f8, ink #211e1e. The printout's
+   face is Segoe UI; Open Sans is the closest stand-in where it is missing
+   (it is on Windows, not on a Mac). Open Sans sets 4-9% wider, so sizes
+   and tracking below are trimmed until each line spans what it spans on
+   the printout: the title at 23px measures the printout's 425px. */
+.rpt-page[data-plx] { padding: 50px 48px 51px; gap: 0; font-family: 'Segoe UI', 'Open Sans', sans-serif; color: #211e1e; }
+.plx-head { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #2860a8; color: #2860a8; }
+.plx-title { font-size: 23px; line-height: 24px; padding-bottom: 6px; white-space: nowrap; }
+.plx-periods { font-size: 13px; letter-spacing: -0.2px; line-height: 17.7px; text-align: right; white-space: nowrap; }
+.plx-options { margin-top: 1px; height: 19px; display: flex; align-items: center; padding: 0 5px; background: #eef3f8; border-radius: 3px; font-size: 10.5px; letter-spacing: -0.3px; font-style: italic; }
+
+/* The label column, then four 110px amount columns whose right edges sit at
+   418 / 528 / 638 / 748 on the page, as on the printout. */
+.plx-cols, .plx-row, .plx-srow { display: grid; grid-template-columns: 260px repeat(4, 110px) 1fr; font-size: 10.5px; letter-spacing: -0.15px; }
+.plx-cols { position: relative; margin-top: 11.8px; line-height: 14.7px; }
+.plx-cols > span { align-self: end; text-align: right; white-space: nowrap; }
+/* The rule under the header starts 8px into the first amount column and
+   stops where the body's own rules stop. */
+.plx-cols::after { content: ''; position: absolute; left: 268px; right: 11px; bottom: -1px; height: 1px; background: #6a6a6a; }
+.plx-sumcols { margin-top: 8.2px; }
+.plx-sumcols::after { right: 0; }
+
+.plx-body { display: flex; flex-direction: column; }
+.plx-band { margin: 45px 10px 7.2px 0; height: 18px; display: flex; align-items: center; padding: 0 5px; background: #eef3f8; border-radius: 3px; font-size: 12px; font-weight: 600; color: #2860a8; }
+.plx-band.plx-first { margin-top: 11.4px; }
+.plx-cont { margin-top: 15px; display: flex; flex-direction: column; }
+
+.plx-row { line-height: 17.35px; }
+.plx-row .lbl { white-space: nowrap; }
+.plx-row .amt, .plx-srow .amt { text-align: right; white-space: nowrap; }
+.plx-l1 .lbl { padding-left: 25.5px; }
+.plx-l2 .lbl { padding-left: 35px; }
+/* A group's TOTAL line: ruled from the account indent to the body's right
+   edge, with a little air after it before the next account or group. */
+.plx-sub { background: linear-gradient(#8a8a8a, #8a8a8a) no-repeat 33px 0 / calc(100% - 44px) 1px; margin-bottom: 6.65px; }
+.plx-total { margin-top: 10px; color: #2860a8; font-weight: 600; }
+.plx-total .lbl { text-align: right; padding-right: 64px; }
+
+.plx-summary { margin-top: 45px; display: flex; flex-direction: column; }
+.plx-tab { border-bottom: 1.5px solid #2860a8; }
+.plx-tab span { display: flex; align-items: center; width: 102px; height: 17px; padding: 0 5px; box-sizing: border-box; background: #eef3f8; border-radius: 3px 3px 0 0; font-size: 12px; color: #2860a8; }
+.plx-srow { line-height: 21.6px; }
+.plx-sumcols + .plx-srow { margin-top: 4.5px; }
+.plx-srow .lbl { padding-left: 2px; }
+.plx-srow.plx-rule { border-bottom: 1px solid #8a8a8a; }
+
+.plx-foot { margin-top: auto; border-top: 2px solid #2860a8; display: flex; justify-content: space-between; align-items: flex-start; }
+.plx-foot-left { display: flex; align-items: center; gap: 11px; margin-top: 4px; height: 16px; line-height: 16px; font-size: 10px; letter-spacing: -0.1px; color: #5b5b5a; }
+.plx-mark { width: 15px; height: 16px; color: #201d1d; flex: none; }
+.rpt-page[data-plx] .rpt-foot-page { width: 87px; height: 15px; padding: 0; justify-content: center; border-radius: 0 0 3px 3px; background: #eef3f8; font-size: 11px; font-style: normal; color: #29262a; }
 
 /* ============================================================
    Report viewer — where Print / PDF on an analyzed result lands

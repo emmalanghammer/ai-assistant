@@ -386,10 +386,10 @@ const DATA_PROMPTS = {
     note:"Vehicle details are kept in user-defined fields on the tenant record. Two other red vehicles are on file at this property; only the Camaro is an exact match.",
     followups:['veh_parking','veh_missing'],
     actions:['print'] },
-  q5: { reportName:'Profit & Loss · MTD vs. Last Year', reportSource:'Financial · Comparative P&L', cat:1, icon:'assessment', label:'Run a P&L this month to date compared to last year same period',
+  q5: { reportName:'Profit & Loss Previous Year Comparison', reportSource:'Financial · Comparative P&L', cat:1, icon:'assessment', label:'Run a P&L this month to date compared to last year same period',
     kw:'profit loss statement compared last year period income expenses noi report',
     text:'P&L for October 1–20, 2026 against October 1–20, 2025. All 10 properties, accrual basis.',
-    report:{ title:'Profit & Loss · MTD vs. same period last year', cols:['Oct 1–20, 2026','Oct 1–20, 2025','Var'],
+    report:{ title:'Profit & Loss Previous Year Comparison', cols:['10/01/26 - 10/20/26','10/01/25 - 10/20/25','% Change'],
       rows:[
         {kind:'head', a:'Income'},
         {kind:'row', a:'Rental Income', b:'$1,284,310', c:'$1,208,940', d:'+6.2%', dir:'up'},
@@ -407,7 +407,7 @@ const DATA_PROMPTS = {
     note:'This is the report summary, not the posted report. Ask me anything about these numbers and I will read the detail behind them.',
     followups:['pl_rm','pl_noi','pl_byprop'],
     tileName:'NOI vs. Last Year', tileRows:[ ['Portfolio NOI','$807,000 · was $777,430','+3.8%',GREEN] ],
-    summary:'Income is up 6.4% year-over-year and would have carried NOI further if not for a 23.6% jump in expenses, concentrated almost entirely in Repairs & Maintenance and Turnover.',
+    summary:'Income is up 6.4% year-over-year and would have carried NOI further if not for a 10.4% jump in expenses, concentrated almost entirely in Repairs & Maintenance and Turnover.',
     actions:['summarize','print'] },
 };
 
@@ -1939,33 +1939,61 @@ function buildOccupancySummaryReport(){
     </div>`;
 }
 
-/* Profit & Loss — a real GL statement (account numbers, nested groups,
-   indented children, bold subtotals) rather than the 4-line category
-   comparison the chat shows. Modeled directly on a real Rent Manager P&L
-   printout: plain italic scope line (no shaded band, unlike the
-   Occupancy Summary's Report Options bar), two indent levels, and
-   subtotals in bold black — blue is reserved for section bands only. */
-const PL_GRID = '1fr 120px 120px 90px';
-function plFmt(n){ return n.toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 }); }
+/* Profit & Loss Previous Year Comparison — built to the real Rent Manager
+   printout of that report (a PDF Emma supplied, Oct 2026): title with the
+   two comparison periods on the right, the basis/scope bar, a two-line
+   "Amounts from" header with $ Change and % Change, shaded section bands,
+   uppercase GL groups with their TOTAL lines, blue right-aligned totals, a
+   Non Operating Expense section and a closing Summary.
 
-function plRow(label, indent, cur, prior){
-  const cells = [reportCell(label, { first:true, indent })];
-  if (cur === undefined){
-    cells.push(reportCell('', { amount:true }), reportCell('', { amount:true }), reportCell('', { amount:true }));
-  } else {
-    cells.push(reportCell(plFmt(cur), { amount:true }), reportCell(plFmt(prior), { amount:true }), reportCell(plFmt(cur + prior), { amount:true }));
-  }
-  return `<div class="rpt-row" style="grid-template-columns:${PL_GRID}">${cells.join('')}</div>`;
+   The account figures are the demo's own and must not drift: the chat
+   answer, the report viewer's analysis (PL_ANALYSIS_HTML) and its scripted
+   follow-up (PNL_FOLLOWUP_HTML) all quote them. Every group adds up to the
+   category the chat shows (Rental Income $1,284,310, Repairs & Maintenance
+   $214,880 ...), and the grand totals to its Total Income, Total Expenses
+   and NOI. Measurements are the PDF's, at 816px to the letter page; see
+   .rpt-page[data-plx] in orion.css. */
+const PLX_CUR = '10/01/26 - 10/20/26', PLX_PRIOR = '10/01/25 - 10/20/25';
+function plFmt(n){
+  const v = Math.round(n * 100) / 100;
+  return (v < 0 ? '-' : '') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
 }
-function plSubtotal(label, indent, cur, prior, grand){
-  const cells = [reportCell(label, { first:true, indent })];
-  cells.push(reportCell(plFmt(cur), { amount:true }), reportCell(plFmt(prior), { amount:true }), reportCell(plFmt(cur + prior), { amount:true }));
-  return `<div class="rpt-row rpt-pl-subtotal${grand ? ' rpt-pl-grand' : ''}" style="grid-template-columns:${PL_GRID}">${cells.join('')}</div>`;
+/* Blank when there is nothing to compare against, the way the printout
+   leaves it. */
+function plPct(cur, prior){
+  if (!prior) return '';
+  return (Math.round((cur - prior) / Math.abs(prior) * 1000) / 10).toFixed(1) + '%';
 }
-function plGap(){ return `<div style="height:10px"></div>`; }
+function plAmounts(cur, prior){
+  return [plFmt(cur), plFmt(prior), plFmt(cur - prior), plPct(cur, prior)]
+    .map(v => `<span class="amt">${esc(v)}</span>`).join('');
+}
+/* kind: 'grp' an uppercase group heading, 'acct' an account inside a group,
+   'solo' an account that stands on its own, 'sub' a group's TOTAL line. */
+function plLine(kind, label, cur, prior){
+  const lvl = kind === 'acct' || kind === 'sub' ? 2 : 1;
+  const amounts = kind === 'grp' ? '' : plAmounts(cur, prior);
+  return `<div class="plx-row plx-${kind} plx-l${lvl}"><span class="lbl">${esc(label)}</span>${amounts}</div>`;
+}
+function plTotal(label, cur, prior){
+  return `<div class="plx-row plx-total"><span class="lbl">${esc(label)}</span>${plAmounts(cur, prior)}</div>`;
+}
+function plBand(label, first){ return `<div class="plx-band${first ? ' plx-first' : ''}">${esc(label)}</div>`; }
+function plColHead(cls){
+  return `<div class="plx-cols${cls ? ' ' + cls : ''}"><span></span>
+    <span>Amounts from<br>${PLX_CUR}</span><span>Amounts from<br>${PLX_PRIOR}</span>
+    <span>$ Change</span><span>% Change</span></div>`;
+}
+const plSum = list => [list.reduce((s,r)=>s+r[2],0), list.reduce((s,r)=>s+r[3],0)];
+function plGroup(number, name, list){
+  const t = plSum(list);
+  return plLine('grp', number + ' ' + name)
+    + list.map(r => plLine('acct', r[0] + ' ' + r[1], r[2], r[3])).join('')
+    + plLine('sub', number + ' TOTAL ' + name, t[0], t[1]);
+}
 
 function buildProfitLossReport(){
-  const income = [
+  const other = [
     ['4000', 'Management Fee Income', 42000, 39500],
     ['4001', 'Tenant Insurance Commission', 15000, 13000],
     ['4002', 'Forfeited Security Deposits', 7200, 5400],
@@ -1978,8 +2006,6 @@ function buildProfitLossReport(){
     ['4009', 'Interest Income', 310, 260],
     ['4010', 'Miscellaneous Other Income', 14210, 14580],
   ];
-  const otherIncomeTotal = [income.reduce((s,r)=>s+r[2],0), income.reduce((s,r)=>s+r[3],0)];
-
   const rental = [
     ['4101', 'Rental Income', 1285500, 1208100],
     ['4102', 'Pet Fees', 9240, 8100],
@@ -1990,110 +2016,87 @@ function buildProfitLossReport(){
     ['4117', 'Vacancy Loss', -18400, -16200],
     ['4118', 'Loss to Lease', -9580, -7100],
   ];
-  const rentalTotal = [rental.reduce((s,r)=>s+r[2],0), rental.reduce((s,r)=>s+r[3],0)];
-  const totalIncome = [rentalTotal[0] + otherIncomeTotal[0], rentalTotal[1] + otherIncomeTotal[1]];
-
   const rm = [
     ['5010', 'HVAC Repairs', 68400, 52900],
     ['5020', 'Plumbing Repairs', 54200, 44800],
     ['5030', 'Electrical Repairs', 31900, 26700],
     ['5040', 'General Repairs & Supplies', 60380, 51820],
   ];
-  const rmTotal = [rm.reduce((s,r)=>s+r[2],0), rm.reduce((s,r)=>s+r[3],0)];
-
   const payroll = [
     ['5110', 'Salaries & Wages', 152600, 148900],
     ['5120', 'Payroll Taxes', 24800, 23700],
     ['5130', 'Benefits', 11000, 10300],
   ];
-  const payrollTotal = [payroll.reduce((s,r)=>s+r[2],0), payroll.reduce((s,r)=>s+r[3],0)];
-
   const util = [
     ['5210', 'Electric', 58700, 62900],
     ['5220', 'Water & Sewer', 29800, 31200],
     ['5230', 'Gas', 7640, 7500],
   ];
-  const utilTotal = [util.reduce((s,r)=>s+r[2],0), util.reduce((s,r)=>s+r[3],0)];
-
   const turnover = [
     ['5310', 'Make-Ready Labor', 41200, 31800],
     ['5320', 'Flooring & Paint', 24900, 19600],
     ['5330', 'Cleaning', 8210, 7540],
   ];
-  const turnoverTotal = [turnover.reduce((s,r)=>s+r[2],0), turnover.reduce((s,r)=>s+r[3],0)];
+  const nonOp = [ ['6200', 'Depreciation Expense', 96250, 92400] ];
 
-  const totalExpenses = [rmTotal[0] + payrollTotal[0] + utilTotal[0] + turnoverTotal[0],
-                          rmTotal[1] + payrollTotal[1] + utilTotal[1] + turnoverTotal[1]];
-  const noi = [totalIncome[0] - totalExpenses[0], totalIncome[1] - totalExpenses[1]];
+  const add = (...ts) => [ts.reduce((s,t)=>s+t[0],0), ts.reduce((s,t)=>s+t[1],0)];
+  const income  = add(plSum(other), plSum(rental));
+  const expense = add(plSum(rm), plSum(payroll), plSum(util), plSum(turnover));
+  const noi     = [income[0] - expense[0], income[1] - expense[1]];
+  const noe     = plSum(nonOp);
+  const net     = [noi[0] - noe[0], noi[1] - noe[1]];
+  const solo = r => plLine('solo', r[0] + ' ' + r[1], r[2], r[3]);
 
-  const acctRows = (list, indent) => list.map(r => plRow(r[0] + ' ' + r[1], indent, r[2], r[3])).join('');
-  const headRow = `<div class="rpt-row rpt-headrow" style="grid-template-columns:${PL_GRID}">
-    ${reportCell('')}
-    ${reportCell('2026', { amount:true })}
-    ${reportCell('2025', { amount:true })}
-    ${reportCell('Total', { amount:true })}
-  </div>`;
-
-  /* Two pages, not one crammed sheet — a real GL-level P&L runs long
-     enough that a real one prints multiple sheets too (see the Reports
-     Guide reference: five pages for a much longer recap). */
   const page = (bodyHtml, n, total) => `
-    <div class="rpt-page">
-      <div class="rpt-header">
-        <div class="rpt-title-row">
-          <span class="rpt-title">Profit &amp; Loss Statement</span>
-          <span class="rpt-daterange">Yearly recap from 2025 to 2026</span>
-        </div>
-        <div class="rpt-subtitle">Accrual Basis | All Properties</div>
+    <div class="rpt-page" data-plx>
+      <div class="plx-head">
+        <span class="plx-title">Profit &amp; Loss Previous Year Comparison</span>
+        <span class="plx-periods">Comparison Periods: 10/01/26 to 10/20/26<br>10/01/25 to 10/20/25</span>
       </div>
-      <div class="rpt-body"><div class="rpt-section">${bodyHtml}</div></div>
-      <div class="rpt-footer">
-        <div class="rpt-foot-left">
-          <svg class="rmx-icon rpt-foot-ico"><use href="#properties"></use></svg>
-          <span>RentManager.com</span><span>10/20/26</span><span>7:22 AM</span>
-        </div>
-        <div class="rpt-foot-page">${n} of ${total}</div>
+      <div class="plx-options">Accrual Basis | All Properties</div>
+      ${plColHead()}
+      <div class="plx-body">${bodyHtml}</div>
+      <div class="plx-foot">
+        <span class="plx-foot-left">
+          <svg class="plx-mark" viewBox="0 0 32 32" aria-hidden="true"><use href="#rmx-logo-mark"></use></svg>
+          <span>RentManager.com</span><span>10/20/26</span><span>07:22 AM</span>
+        </span>
+        <span class="rpt-foot-page">${n} of ${total}</span>
       </div>
     </div>`;
 
-  const page1Body = `
-    ${headRow}
-    <div class="rpt-section-label"><span class="lbl">Income</span></div>
-    ${plGap()}
-    ${income.slice(0,10).map(r => plRow(r[0] + ' ' + r[1], 24, r[2], r[3])).join('')}
-    ${plRow('4100 RENTAL PROPERTY INCOME', 24)}
-    ${acctRows(rental, 48)}
-    ${plSubtotal('4100 TOTAL RENTAL PROPERTY INCOME', 24, rentalTotal[0], rentalTotal[1])}
-    ${plGap()}
-    ${plRow(income[10][0] + ' ' + income[10][1], 24, income[10][2], income[10][3])}
-    ${plGap()}
-    ${plSubtotal('Total Income', 0, totalIncome[0], totalIncome[1], true)}`;
+  const page1 = `
+    ${plBand('Income', true)}
+    ${other.slice(0, 10).map(solo).join('')}
+    ${plGroup('4100', 'RENTAL PROPERTY INCOME', rental)}
+    ${solo(other[10])}
+    ${plTotal('Total Income:', income[0], income[1])}
+    ${plBand('Expense')}
+    ${plGroup('5000', 'REPAIRS & MAINTENANCE', rm)}
+    ${plGroup('5100', 'PAYROLL', payroll)}
+    ${plGroup('5200', 'UTILITIES', util)}`;
 
-  const page2Body = `
-    ${headRow}
-    <div class="rpt-section-label"><span class="lbl">Expenses</span></div>
-    ${plGap()}
-    ${plRow('5000 REPAIRS & MAINTENANCE', 24)}
-    ${acctRows(rm, 48)}
-    ${plSubtotal('5000 TOTAL REPAIRS & MAINTENANCE', 24, rmTotal[0], rmTotal[1])}
-    ${plGap()}
-    ${plRow('5100 PAYROLL', 24)}
-    ${acctRows(payroll, 48)}
-    ${plSubtotal('5100 TOTAL PAYROLL', 24, payrollTotal[0], payrollTotal[1])}
-    ${plGap()}
-    ${plRow('5200 UTILITIES', 24)}
-    ${acctRows(util, 48)}
-    ${plSubtotal('5200 TOTAL UTILITIES', 24, utilTotal[0], utilTotal[1])}
-    ${plGap()}
-    ${plRow('5300 TURNOVER', 24)}
-    ${acctRows(turnover, 48)}
-    ${plSubtotal('5300 TOTAL TURNOVER', 24, turnoverTotal[0], turnoverTotal[1])}
-    ${plGap()}
-    ${plSubtotal('Total Expenses', 0, totalExpenses[0], totalExpenses[1], true)}
-    ${plGap()}
-    ${plSubtotal('Net Operating Income', 0, noi[0], noi[1], true)}`;
+  /* The Expense section runs on from page 1 without its band repeated,
+     as the printout does. */
+  const page2 = `
+    <div class="plx-cont">${plGroup('5300', 'TURNOVER', turnover)}</div>
+    ${plTotal('Total Expense:', expense[0], expense[1])}
+    ${plTotal('NOI:', noi[0], noi[1])}
+    ${plBand('Non Operating Expense')}
+    ${nonOp.map(solo).join('')}
+    ${plTotal('Total Non Operating Expense:', noe[0], noe[1])}
+    ${plTotal('Net Income:', net[0], net[1])}
+    <div class="plx-summary">
+      <div class="plx-tab"><span>Summary</span></div>
+      ${plColHead('plx-sumcols')}
+      <div class="plx-srow"><span class="lbl">Income:</span>${plAmounts(income[0], income[1])}</div>
+      <div class="plx-srow plx-rule"><span class="lbl">Expense:</span>${plAmounts(expense[0], expense[1])}</div>
+      <div class="plx-srow"><span class="lbl">Net Operating Income:</span>${plAmounts(noi[0], noi[1])}</div>
+      <div class="plx-srow plx-rule"><span class="lbl">Non Operating Expense:</span>${plAmounts(-noe[0], -noe[1])}</div>
+      <div class="plx-srow"><span class="lbl">Net Income:</span>${plAmounts(net[0], net[1])}</div>
+    </div>`;
 
-  return [page(page1Body, 1, 2), page(page2Body, 2, 2)];
+  return [page(page1, 1, 2), page(page2, 2, 2)];
 }
 
 /* ============================================================

@@ -399,7 +399,7 @@ const PL_ANALYSIS_HTML = `
 <ul>
   <li><strong>Total Income:</strong> <strong>$1,380,730</strong>, up <strong>6.4%</strong> from $1,297,090.
     <ul>
-      <li><strong>Rental Property Income:</strong> the largest contributor, at <strong>$1,284,310</strong> (+6.4%), led by base rental income of $1,285,500, offset by $18,400 in vacancy loss and $9,580 in loss to lease.</li>
+      <li><strong>Rental Property Income:</strong> the largest contributor, at <strong>$1,284,310</strong> (+6.2%), led by base rental income of $1,285,500, offset by $18,400 in vacancy loss and $9,580 in loss to lease.</li>
       <li><strong>Other Income:</strong> <strong>$96,420</strong> (+9.4%), led by Management Fee Income ($42,000) and Tenant Insurance Commission ($15,000).</li>
     </ul>
   </li>

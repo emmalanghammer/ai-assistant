@@ -69,6 +69,16 @@ the page design is what this screen is copying. Worth resolving one way or the
 other in Foundations.
 
 
+**The P&L report uses its own measurements and Open Sans.** Profit & Loss
+Previous Year Comparison is matched to a real Rent Manager printout of that
+report (PDF supplied Oct 2026), measured at 816px to the letter page: blue
+`#2860a8`, band `#eef3f8`, and the printout's own spacing, all literals like the
+rest of the report styles, since a report is a document rather than an Express
+screen. The printout's face is Segoe UI, which a Mac does not have, so
+Open Sans (Google Fonts) stands in, with sizes and tracking trimmed until each
+line spans what it does on the printout. On Windows the real Segoe UI is used.
+
+
 **Icon substitutions.** Every icon is real geometry harvested from RMX
 Iconography — 61 core glyphs plus 31 Express product icons in
 `assets/icons-local.svg`. Nothing is drawn. Three concepts have no glyph in the
