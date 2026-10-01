@@ -991,6 +991,10 @@ function syncComposerInset(){
   if (!body || !composer) return;
   /* Sit the composer directly on top of the footer. */
   if (footer) composer.style.bottom = Math.round(footer.getBoundingClientRect().height) + 'px';
+  /* Leave the scrollbar its strip. A classic scrollbar reports its width;
+     an overlay one (macOS) reports none but still draws about 11-15px wide
+     over the content, so allow 16 either way. */
+  composer.style.setProperty('--sb-gutter', Math.max(16, body.offsetWidth - body.clientWidth) + 'px');
   /* Line the composer's copy of the panel wash up with the panel's own. */
   const panel = composer.closest('.orion-panel');
   if (panel){
