@@ -1384,6 +1384,7 @@ function renderMessage(m, idx, animate){
      sub-options, a closing note) that text/steps/bullets/note can't shape
      — revealed as one unit. There is no .text to type alongside it. */
   if (m.rich) inner += wrapOne(`<div class="mrich">${m.rich}</div>`);
+  if (m.progress) inner += wrapOne(renderProgress(m.progress));
   if (m.steps) inner += `<div class="mstep-list">${m.steps.map((s,i)=>`<div class="mstep${rv}"${hid}><span class="n">${i+1}</span><span class="t">${esc(s)}</span></div>`).join('')}</div>`;
 
   /* Order is deliberate: prose, then the data, then anything that
@@ -1583,6 +1584,67 @@ function matchPrompt(q){
    ~1.5s. */
 const ORION_PACE = 1.6;
 
+/* RMX Components "Progress Bar" (Feedback & Status, 1951:131400): a 12px
+   round track in Container/disabled, filled in Icon/icon-primary while
+   In-Progress and Icon/icon-success once Complete, with a 30px right-aligned
+   percentage beside it. A status line under it names who is being merged,
+   so the bar reads as real work rather than a timer. `frac` runs 0 to 1. */
+function renderProgress(pr){
+  const total = pr.names.length, frac = Math.min(pr.frac || 0, 1);
+  const complete = frac >= 1;
+  const current = Math.min(Math.floor(frac * total), total - 1);
+  const status = complete ? 'All ' + total + ' merged'
+    : 'Merging ' + pr.names[current] + ' · ' + (current + 1) + ' of ' + total;
+  return `<div class="mprogress${complete ? ' is-complete' : ''}">
+    <div class="mprogress-bar" data-rmx-component="Progress Bar"><span class="track"><span class="amount" style="width:${(frac * 100).toFixed(2)}%"></span></span><span class="pct">${Math.round(frac * 100)}%</span></div>
+    <div class="mprogress-status">${esc(status)}</div>
+  </div>`;
+}
+/* Fills continuously rather than in steps: progress is worked out from the
+   time elapsed every 40ms and painted into the row in place (re-rendering
+   the conversation would restart its fade and move the view). A timer, not a
+   frame callback, for the same reason as the reveal: a throttled frame
+   stalls the bar. Eased gently at both ends, so it gathers pace and settles
+   instead of starting and stopping dead. Stops quietly once its message is
+   no longer in the conversation (a new chat, a chat opened from History),
+   so another chat never receives a stray confirmation. */
+const PROGRESS_PER_ITEM_MS = 330;
+function runProgress(idx, then){
+  const m = state.messages[idx];
+  if (!m || !m.progress) return;
+  const pr = m.progress;
+  const live = () => state.messages[idx] === m;
+  const duration = pr.names.length * PROGRESS_PER_ITEM_MS;
+  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  let start = 0, timer = 0;
+  const paint = () => {
+    const el = document.querySelector(`#orionPanel .msg-row[data-idx="${idx}"] .mprogress`);
+    if (!el) return;
+    const fresh = document.createElement('div');
+    fresh.innerHTML = renderProgress(pr);
+    const next = fresh.firstElementChild;
+    el.className = next.className;
+    el.querySelector('.amount').style.width = next.querySelector('.amount').style.width;
+    el.querySelector('.pct').textContent = next.querySelector('.pct').textContent;
+    const status = el.querySelector('.mprogress-status');
+    const text = next.querySelector('.mprogress-status').textContent;
+    if (status.textContent !== text) status.textContent = text;
+  };
+  const tick = () => {
+    if (!live()){ clearInterval(timer); return; }
+    const t = Math.min((Date.now() - start) / duration, 1);
+    pr.frac = ease(t);
+    paint();
+    if (t >= 1){
+      clearInterval(timer);
+      saveConversation();
+      setTimeout(() => { if (live()) then(); }, 700);
+    }
+  };
+  /* A beat after the card fades in, so the bar is seen starting from empty. */
+  setTimeout(() => { start = Date.now(); timer = setInterval(tick, 40); }, 600);
+}
+
 function thinkThen(text, fn, delay){
   state.thinking = text; render();
   clearTimeout(pendingTimer);
@@ -1698,12 +1760,27 @@ function act(key, id){
   }
   if (key === 'merge'){
     push([{ role:'user', text:'Merge them.' }]);
-    /* Merging ends the flow, like posting does — a confirmation and nothing
+    /* The merge is work you can watch: a progress bar that walks through the
+       15 people, naming each as it goes, then turns green. Once it is done the
+       same reply becomes the confirmation, in place, so the conversation ends
+       on the result rather than on a finished progress bar with the result
+       stacked under it. Merging ends the flow, like posting does: nothing
        further to do. */
-    thinkThen('Merging prospects', () => {
-      const d = p.merged;
-      push([{ role:'bot', src:id, text:d.text, stats:d.stats }]);
-    }, 1000);
+    const names = p.mergePlan.table.map(r => r[0]);
+    thinkThen('Starting the merge', () => {
+      push([{ role:'bot', src:id, text:'Merging ' + names.length + ' prospects. Each person\'s notes, activity history and documents are moving onto the record that is kept.',
+        progress:{ names, frac:0 } }]);
+      const idx = state.messages.length - 1;
+      runProgress(idx, () => {
+        const d = p.merged;
+        /* A new object with no _shown, so render() fades it in like any
+           arriving answer. Same position and same count, so the view holds. */
+        state.messages = state.messages.slice();
+        state.messages[idx] = { role:'bot', src:id, text:d.text, stats:d.stats };
+        render();
+        saveConversation();
+      });
+    }, 600);
     return;
   }
   if (key === 'post_credit'){

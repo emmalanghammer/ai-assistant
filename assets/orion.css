@@ -360,6 +360,17 @@ a { color: var(--text-link); }
 .mnote .t { font-size:12.5px; line-height:18px; color:var(--text-secondary); }
 .mnote .t a { display:block; margin-top:4px; }
 
+/* Progress Bar, from RMX Components (1951:131400). Container/disabled is a
+   Foundations colour the bundled tokens.css does not carry yet, so it is
+   declared here with the library's value. The fill is moved every 40ms by
+   runProgress; the short linear transition blends those moves together. */
+.mprogress { --container-disabled: #e5e5e5; display:flex; flex-direction:column; gap:var(--spacing-xs); }
+.mprogress-bar { display:flex; align-items:center; gap:var(--spacing-md); }
+.mprogress-bar .track { flex:1 0 0; min-width:0; height:12px; overflow:hidden; background:var(--container-disabled); border-radius:var(--radius-round); }
+.mprogress-bar .amount { display:block; height:12px; background:var(--icon-brand); border-radius:var(--radius-round); transition:width 60ms linear, background-color .4s ease; }
+.mprogress.is-complete .amount { background:var(--icon-success); }
+.mprogress-bar .pct { flex:none; width:30px; text-align:right; font:var(--type-label-s-regular); color:var(--text-primary); }
+.mprogress-status { font:var(--type-label-s-regular); color:var(--text-primary); }
 .mquestion { font:400 14px/20px 'Roboto',sans-serif; color:var(--text-secondary); }
 .mactions { display:flex; flex-wrap:wrap; gap:var(--spacing-xs); }
 /* DESIGN.md 7.1 — 36px tall, radius 4, 14px label, ~16px side padding. */
