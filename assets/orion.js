@@ -122,7 +122,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
 
     <div class="orion-body" id="orionBody" onscroll="updateJumpToLatest()">
       <div class="orion-greet" id="orionGreet">
-        <p class="hi">Hi Charlie!</p>
+        <p class="hi">Hi Riley!</p>
         <div class="home-card">
           <div class="home-ask">
             <textarea id="homeInput" rows="1" placeholder="How can I help?" onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
@@ -1271,7 +1271,7 @@ function submitHome(){
    a prompt to the sheet adds it to the walk.
 
    The sequence spans BOTH composers the demo passes through: homeInput (the
-   fresh "Hi Charlie!" screen) for the first ask, then draftInput (the
+   fresh "Hi Riley!" screen) for the first ask, then draftInput (the
    composer at the bottom of an ongoing conversation) for every follow-up
    after that one's been sent — so clicking into whichever box is on screen
    keeps advancing the same walk. homeAutoFillIndex is intentionally never
