@@ -3901,8 +3901,12 @@ const FOLLOWUPS = {
   ar_latefee: { q:'Were late fees posted this period?', text:'Not everywhere. Late fees posted on 8 of your 10 properties. Hawthorne Ridge and Crestline were skipped, and Hawthorne has now missed two of the last three cycles.',
     bullets:['Unposted late fees at Hawthorne Ridge total roughly $4,900 across 31 delinquent leases.','Hawthorne is also the property where aging past 30 days grew the most, which usually follows missed fee posting.'],
     note:'Post Late Fees can be run for a single property, so this does not require re-running the whole portfolio.', followups:['ar_prop'] },
-  occ_month: { q:'How does that compare to last month?', text:'Occupancy was 90.4% on September 20, so you are down 0.8 points — four net move-outs, three of them at Hawthorne Ridge.',
-    table:[ ['Hawthorne Ridge','84.6% · was 87.5%','-2.9 pts',RED], ['Riverview Apartments','91.6% · was 91.0%','+0.6 pts',GREEN], ['Union Street Lofts','89.5% · was 89.5%','Flat',GRAY] ], followups:['occ_old','occ_econ'] },
+  occ_month: { q:'How does that compare to last month?', text:'Occupancy was 90.3% on September 20, 757 of 838 units, so you are down 0.7 points. That is six net move-outs, three of them at Hawthorne Ridge. Here is every property against last month.',
+    /* Every property from the occupancy answer, in the same order, so the
+       comparison covers exactly what was asked about. Counts are whole units
+       against the same unit totals, so each percentage and the portfolio
+       figure follow from them. */
+    table:[ ['Riverview Apartments','91.6% · was 90.9%','+0.7 pts',GREEN], ['Union Street Lofts','89.5% · was 89.5%','Flat',GRAY], ['Crestline Business Park','87.7% · was 89.2%','-1.5 pts',ORANGE], ['Hawthorne Ridge','84.6% · was 87.5%','-2.9 pts',RED], ['Harbor Flats','90.9% · was 93.2%','-2.3 pts',RED], ['Willowbrook','93.1% · was 91.7%','+1.4 pts',GREEN], ['Ridgeline','88.5% · was 89.6%','-1.1 pts',ORANGE], ['Meadowbrook Apartments','91.7% · was 91.7%','Flat',GRAY], ['Ashford Commons','87.0% · was 88.9%','-1.9 pts',ORANGE], ['Birchwood Flats','92.5% · was 92.5%','Flat',GRAY] ], followups:['occ_old','occ_econ'] },
   occ_old: { q:'Which vacancies are oldest?', text:'Seventeen units have been vacant more than 30 days. These four are past 60.',
     table:[ ['Hawthorne Ridge 902','Vacant 94 days · 2 bed','94 d',RED], ['Hawthorne Ridge 410','Vacant 78 days · 1 bed','78 d',RED], ['Crestline Suite 120','Vacant 71 days · commercial','71 d',RED], ['Union Street Lofts 214','Vacant 63 days · studio','63 d',ORANGE] ], followups:['occ_econ'] },
   occ_econ: { q:'What is the economic occupancy?', text:'Physical occupancy is 89.6%; economic occupancy is 87.0%. The 2.6-point gap is concessions and unpaid rent, not empty units.',
