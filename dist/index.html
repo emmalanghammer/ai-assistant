@@ -3160,6 +3160,12 @@ function rptPageCount(id){ return rptPages(id).length; }
    the page is how a presenter gets back to a clean start. Runs first, before
    anything reads the saved state back. Only this prototype's own keys, so
    another prototype open on the same origin keeps its state. */
+/* No red spellcheck underlines anywhere in the demo: a presenter's typos,
+   and the walk's typed prompts, should not be marked up in front of a room.
+   Set on the document as well as on each field, since spellcheck is
+   inherited and this catches any field added later. */
+document.documentElement.spellcheck = false;
+
 function clearDemoState(){
   try {
     Object.keys(sessionStorage).filter(k => k.startsWith('rmx-orion')).forEach(k => sessionStorage.removeItem(k));
@@ -3252,7 +3258,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
 
     <div class="history-view" id="historyView" hidden>
       <div class="history-search-wrap">
-        <div class="history-search"><svg class="rmx-icon"><use href="#search"></use></svg><input id="historySearchInput" placeholder="Find a chat" oninput="renderHistoryFull()"></div>
+        <div class="history-search"><svg class="rmx-icon"><use href="#search"></use></svg><input id="historySearchInput" spellcheck="false" placeholder="Find a chat" oninput="renderHistoryFull()"></div>
       </div>
       <div id="historyFavSection"></div>
       <div id="historyAllSection"></div>
@@ -3263,7 +3269,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
         <p class="hi">Hi Riley!</p>
         <div class="home-card">
           <div class="home-ask">
-            <textarea id="homeInput" rows="1" placeholder="How can I help?" onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
+            <textarea id="homeInput" spellcheck="false" rows="1" placeholder="How can I help?" onclick="demoComposerAutoFill('homeInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitHome)"></textarea>
             <svg class="rmx-icon send" onclick="submitHome()"><use href="#send"></use></svg>
           </div>
           <button class="browse-link" onclick="toggleSheet()"><svg class="rmx-icon"><use href="#lightbulb"></use></svg><span class="lbl">Browse Prompt Suggestions</span></button>
@@ -3285,7 +3291,7 @@ const ORION_PANEL_HTML = `<div class="orion-panel" id="orionPanel" hidden>
       </button>
       <div><button class="browse-btn" id="browseBtn" onclick="toggleSheet()"><svg class="rmx-icon" style="width:18px;height:18px"><use href="#lightbulb"></use></svg>Prompt Suggestions</button></div>
       <div class="orion-ask">
-        <textarea id="draftInput" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
+        <textarea id="draftInput" spellcheck="false" rows="1" placeholder="Ask anything..." onclick="demoComposerAutoFill('draftInput')" oninput="growAsk(this)" onkeydown="askKey(event, submitDraft)"></textarea>
         <svg class="rmx-icon send" onclick="submitDraft()"><use href="#send"></use></svg>
       </div>
       <div class="orion-disclaimer">AI may be inaccurate. Make sure to verify information before use.</div>
