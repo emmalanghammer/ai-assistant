@@ -22,6 +22,97 @@
    the page is how a presenter gets back to a clean start. Runs first, before
    anything reads the saved state back. Only this prototype's own keys, so
    another prototype open on the same origin keeps its state. */
+/* ---------- Display brightness ----------
+   For a washed-out projector: the user avatar opens a small panel with one
+   slider, from -40 (darker) to +30 (brighter), applied live as a filter on
+   <html> (the root is the one element a filter does not turn into a
+   containing block, so fixed-position panels stay where they are). Going
+   darker also adds contrast, so light greys do not sink into the white.
+   0 means no filter at all. Kept in localStorage, not sessionStorage, so it
+   survives the demo resets a reload or the logo does: it is about the room,
+   not the demo. Every storage call is guarded, so a blocked storage still
+   leaves a working slider. */
+const BRIGHTNESS_KEY = 'display-brightness';
+function applyBrightness(v){
+  v = Math.max(-40, Math.min(30, Math.round(+v || 0)));
+  const b = 1 + v / 100, c = v < 0 ? 1 + (-v / 100) * 1.4 : 1;
+  document.documentElement.style.filter = v ? `brightness(${b.toFixed(2)}) contrast(${c.toFixed(2)})` : '';
+  try { localStorage.setItem(BRIGHTNESS_KEY, String(v)); } catch (e) {}
+  return v;
+}
+function savedBrightness(){
+  try { return Math.max(-40, Math.min(30, Math.round(+(localStorage.getItem(BRIGHTNESS_KEY) || 0)) || 0)); }
+  catch (e) { return 0; }
+}
+applyBrightness(savedBrightness());
+
+const brightLabel = v => (v > 0 ? '+' : '') + v;
+function openBrightness(anchor){
+  let pop = document.getElementById('brightPop');
+  if (!pop){
+    pop = document.createElement('div');
+    pop.id = 'brightPop';
+    pop.className = 'bright-pop';
+    pop.setAttribute('role', 'dialog');
+    pop.setAttribute('aria-label', 'Display brightness');
+    document.body.appendChild(pop);
+  }
+  const v = savedBrightness();
+  pop.innerHTML = `<div class="bp-t">Display brightness</div>
+    <div class="bp-row"><span class="bp-end">Darker</span>
+      <input type="range" id="brightRange" min="-40" max="30" step="1" value="${v}" aria-label="Display brightness">
+      <span class="bp-end">Brighter</span></div>
+    <div class="bp-foot"><span id="brightVal">${brightLabel(v)}</span><button type="button" id="brightReset">Reset</button></div>`;
+  /* Directly under the avatar, growing leftward from its right edge, and
+     never closer than 8px to either side of the window. */
+  const r = anchor.getBoundingClientRect();
+  pop.style.top = Math.round(r.bottom + 8) + 'px';
+  pop.style.right = Math.max(8, Math.round(window.innerWidth - r.right)) + 'px';
+  pop.hidden = false;
+  anchor.setAttribute('aria-expanded', 'true');
+  pop.querySelector('#brightRange').focus();
+}
+function closeBrightness(){
+  const pop = document.getElementById('brightPop');
+  if (pop) pop.hidden = true;
+  document.querySelectorAll('.rmx-appbar__avatar').forEach(a => a.setAttribute('aria-expanded', 'false'));
+}
+document.addEventListener('input', e => {
+  if (e.target.id !== 'brightRange') return;
+  const v = applyBrightness(e.target.value);
+  document.getElementById('brightVal').textContent = brightLabel(v);
+});
+document.addEventListener('click', e => {
+  const pop = document.getElementById('brightPop');
+  if (e.target.closest('#brightReset')){
+    applyBrightness(0);
+    document.getElementById('brightRange').value = 0;
+    document.getElementById('brightVal').textContent = '0';
+    return;
+  }
+  const av = e.target.closest('.rmx-appbar__avatar');
+  if (av){ if (pop && !pop.hidden) closeBrightness(); else openBrightness(av); return; }
+  if (pop && !pop.hidden && !e.target.closest('#brightPop')) closeBrightness();
+});
+document.addEventListener('keydown', e => {
+  const av = e.target.closest && e.target.closest('.rmx-appbar__avatar');
+  if (av && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); av.click(); return; }
+  const pop = document.getElementById('brightPop');
+  if (e.key === 'Escape' && pop && !pop.hidden){ closeBrightness(); const a = document.querySelector('.rmx-appbar__avatar'); if (a) a.focus(); }
+});
+/* The avatar is a plain span in the app bar; make it reachable and
+   announced as the control it now is. */
+function wireAvatars(){
+  document.querySelectorAll('.rmx-appbar__avatar').forEach(a => {
+    a.setAttribute('role', 'button');
+    a.setAttribute('tabindex', '0');
+    a.setAttribute('aria-haspopup', 'dialog');
+    a.setAttribute('aria-expanded', 'false');
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wireAvatars);
+else wireAvatars();
+
 /* No red spellcheck underlines anywhere in the demo: a presenter's typos,
    and the walk's typed prompts, should not be marked up in front of a room.
    Set on the document as well as on each field, since spellcheck is

@@ -1179,3 +1179,19 @@ a                                    { color: var(--text-link); text-decoration:
 .rmx-btn--text:hover .rmx-btn__label { text-decoration: none; }
 .rmx-btn--underline,
 .rmx-btn--underline .rmx-btn__label  { text-decoration: none; }
+
+/* ---------- Display brightness panel (opened from the user avatar) ----------
+   A floating panel, so it takes the prototype's menu surface: white, the
+   default hairline, radius-sm and the same --shadow-md as the report menus.
+   Fixed-positioned by openBrightness() under the avatar. */
+.rmx-appbar__avatar { cursor: pointer; }
+.bright-pop { position: fixed; z-index: 3000; width: 300px; box-sizing: border-box; padding: var(--spacing-xs) var(--spacing-md);
+  background: var(--container-primary); border: 1px solid var(--border-primary); border-radius: var(--radius-sm); box-shadow: var(--shadow-md); }
+.bright-pop[hidden] { display: none; }
+.bp-t { font: var(--type-paragraph-s-semibold); color: var(--text-secondary); margin-bottom: var(--spacing-xxs); }
+.bp-row { display: flex; align-items: center; gap: var(--spacing-xs); }
+.bp-row input[type=range] { flex: 1; min-width: 0; margin: 0; accent-color: var(--icon-brand); }
+.bp-end, .bp-foot { font: var(--type-label-s-regular); color: var(--text-primary); }
+.bp-foot { display: flex; justify-content: space-between; align-items: center; margin-top: var(--spacing-xxs); }
+#brightReset { border: 0; background: none; padding: 0; cursor: pointer; font: var(--type-label-s-regular); color: var(--text-link); }
+#brightReset:hover { text-decoration: underline; }
